@@ -173,6 +173,39 @@ observations for request construction, remote response, parsing, and validation
 where those boundaries matter. Do not use a no-network unit test to support a
 claim about an API's speed, reliability, or model quality.
 
+### Worked validation: a well-formed but unsafe plan
+
+The fixture responder receives one allowed result:
+`book/chapters/08-turning-meaning-into-geometry.md`. It returns an object that
+looks valid: it has an objective, an evidence-path list, one implementation
+step, no warnings, and `approval_required: false`. But the path list also adds
+`outside.md`, and the model-supplied objective does not match the caller's
+request. A parser that only checks JSON shape would accept this object and make
+it look authoritative.
+
+`validate_plan` applies the actual contract. It keeps only the retrieved
+Chapter 8 path, records `Rejected unsupported evidence paths: outside.md`,
+replaces the objective with the caller's objective, and forces
+`approval_required` to true. The surviving step remains a proposal, not a
+write. This is a useful distinction: the response was syntactically valid but
+failed an evidence/authority check. A schema did its job only after the
+application compared its fields with trusted context.
+
+Run the same responder with no retrieved evidence. The path allow-list is
+empty, so the validator clears every plan step and appends the warning “No
+retrieved evidence: do not make an implementation claim.” It does not invent a
+generic safe-sounding task list. The caller can retrieve again, narrow the
+objective, or stop; it cannot present the model-shaped object as an
+evidence-backed recommendation.
+
+The LangChain fixture follows the same exercise through a different adapter.
+It returns a parsed structured object through `with_structured_output`, then
+passes it to the same validator. A parsing error or missing parsed object raises
+instead of becoming a guessed fallback. The two routes therefore share the
+important behavior even though their client code differs: only the supplied
+evidence may survive, approval cannot be waived by the response, and malformed
+output remains visible to the operator.
+
 ## What broke
 
 A valid schema can still contain an unsupported citation, a plan can sound

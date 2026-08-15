@@ -2043,3 +2043,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue the fourth-pass worked-case expansion with Chapter 10's
   schema-validation scenario, then expand early chapters and regenerate the
   DOCX for visual review.
+
+### 2026-08-15 — Chapter 10 fourth-pass schema-validation case
+
+**What changed:**
+
+- Added a concrete validation walkthrough to Chapter 10. It follows a
+  well-formed plan containing `outside.md`, shows allow-list filtering,
+  caller-controlled objective/approval normalization, the no-evidence path,
+  and the shared LangChain/direct adapter contract.
+- The case makes the distinction between JSON/schema validity and evidence or
+  authority validity explicit, without making an API-quality claim.
+
+**Verification:**
+
+- `make audit-book` passed at 32,217 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_structured_planning.py` passed (7 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin fourth-pass expansion of the opening chapters, starting with the
+  introduction's installation/reproducibility walkthrough; then regenerate the
+  DOCX for visual review once a meaningful batch is complete.
