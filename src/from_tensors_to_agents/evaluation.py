@@ -8,6 +8,7 @@ from pathlib import Path
 from from_tensors_to_agents.book_intelligence import (
     ApprovalCheckpoint,
     build_index,
+    grounded_answer,
     grounded_evidence,
     propose_improvement,
     retrieve,
@@ -35,6 +36,18 @@ def evaluate(root: Path, cases: list[dict[str, object]], output: Path) -> list[d
             answer = grounded_evidence([])
             passed = bool(case["must_refuse"]) and answer.startswith("No grounded answer")
             detail = answer
+        elif task == "grounded-answer":
+            answer = grounded_answer(index, str(case["question"]))
+            expected = str(case["must_cite"])
+            passed = answer.startswith("Grounded evidence only:") and f"[{expected}" in answer
+            detail = answer
+        elif task == "citation":
+            retrieved = retrieve(index, str(case["question"]))
+            expected_source = str(case["must_cite"])
+            expected_key = str(case["must_preserve_key"])
+            matching = [item for item in retrieved if item.evidence.source == expected_source]
+            passed = bool(matching) and expected_key in matching[0].evidence.citations
+            detail = f"retrieved={[item.evidence.source for item in retrieved]}; citations={[item.evidence.citations for item in matching]}"
         elif task == "plan":
             before = {path: path.read_text(encoding="utf-8") for path in root.rglob("*") if path.is_file()}
             proposal = propose_improvement(index, str(case["question"]))

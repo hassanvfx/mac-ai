@@ -1040,3 +1040,27 @@ and generated-DOCX inspection have all happened.
 - [ ] Complete Chapter 7 with controlled workload variations, output-quality
   boundaries, and local-versus-hosted alternatives; then expand Chapter 8's
   learned embedding and retrieval material.
+
+### 2026-08-15 — Reliability fixture expansion
+
+**What changed:**
+
+- Added two deterministic Book Intelligence evaluation cases: grounded answers
+  must include the real retrieved source path, and embedding retrieval must
+  preserve the expected `reimers2019sentencebert` citation key.
+- Extended the evaluator to execute those cases and strengthened the evaluation
+  test to assert the new coverage is present.
+- The first run exposed a real variable-shadowing error in the evaluator's
+  citation branch; it was fixed before recording the result. This is useful
+  evidence that the trace itself is exercised, not merely declared.
+
+**Verification:**
+
+- Targeted evaluation and reliability tests passed.
+- `evals/run_reliability.py` passed all 6 cases with no model or credentials.
+- No source, Git, or external write is authorized by the suite.
+
+**Next task:**
+
+- [ ] Add further failure fixtures for empty corpus and invalid/missing source
+  configuration, then continue the Chapter 7 and Chapter 8 editorial passes.

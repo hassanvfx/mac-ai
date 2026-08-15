@@ -12,4 +12,9 @@ def test_versioned_book_intelligence_evaluation_passes_without_a_model(tmp_path:
         tmp_path / "evaluation.json",
     )
     assert all(result["passed"] for result in results)
+    assert {result["id"] for result in results} >= {
+        "grounded-path-attribution",
+        "citation-key-preservation",
+        "unsupported-claim",
+    }
     assert (tmp_path / "evaluation.json").exists()
