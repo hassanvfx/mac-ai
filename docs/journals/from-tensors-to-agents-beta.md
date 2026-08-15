@@ -2491,6 +2491,31 @@ and generated-DOCX inspection have all happened.
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
 
+### 2026-08-15 — Canonical comparison-methods appendix
+
+**What changed:**
+
+- Added Appendix G, *Comparison Methods Without False Rankings*. It gives a
+  reusable protocol for framework, device, retrieval, and workflow comparisons:
+  decision-first design, controlled envelopes, predeclared success/failure,
+  visible timing/quality boundaries, paired records, and limited conclusions.
+
+**Verification:**
+
+- `make audit-book` passed at 43,243 words; Appendix G contributes 1,235
+  words. The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  seven appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the remaining canonical teaching material needed to reach the beta
+  word target, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
+
 ### 2026-08-15 — Book Intelligence capstone walkthrough
 
 **What changed:**
