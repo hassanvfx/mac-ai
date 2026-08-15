@@ -2491,6 +2491,35 @@ and generated-DOCX inspection have all happened.
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
 
+### 2026-08-15 — Beta manuscript word target reached
+
+**What changed:**
+
+- Extended Appendix H with the post-sprint consolidation practice: select the
+  next experiment from recorded uncertainty, maintain chapter/evidence links,
+  preserve handoffs, and treat failures and later revisions as durable learning
+  artifacts.
+
+**Verification:**
+
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run ruff check .` passed.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest` passed (44
+  tests).
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run python
+  evals/run_reliability.py` passed (10 cases).
+- `npm run build` in `site/` passed; the Docusaurus update-check permission
+  warning occurred after the successful build.
+- `./scripts/build-book.sh` produced the ignored interim DOCX before the final
+  Appendix H expansion; rebuild it before the next DOCX render pass.
+- `make audit-book` now passes at 45,002 words, meeting the 45,000-word beta
+  minimum; `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Rebuild/render the final expanded interim DOCX, then perform the next
+  editorial/print review pass. Final Word-PDF export and Lulu release inputs
+  remain human-gated.
+
 ### 2026-08-15 — Canonical ten-day learning sprint
 
 **What changed:**
