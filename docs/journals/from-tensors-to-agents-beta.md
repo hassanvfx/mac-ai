@@ -1651,3 +1651,27 @@ and generated-DOCX inspection have all happened.
 - [ ] Begin the third pass on Chapter 6: deepen the tokenization/attention
   lesson with a worked mask and softmax example, attention-interpretation
   boundaries, context-length policy, and model-evaluation protocol.
+
+### 2026-08-15 — Chapter 6 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 6 from 1,631 to 2,243 words with a worked padding-mask and
+  attention-softmax contract, a clear limit on attention as explanation, and
+  tokenizer/model pairing boundaries.
+- Added a model-evaluation protocol beyond handpicked prompts, context-window
+  policy choices, and encoder/classifier versus generative Transformer
+  interface distinctions.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 24,895 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_transformers_helpers.py` passed (4 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 7 a third-pass expansion: local-inference workload design,
+  prompt/cache/context interactions, memory-pressure diagnostics, and the
+  boundaries between a local observation and a deployment decision.

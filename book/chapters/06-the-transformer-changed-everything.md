@@ -84,6 +84,30 @@ evidence. Inspect the mask whenever batching or truncation behaves oddly: an
 incorrect mask can produce a numerically valid forward pass with the wrong
 effective input.
 
+### A worked masked-attention view
+
+Imagine a batch with one sequence `[CLS], good, [SEP]` and one shorter sequence
+`[CLS], bad, [SEP]` padded to the same width. Their masks might both be
+`[1, 1, 1]` in this tiny example; with extra padding, the shorter row becomes
+`[1, 1, 1, 0, 0]`. Before softmax, an attention implementation adds a very
+negative value to scores for masked key positions. Softmax then assigns those
+positions effectively zero weight. The mask does not give the model a new fact;
+it prevents an artificial padding symbol from becoming a candidate source of
+context.
+
+This is a contract on both axes. The mask's batch and sequence dimensions must
+refer to the same examples and positions as the token IDs. A transposed or
+misaligned mask can have the correct numeric shape in a square batch while
+silencing real tokens or exposing padding. When attention output looks odd,
+inspect decoded tokens and masks together before inspecting model weights.
+
+Softmax also makes attention weights relative. If one score rises while all
+others remain fixed, its normalized share can rise even though its raw value is
+not a general measure of importance. A token can receive high attention in one
+head/layer while later residual paths and feed-forward layers change the final
+representation. Use attention tensors to test a computation or debug a mask,
+not as a standalone explanation for a classifier decision.
+
 ## Real implementation: reveal the path hidden by a convenience API
 
 The manual path in `experiments/06-transformers/inspect_sentiment.py` is:
@@ -129,6 +153,23 @@ separate empirical property. When a product decision depends on confidence,
 evaluate calibration and error costs on a relevant held-out dataset instead of
 thresholding a displayed score by intuition.
 
+### What an inference evaluation would need
+
+The two fixed sentences are an interface fixture, not an evaluation dataset.
+They answer whether the manual and pipeline paths agree under a declared model
+revision. An inference evaluation needs a versioned collection of inputs with
+labels or human judgments, a sampling rule, a metric appropriate to the task,
+and a plan for failures. For sentiment classification that may include class
+balance, accuracy or F1, calibration, domain slices, negation/sarcasm cases,
+and a human review rule for uncertain or harmful errors.
+
+Keep model evaluation separate from prompt anecdotes. A prompt that produces an
+intuitive label is a useful demonstration, but it is selected evidence. A good
+test set includes cases the author did not choose because they flatter the
+model. Record model identifier, revision, tokenizer, maximum length,
+preprocessing, device, and label mapping with the results so a future reader
+can tell whether a changed score came from the model or the evaluation setup.
+
 ## Experiment
 
 The recorded run used Python 3.11.9, PyTorch 2.13.0, Transformers 5.15.0, a
@@ -152,6 +193,15 @@ and pipeline result. Then change one variable—such as `--max-length` or
 first changed contract: tokenization, truncation, model revision, label map, or
 device. A changed label is an observation that needs context, not a reason to
 select the more convenient result.
+
+For a context-length policy, define what happens to text that exceeds the
+model's input window before deployment. Truncating the tail may be acceptable
+for a short classification field whose relevant information appears first; it
+is unsafe for a document where the conclusion or exception appears last.
+Chunking produces multiple predictions that need a declared aggregation rule;
+summarizing before classification introduces a second model and failure mode.
+Choose the policy from the task and evaluate boundary cases, not from whichever
+option makes an API call easiest.
 
 ## What broke
 
@@ -183,6 +233,13 @@ checkpoint can reverse a mapping, add classes, or use labels whose names are
 less self-explanatory. The manual ranking helper reads the mapping to keep this
 experiment tied to the selected model artifact.
 
+Tokenizer/model mismatch is a related failure. Token IDs are meaningful only to
+the embedding table and vocabulary that trained with them. Loading a tokenizer
+from a different checkpoint, silently changing special-token handling, or
+mixing cased and uncased preprocessing can preserve a valid tensor shape while
+altering the input the classifier actually receives. Pin the paired model and
+tokenizer revision for any recorded inference result.
+
 ## Alternatives and when to use them
 
 Use a direct model call when you need to inspect preprocessing, logits, labels,
@@ -197,6 +254,14 @@ has different context, safety, and evaluation requirements; do not treat this
 sentiment script as a miniature chat assistant. For exact strings, metadata, or
 known keywords, conventional search and rules can be more transparent than any
 Transformer inference call.
+
+Encoder classifiers, decoder-only language models, and encoder-decoder models
+also solve different interface problems. A compact encoder classifier maps a
+bounded input to a known label set; a decoder predicts the next token repeatedly;
+an encoder-decoder model maps one sequence to another. The word “Transformer”
+does not make their context policies, outputs, evaluation methods, or safety
+requirements interchangeable. Choose the architecture after naming the input,
+output, and error decision the product actually needs.
 
 ## Evidence trail
 
