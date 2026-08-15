@@ -29,6 +29,21 @@ feature map across all remaining positions. This does not mean the network has
 learned human concepts such as “line” or “object.” It means the architecture
 offers a route from local pixel patterns to a translation-tolerant class score.
 
+The phrase “feature map” names an intermediate tensor, not a verified picture
+of what the network sees. One channel may respond strongly to a stroke-like
+pattern in this fixture, but its values are the result of learned filters,
+nonlinearities, and the data distribution—not a human-approved concept label.
+Visualizing feature maps can help debug dimensions, dead channels, or saturated
+activations. It cannot prove that a prediction was caused by a visual story a
+reader prefers.
+
+Receptive field has a boundary. A wider field lets a later unit combine more of
+the image, but it does not restore detail a pooling step or crop removed. For
+this 16×16 fixture, two convolutions and pooling make a compact teaching model.
+For a high-resolution task, the same choices can discard thin objects or exact
+positions. Begin with “what must remain distinguishable?” rather than layer
+count.
+
 ## Problem
 
 Train and inspect a small image classifier rather than treating a CNN as a black
@@ -109,6 +124,29 @@ Repeatedly using the test score to select a configuration turns it into another
 validation set. This small fixture keeps all three splits because the habit is
 more important than the difficulty of the current images.
 
+### A decision rule for the three splits
+
+Use training data to compute gradients. Use validation data to compare a small
+number of predeclared alternatives: two learning rates, a pooling choice, or a
+noise condition. Freeze the selected configuration, then evaluate the test
+split once as the reported result. If a test result prompts another architecture
+change, the old test set has become model selection and a new held-out split is
+needed for an honest final estimate.
+
+On a small fixture, record counts as well as percentages. Accuracy of 1.000 on
+48 held-out examples means 48 declared predictions were correct; it does not
+estimate a large-population error rate precisely. The identity matrix and empty
+mistake list add detail, but do not make the sample larger.
+
+### From an error to a hypothesis
+
+If a harder follow-up makes diagonal strokes become vertical predictions, do
+not immediately add layers. Open the named examples, compare their conditions
+with correct diagonals, and check preprocessing and labels. Then state a
+falsifiable hypothesis—perhaps pooling removes a displaced diagonal cue—and
+test one intervention against the same fixed test condition. This connects an
+off-diagonal cell to an experiment rather than an anecdote.
+
 ## Experiment
 
 The recorded PyTorch MPS run used 32 training examples per class, 16 validation
@@ -144,6 +182,12 @@ be confused with vertical strokes under larger offsets”—then inspect the mat
 and saved mistakes. A harder score alone is not a finding until its error shape
 and changed condition are recorded.
 
+Keep a baseline record immutable. A controlled variant needs its own generator
+settings, split seeds, model/optimizer settings, device, metrics, matrix,
+mistakes, and limitations. Otherwise a later noisy run can overwrite the
+perfect baseline and make it impossible to identify what changed. Benchmark
+records preserve this history; prose should point to the executable condition.
+
 ## What broke
 
 The easy failure is to report training accuracy alone. A model can memorize a
@@ -163,6 +207,14 @@ and whether mistakes came from training, validation, or test data. Keep class
 names and matrix ordering with the recorded result. When a real dataset
 replaces this fixture, examine labels as well as predictions: a model cannot
 learn a distinction that annotators apply inconsistently.
+
+Distribution shift is the larger version of the same problem. The fixture
+assumes centered-ish strokes, clipped Gaussian noise, and three balanced named
+classes. A camera image with texture, a new diagonal angle, or an unrepresented
+class asks a different question. A confident output is still only one of the
+original three logits. Before using a CNN in a new environment, collect
+representative held-out data, decide how unknowns are handled, and evaluate the
+error patterns that matter to users.
 
 ## Alternatives and when to use them
 
@@ -188,6 +240,13 @@ limiting what the result establishes. A real deployment may have camera noise,
 backgrounds, labels, and class proportions that this generator never models.
 The correct response is not to claim robustness from a toy score; it is to
 create a new versioned evaluation question with those conditions represented.
+
+Segmentation, detection, and keypoint tasks are further alternatives when a
+single class label discards information the product needs. Their outputs carry
+spatial structure, so datasets, losses, metrics, and error review must do the
+same. A classifier that calls a scene “diagonal” cannot replace a system that
+must identify where a defect lies. Match output representation to the decision
+the user must make before choosing an architecture family.
 
 ## Evidence trail
 

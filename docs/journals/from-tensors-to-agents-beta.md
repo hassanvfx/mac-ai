@@ -1626,3 +1626,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 5 a third-pass expansion: move from the existing CNN
   explanation to receptive-field examples, feature-map interpretation limits,
   controlled robustness experiments, and train/validation/test decision rules.
+
+### 2026-08-15 — Chapter 5 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 5 from 1,666 to 2,202 words. It now frames feature maps as
+  diagnostics rather than explanations, establishes receptive-field limits, and
+  gives a strict train/validation/test decision rule.
+- Added a procedure for converting a confusion-matrix error into a falsifiable
+  one-change experiment, immutable baseline-record guidance, distribution-shift
+  boundaries, and output-representation alternatives such as detection and
+  segmentation.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 24,283 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_vision.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin the third pass on Chapter 6: deepen the tokenization/attention
+  lesson with a worked mask and softmax example, attention-interpretation
+  boundaries, context-length policy, and model-evaluation protocol.
