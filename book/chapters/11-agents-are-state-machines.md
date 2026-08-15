@@ -13,6 +13,11 @@ needs to answer sharper questions: what state is saved, what causes a pause,
 what happens after rejection, and which transition is allowed to mutate the
 world?
 
+State is also an audit record. It should say which evidence was considered,
+which plan was proposed, why a workflow paused, and whether a human accepted or
+rejected it. If those facts exist only in transient prompt text, a restart or a
+later review cannot distinguish a deliberate decision from an accidental one.
+
 ## Problem
 
 The Book Intelligence Assistant has retrieved evidence, a plan, and a critique.

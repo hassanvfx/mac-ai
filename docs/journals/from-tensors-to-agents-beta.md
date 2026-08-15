@@ -1117,3 +1117,8 @@ and generated-DOCX inspection have all happened.
 - Began the structured-systems editorial pass: direct and framework adapters
   must share retrieved evidence and either return validated, source-scoped
   output or expose their failure; typed output is never permission to act.
+
+### 2026-08-15 — Chapter 11 persisted-state audit boundary
+
+- Clarified that persisted workflow state records considered evidence, proposed
+  plan, pause reason, and human decision—not merely enough data to resume code.
