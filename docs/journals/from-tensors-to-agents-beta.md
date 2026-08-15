@@ -1252,3 +1252,33 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 9's grounded-answer material: chunk-to-answer citation
   mechanics, retrieval failures, context budgeting, and the distinction between
   repository evidence and a generative response.
+
+### 2026-08-15 — Chapter 9 grounded-RAG expansion
+
+**What changed:**
+
+- Expanded Chapter 9 to a 1,379-word first editorial pass. It now separates
+  retrieved context from model weights, defines the reader-visible evidence
+  packet, and documents threshold and context-budget limits without treating
+  either as a truth guarantee.
+- Added deterministic failure/evaluation guidance for empty inputs, weak
+  neighbors, citations, path resolution, retrieval recall, and grounded-answer
+  support. It also calls out citation laundering and repository text that must
+  never become workflow instructions.
+- Clarified when curated links or manual search are the better option, and the
+  required primary-source boundary for high-stakes external questions.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 18,085 words, still below the
+  45,000–55,000 beta target.
+- Targeted Book Intelligence retrieval/evaluation tests passed: 14 tests.
+- The deterministic grounded-answer exercise ran and returned only labeled
+  repository excerpts; it did not generate a free-form answer.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 10's direct-SDK and structured-output comparison: schema
+  validation, adapter failures, configuration boundaries, and the no-write plan
+  contract.
