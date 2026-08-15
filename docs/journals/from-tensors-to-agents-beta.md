@@ -1812,3 +1812,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 12 a third-pass expansion: sharpen approval scope, human
   review ergonomics, persistence and retention choices, rejection/revision
   loops, and how a future writer remains least-privileged.
+
+### 2026-08-15 — Chapter 12 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 12 from 1,191 to 1,869 words. It now defines reviewable
+  approval scope, treats the pause payload as a human interface, and separates
+  approve/reject from future revision and execution capabilities.
+- Added retention and generated-state cleanup guidance, secret boundaries,
+  stale-proposal and rejection recovery procedures, review-ergonomics criteria,
+  and a narrowly scoped design for any future writer.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 28,935 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_approval_workflow.py tests/test_workflow_comparison.py` passed
+  (4 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 13 a third-pass expansion: compare deterministic retrieval,
+  a single planner, and a researcher/critic/writer graph by controlled task,
+  cost, latency, safety, and evidence quality rather than agent-count rhetoric.

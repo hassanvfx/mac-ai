@@ -34,6 +34,21 @@ into a write capability. This book uses a narrower contract: a checkpoint can
 remember a proposal, but it cannot be a substitute for the repository, a
 permission system, or a change log.
 
+Approval is strongest when the reviewer can answer four questions without
+reconstructing hidden context: what is proposed, which evidence supports it,
+what exact effect would follow, and what happens if the answer is no. The beta
+answers the third question with “nothing is executed.” That may feel limited,
+but it is a valuable capability boundary: a reviewer can exercise approval and
+rejection paths before any code has authority to write prose, change Git state,
+or contact an external service.
+
+Human control is also more than a boolean. A useful decision can be approve,
+reject, request a revision, or abandon a stale proposal. This small graph uses
+approve and reject to keep the state space testable. If a revision option is
+added later, it should route back to evidence and planning with an explicit
+reason, not mutate the old plan in place and reuse an approval that was scoped
+to different text.
+
 ## Minimal implementation
 
 The graph from Chapter 11 stores a checkpoint after each super-step under an
@@ -51,6 +66,13 @@ is durable information: the proposal was reviewed and is not authorized to
 continue. A later attempt needs a new proposal with new evidence, or a clearly
 identified resume of the same proposal. It must not silently reinterpret an
 old approval after the chapter, corpus, or requested objective has changed.
+
+The pause payload is an interface for a human, so design it for review rather
+than for a model. Keep paths readable, state why each item was retrieved, show
+the critique and unsupported-claim warnings, and name the no-write boundary in
+plain language. Do not make a reviewer infer scope from a long free-form
+prompt. A good interface makes it easy to reject an unclear proposal; rejection
+is a safe outcome, not an error that must be optimized away.
 
 ## Real implementation
 
@@ -71,6 +93,20 @@ dumping ground for retrieved documents. Keeping evidence as repository paths
 means a reviewer can reopen the canonical file, while keeping the local SQLite
 file ignored prevents operational state from polluting a commit or an exported
 manuscript.
+
+Retention is a design choice, not a side effect of choosing SQLite. Decide how
+long pending proposals are useful, who may read their objectives and evidence
+paths, where backups reside, and how generated state is removed when the work
+ends. For this repository, local generated state is ignored and can be deleted
+without deleting canonical prose or experiment records. A shared deployment
+would need access controls and an explicit retention/deletion policy before
+storing project context for more than a local learning exercise.
+
+Do not put raw secrets in an approval payload, even if a future action needs an
+API credential. The credential should be resolved only by the least-privileged
+executor after a scoped approval, and its value should never be checkpointed or
+rendered in logs. The current graph has no executor, so it offers a simple
+property to test: there is nowhere for a secret-backed external call to occur.
 
 ## Experiment
 
@@ -95,6 +131,21 @@ confirm that no tracked source file has changed. Repeat in a fresh thread with
 approval. The expected terminal labels are deliberately explicit so logs and
 tests do not mistake a pause for success.
 
+Run a stale-proposal exercise as well. Pause with one objective and evidence
+set, change or replace a cited file in a disposable fixture, then inspect the
+resume boundary. The safe policy is to invalidate or re-review the proposal,
+not to treat the old decision as portable. The current beta expresses this as a
+design rule because it has no writer; a writer-capable version must enforce it
+with a revision/hash check and a new approval payload containing the intended
+diff.
+
+Review ergonomics are measurable. Record whether a reviewer can identify the
+objective, paths, limitations, decision, and final no-write status from the
+payload and trace. If they cannot, the system has a transparency failure even
+when the graph reaches the expected node. A future usability evaluation can
+use scripted review cases, but it should preserve the same safety rule: a
+positive label is not evidence of an executed or correct change.
+
 ## What broke
 
 An interrupt node restarts from the beginning when resumed. Therefore code
@@ -110,6 +161,13 @@ paused. Before any future writer acts, it must re-read every cited path,
 validate that the proposal still applies, and show the resulting diff to the
 human. A saved `approved` flag alone is never enough to prove that a changed
 proposal remains safe.
+
+Rejection needs an equally clear recovery route. Preserve the rejected status
+and reviewer reason when there is one, then require a fresh retrieval and plan
+for materially changed work. Do not reset a rejected checkpoint to pending in
+place, because that erases the audit trail and can confuse a later reviewer
+about which proposal was actually declined. Starting a new thread is cheaper
+than interpreting a history with ambiguous scope.
 
 ## Alternatives
 
@@ -140,6 +198,14 @@ actual diff; Git records the final change. This division is intentionally
 boring. It gives a reader one place to inspect operational history and another
 place to inspect published source history, without asking either system to
 pretend it can replace the other.
+
+A future writer should be a narrow, separate capability: receive an approved
+proposal and freshly verified evidence; calculate a single inspectable diff;
+pause again with that diff; then write only the approved target if the revision
+still matches. It should not receive a shell, a broad filesystem path, Git
+credentials, or network tools by default. This is more restrictive than many
+agent demonstrations, but it turns “human in the loop” into a technical
+property instead of an honor system.
 
 ## Evidence trail
 
