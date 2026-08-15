@@ -33,6 +33,8 @@ a built-in explanation of why a model chose a label: attention weights are part
 of the computation, while a trustworthy explanation requires a separate,
 validated evaluation question.
 
+![Transformer inference turns text into an explicit sequence of model contracts.](../assets/transformers/tokenization-to-logits.svg)
+
 ## Problem
 
 Move from tokenization to a pretrained model inference path we can inspect. We
@@ -64,6 +66,14 @@ script. `[CLS]` and `[SEP]` delimit the sequence for this model family; they
 are not words from the sentence. An attention mask marks which positions are
 real input rather than padding when a batch contains sequences of unequal
 length.
+
+Padding illustrates why masks exist. A batch processor wants rectangular
+tensors, but one sentence may have 10 tokens and another 40. It can add padding
+tokens to make both rows length 40. The attention mask distinguishes genuine
+positions from added placeholders, so the model does not treat padding as
+evidence. Inspect the mask whenever batching or truncation behaves oddly: an
+incorrect mask can produce a numerically valid forward pass with the wrong
+effective input.
 
 ## Real implementation: reveal the path hidden by a convenience API
 

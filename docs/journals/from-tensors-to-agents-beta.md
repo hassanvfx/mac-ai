@@ -998,3 +998,23 @@ and generated-DOCX inspection have all happened.
 - [ ] Complete Chapter 6 with padding/truncation experiments, offline/cache
   failures, and alternatives; then add the tokenization/attention data-flow
   vector visual.
+
+### 2026-08-15 — Chapter 6 transformer visual and padding boundary
+
+**What changed:**
+
+- Added `book/assets/transformers/tokenization-to-logits.svg`, an editable
+  vector diagram of the inspected text → tokenizer → IDs/mask → contextual
+  vectors → logits/label path.
+- Expanded Chapter 6 with padding-mask behavior and linked the visual directly
+  beside the input-contract explanation.
+
+**Verification:**
+
+- `make audit-book` passed at 14,205 words.
+- `cd site && npm run build` passed; the new SVG resolves in the course site.
+
+**Next task:**
+
+- [ ] Finish Chapter 6's controlled truncation/cache-failure/alternative
+  guidance, then begin Chapter 7's measured MLX and local-model discussion.
