@@ -50,6 +50,24 @@ numbered chapter, the chapter identifier stays attached. If it contains a
 citation key, that key travels with the result as a clue for the reader to
 check in the shared bibliography.
 
+Chunk boundaries are an information-retrieval policy, not cleanup trivia. A
+boundary that separates a benchmark number from its workload can produce an
+apparently relevant but unusable result. One that merges several unrelated
+sections can hide which statement the score actually matched. The baseline
+uses blank paragraphs because Markdown authors already use them to group an
+idea, and its `limit=1200` character rule is visible in
+`src/from_tensors_to_agents/book_intelligence.py`. This is a practical default,
+not an ideal universal size. Change it only alongside a fixture evaluation and
+record the corpus revision that produced the result.
+
+There are two useful kinds of determinism here. The hash-vector baseline is
+deterministic across runs of the same code and text, so a failing attribution
+test has a narrow debugging surface. A learned encoder can also be made
+repeatable enough for an experiment by pinning its model identifier, package
+versions, corpus snapshot, and ranking procedure. Neither form proves that the
+ranking is good. Repeatability tells us that we can investigate a result; it
+does not turn a similarity score into relevance.
+
 ## Minimal implementation
 
 The baseline in [book_intelligence.py](../../src/from_tensors_to_agents/book_intelligence.py)
@@ -64,6 +82,14 @@ synonyms, and word order make it unsuitable for claims about semantic quality.
 Its value is different: the same fixture and query produce the same ordering,
 so tests can verify chunking, path attribution, citation propagation, empty
 input, and refusal behavior on a CPU-only machine.
+
+The fixture is deliberately smaller than the live book corpus. It is a frozen,
+non-sensitive set of source-shaped files whose expected paths and citation keys
+belong in tests. That gives automated checks a stable oracle even while this
+manuscript changes daily. The live corpus is the useful authoring workspace;
+its generated index remains local because it reflects the current checkout and
+may be stale the moment another chapter is edited. Never treat a passing
+fixture ranking as proof that the live corpus has complete coverage.
 
 ```bash
 uv run python experiments/08-embeddings/book_search.py --deterministic \
@@ -89,6 +115,22 @@ score. This lets later RAG and planning layers work against an explicit
 interface rather than assume a particular vector database. If the learned
 encoder cannot be installed or loaded, the fallback must label itself instead
 of implying that learned search took place.
+
+The implementation normalizes the complete matrix of document vectors and the
+query vector before their dot product. This gives cosine similarity for
+nonempty vectors, but the score remains relative to this corpus and encoder.
+Do not compare a score from one embedding model or chunk policy with a score
+from another as though they were calibrated probabilities. Compare outcomes:
+did an acceptable evidence path appear in the returned set, did the result
+retain its source metadata, and could a reader inspect the supporting passage?
+
+The encoder is optional for two operational reasons. Downloaded weights and
+their cache consume local storage, and the model may be unavailable on an
+offline or CPU-only machine. The command begins with `df -h .` so an author can
+check storage before triggering that download. If the optional path fails, use
+the deterministic baseline to keep contract tests and the rest of the book
+workflow working; report the learned run as unavailable rather than silently
+substituting a different model.
 
 ```bash
 df -h .
@@ -119,6 +161,22 @@ limit, embedding model, normalization rule, or corpus snapshot. Separate
 retrieval recall from answer grounding: retrieval asks whether useful evidence
 appeared; grounding asks whether the response cites only evidence it received.
 
+Use simple measurements before elaborate dashboards. For a question with an
+acceptable path set, recall at *k* asks whether at least one acceptable path is
+in the first *k* returned results. A path-attribution check asks whether every
+displayed result actually resolves inside the corpus. A failure review asks why
+the miss occurred: query vocabulary, an over-broad chunk, a missing document,
+or a misleading but lexically similar neighbor. These measures expose different
+problems and should be stored with the question rather than reconstructed from
+a favorable terminal screenshot.
+
+The retrieval interface is intentionally read-only. It can assemble evidence
+for a later plan, but it cannot edit a chapter, rewrite a benchmark, or alter
+Git state. This boundary keeps the first capability easy to audit: input files
+produce chunks; chunks produce ranked candidates; candidates preserve paths.
+Chapters 9 through 12 add answers, structured plans, and approval state on top
+of this contract without granting retrieval itself write authority.
+
 ## What broke
 
 Three failure modes matter immediately. Empty input has no evidence and must
@@ -136,6 +194,14 @@ Rebuild it after editorial changes, and resolve every returned path inside the
 configured corpus before displaying it. The corpus reviewer rejects Markdown
 links that escape that boundary.
 
+Similarity can also encode an accidental shortcut. A query asking about
+“memory” may retrieve a local-inference benchmark when the author meant a
+LangGraph checkpoint, because both use the same word. A query with a citation
+key may be better served by exact lookup than embedding search. Preserve the
+query and the returned excerpt in an evaluation failure fixture; saying only
+that “retrieval was bad” leaves no way to tell whether an embedding change,
+chunk boundary, or task wording should change next.
+
 ## Alternatives
 
 Keyword search is cheap, predictable, and sometimes best for exact filenames
@@ -151,6 +217,14 @@ questions are both common. Consider a persistent vector store only when corpus
 size, update rate, filtering needs, or multi-user access makes an in-process
 index impractical. In every case, keep the index revision, chunking policy, and
 returned paths inspectable before optimizing ranking sophistication.
+
+Reranking is useful when a cheap first pass returns many candidates but the
+top few need finer discrimination. It is not a free accuracy button: it adds a
+second model or rule, another versioned dependency, and another place to lose
+provenance. Add it only when a recorded evaluation miss justifies it, and make
+the reranker return the original `Evidence` records rather than a detached
+summary. For this book-sized corpus, transparent candidates are more valuable
+than an opaque score improvement.
 
 ## When to use it—and when not to
 

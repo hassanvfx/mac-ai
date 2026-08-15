@@ -1702,3 +1702,30 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 8 a third-pass expansion: explain chunk boundaries,
   deterministic versus learned embeddings, retrieval metrics, fixture-corpus
   limits, and the evidence-preserving handoff into grounded answering.
+
+### 2026-08-15 — Chapter 8 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 8 from 1,290 to 2,029 words. The chapter now treats chunk
+  boundaries as a versioned policy, separates deterministic fixture tests from
+  learned retrieval, and documents the shared provenance contract in more
+  depth.
+- Added retrieval-evaluation guidance for acceptable paths, recall at *k*,
+  attribution checks, failure fixtures, stale-index handling, and the read-only
+  boundary that later answering and planning layers must preserve.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 26,216 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_intelligence.py tests/test_learned_retrieval.py` passed
+  (13 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 9 a third-pass expansion: make grounded-context assembly,
+  citations, missing-evidence refusal, query/data boundaries, and answer
+  evaluation concrete without allowing retrieved text to masquerade as proof.
