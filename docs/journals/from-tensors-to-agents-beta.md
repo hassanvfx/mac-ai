@@ -381,6 +381,11 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
   syntax. GitHub rejected the workflow during registration, before any job was
   created. Replaced it with standard block mapping syntax and will verify the
   new deployment run.
+- Deployment run `31876373899` completed successfully: the Docusaurus build,
+  Pages artifact upload, and `actions/deploy-pages` step all passed.
+- Confirmed public HTTP 200 responses for the course home and the first lab:
+  `https://hassanvfx.github.io/mac-ai/` and
+  `https://hassanvfx.github.io/mac-ai/labs/01/`.
 
 ---
 
