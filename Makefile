@@ -1,4 +1,4 @@
-.PHONY: test lint audit-book site book provisional-pdf preflight cover release-manifest
+.PHONY: test lint audit-book site book provisional-pdf pdf-online preflight cover qrcodes release-manifest
 
 test:
 	uv run pytest
@@ -21,8 +21,14 @@ preflight:
 provisional-pdf: book
 	./scripts/export-provisional-pdf.sh
 
+pdf-online: provisional-pdf
+	uv run python scripts/build_online_pdf.py
+
 cover:
 	uv run python scripts/build-cover.py
+
+qrcodes:
+	uv run python scripts/generate_qr_codes.py
 
 release-manifest:
 	uv run python scripts/release_manifest.py

@@ -6,3 +6,9 @@
 .markdown h1 {
   letter-spacing: -0.03em;
 }
+
+.markdown code {
+  border: 1px solid #d9e2ec;
+  border-radius: 4px;
+  padding: 0.08rem 0.28rem;
+}

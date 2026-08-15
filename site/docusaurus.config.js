@@ -4,15 +4,15 @@ import {themes as prismThemes} from 'prism-react-renderer';
 const config = {
   title: 'AI From Tensors to Agents on Mac Silicon',
   tagline: 'Learning modern AI by building it on Apple Silicon',
-  url: 'https://YOUR_GITHUB_USERNAME.github.io',
-  baseUrl: '/from-tensors-to-agents/',
-  organizationName: 'YOUR_GITHUB_USERNAME',
-  projectName: 'from-tensors-to-agents',
+  url: 'https://hassanvfx.github.io',
+  baseUrl: '/mac-ai/',
+  organizationName: 'hassanvfx',
+  projectName: 'mac-ai',
   onBrokenLinks: 'throw',
   presets: [[
     'classic',
     {
-      docs: {path: '../book/chapters', routeBasePath: '/', sidebarPath: './sidebars.js'},
+      docs: {path: '../book/chapters', routeBasePath: 'course', sidebarPath: './sidebars.js'},
       blog: false,
       theme: {customCss: './src/css/custom.css'}
     }
@@ -21,8 +21,10 @@ const config = {
     navbar: {
       title: 'AI From Tensors to Agents',
       items: [
-        {to: '/', label: 'Course', position: 'left'},
-        {href: 'https://github.com/YOUR_GITHUB_USERNAME/from-tensors-to-agents', label: 'GitHub', position: 'right'}
+        {to: '/', label: 'Start here', position: 'left'},
+        {to: '/course/', label: 'Course', position: 'left'},
+        {to: '/labs/', label: 'Labs', position: 'left'},
+        {href: 'https://github.com/hassanvfx/mac-ai', label: 'GitHub', position: 'right'}
       ]
     },
     footer: {

@@ -13,3 +13,7 @@ the final wraparound cover or barcode until the final interior PDF page count
 and real ISBN/metadata are available. Lulu's downloaded cover template—not an
 inferred spine calculation—controls the final back/spine/front dimensions and
 barcode safe zone.
+
+`pdf-online-cover.png` is the supplied screen-edition cover. `make pdf-online`
+uses it as the first page of `book/build/pdf-online.pdf`; that PDF is explicitly
+not Lulu-compliant and is intended for online reading only.

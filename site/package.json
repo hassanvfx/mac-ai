@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "prebuild": "node scripts/generate-reader-pages.mjs",
     "start": "docusaurus start",
     "build": "docusaurus build",
     "clear": "docusaurus clear",

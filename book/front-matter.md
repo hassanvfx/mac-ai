@@ -1,25 +1,3 @@
-::: {.half-title}
-
-# AI From Tensors to Agents on Mac Silicon
-
-:::
-
-\newpage
-
-::: {.title-page}
-
-# AI From Tensors to Agents on Mac Silicon
-
-## Learning Modern AI by Building It on Apple Silicon
-
-Hassan Uriostegui
-
-Waken AI Labs
-
-:::
-
-\newpage
-
 ::: {.copyright-page}
 
 Copyright © 2026 Hassan Uriostegui. All rights reserved.

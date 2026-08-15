@@ -5,7 +5,7 @@ imprint: "Waken AI Labs"
 rights: "Copyright © 2026 Hassan Uriostegui. All rights reserved."
 lang: en-US
 papersize: "6x9"
-toc: true
+toc: false
 fontsize: 10.5pt
 mainfont: "Aptos"
 bibliography: ../research/references.bib

@@ -342,6 +342,98 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 
 ## Journal Entries
 
+### 2026-08-15 — Public reader access, labs, and QR bridge
+
+**What changed:**
+
+- Configured the Docusaurus production address for
+  `https://hassanvfx.github.io/mac-ai/` and moved canonical chapter docs under
+  `/course/`, preserving `/` for reader onboarding.
+- Added a generated README-mirror landing page and a versioned chapter-lab
+  manifest. Each lab page provides its command, expected result, GitHub source,
+  benchmark record, course link, and phone-to-Mac AirDrop guidance.
+- Added README sections “How to read this book” and “Learn this with your AI
+  copilot,” including clone/setup steps, the read-run-inspect-modify-verify
+  loop, the 10-day tutoring prompt, and a no-unapproved-writes instruction.
+- Added a QR manifest, deterministic QR generator, and 14 vector chapter-lab
+  QR assets pointing to the planned durable GitHub Pages lab URLs.
+
+**Verification:**
+
+- GitHub CLI authenticated successfully as `hassanvfx`.
+- `npm run build` in `site/` — passed with the final production base path.
+- `uv run ruff check .` — passed.
+- `uv run pytest` — 44 passed.
+
+**Next action:**
+
+- [ ] Commit this reader-access layer with the prior PDF-layout changes.
+- [ ] Create public `hassanvfx/mac-ai`, push `main`, enable GitHub Pages via
+  Actions, and verify the deployment and QR URLs.
+
+---
+
+### 2026-08-15 — Reading-layout refinement
+
+**What changed:**
+
+- Reworked the generated DOCX styles into a cohesive print/read system:
+  Garamond body copy with leading and paragraph separation; Georgia display
+  hierarchy; restrained blue section accents; distinct caption treatment; and
+  page-safe image sizing.
+- Added a code-block panel system with Menlo, inset margins, a soft background,
+  border, compact leading, and matching inline-code treatment.
+- Added generated PDF contents and running folios. The contents page derives
+  its references from the rendered manuscript, avoiding LibreOffice's empty
+  table-of-contents field.
+- Simplified front matter to eliminate the duplicate half-title/title pages.
+- Rebuilt both the 6×9 review interior and `pdf-online.pdf`. Cover production
+  remains deferred as requested.
+
+**Verification:**
+
+- `uv run ruff check .` — passed.
+- Interior PDF preflight — 161 single 6×9 pages, unencrypted.
+- `pdf-online.pdf` — 162 pages, unencrypted, with the supplied cover as page 1.
+- Visually inspected the generated contents page, paragraph spacing, chapter
+  hierarchy, figure placement, and folio treatment.
+
+**Next action:**
+
+- [ ] Commit the online edition and layout-system source changes when requested.
+
+---
+
+### 2026-08-15 — Online reading edition
+
+**What changed:**
+
+- Added `scripts/build_online_pdf.py` and the `make pdf-online` target.
+- Stored the supplied complete cover as `book/assets/cover/pdf-online-cover.png`.
+- Built `book/build/pdf-online.pdf`: one native-aspect cover page followed by
+  the 183-page provisional manuscript PDF.
+
+**Decision:**
+
+`pdf-online.pdf` is a screen-first beta reading edition. Its first cover page
+keeps the supplied artwork's native portrait ratio and is therefore not a Lulu
+interior or wraparound-cover file. It has no print-upload claim and does not
+replace the separately preflighted provisional Lulu-oriented assets.
+
+**Verification:**
+
+- `make pdf-online` — produced a 184-page PDF.
+- `uv run ruff check .` — passed.
+- PDF metadata identifies the edition as online-only; it is unencrypted.
+- Rendered page 1 was visually inspected and matches the supplied cover.
+
+**Next action:**
+
+- [ ] Commit the online-edition source asset and deterministic build command
+  when the user requests it.
+
+---
+
 ### 2026-08-15 — Print-ready beta workflow, identity, and provisional cover
 
 **What changed:**

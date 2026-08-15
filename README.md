@@ -91,6 +91,47 @@ cd site && npm ci && npm start
 9. Multi-agent systems, MCP, and evaluation
 10. Capstone, production concerns, and editing
 
+## How to read this book
+
+This is a build-first book. Read one chapter, run its smallest experiment,
+inspect the result against its benchmark record, then change one variable and
+run it again. The book explains the ideas; the repository is the laboratory.
+
+Start by cloning the public repository on your Mac:
+
+```bash
+git clone https://github.com/hassanvfx/mac-ai.git
+cd mac-ai
+uv sync --group dev
+```
+
+Every chapter has a companion lab on the course site. A chapter-end QR code
+opens that lab on a phone; use Safari Share → AirDrop to send the page to your
+Mac, then open the experiment source and run its displayed command. The lab
+also links to the benchmark record, expected behavior, tests, and the next
+exercise. QR codes are convenience links, not a replacement for cloning the
+repository: experiments run locally on your Mac.
+
+## Learn this with your AI copilot
+
+Use an AI coding assistant as a tutor and reviewer, not as a substitute for
+running the work. After cloning the repository, give your assistant a narrow,
+evidence-based request such as:
+
+```text
+Read README.md and docs/journals/from-tensors-to-agents-beta.md. I am on Day 3
+of the ten-day plan. Guide me through Chapter 3 and its lab one step at a time.
+Do not edit files or install optional dependencies without asking me first.
+After each command, help me compare the output with the linked benchmark and
+choose one small experiment to modify.
+```
+
+Adapt the pace to your background: repeat a day when an experiment is unclear,
+skip only a lesson whose prerequisites you can demonstrate, and record what you
+observed. Ask the copilot to explain an error, propose a small hypothesis, or
+review a change against the chapter and benchmark—but keep final actions and
+claims under your control.
+
 ## Repository map
 
 - `research/` — learning notes and BibTeX sources.

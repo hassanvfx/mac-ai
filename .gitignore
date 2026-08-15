@@ -7,6 +7,8 @@ __pycache__/
 site/node_modules/
 site/.docusaurus/
 site/build/
+site/src/generated/
+site/src/pages/labs/
 book/build/
 *.pdf
 *.DS_Store
