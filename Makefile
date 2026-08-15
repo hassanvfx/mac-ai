@@ -1,10 +1,13 @@
-.PHONY: test lint site book preflight
+.PHONY: test lint audit-book site book preflight
 
 test:
 	uv run pytest
 
 lint:
 	uv run ruff check .
+
+audit-book:
+	python3 scripts/audit_book.py
 
 site:
 	cd site && npm run build

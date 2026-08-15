@@ -791,3 +791,34 @@ and Lulu proof).
   and a page-by-page release inspection remain macOS production tasks.
 - Lulu cover-template download and proof ordering require finalized page count,
   cover/metadata choices, and explicit publication approval.
+
+### 2026-08-15 — Editorial audit and Chapter 1 expansion
+
+**What changed:**
+
+- Added `scripts/audit_book.py` and `make audit-book`. The audit checks each
+  canonical chapter for the required editorial sections, resolves citation
+  keys against the shared BibTeX file, verifies relative Markdown links, and
+  reports the manuscript word count against the 45,000–55,000 beta target.
+- Added a regression test for the audit and documented its use in the README.
+- Expanded Chapter 1 from a short outline into a 1,614-word teaching draft:
+  shape tables, reshape-versus-permute reasoning, layer-boundary contracts,
+  runnable-code linkage, reproducible observation practice, debugging
+  invariants, and practical broadcasting alternatives.
+
+**Verification:**
+
+- `make audit-book` passed with no structural, citation, or link findings.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- The audit reports 10,620 manuscript words. This confirms the beta remains
+  materially incomplete: the remaining chapters need the same substantive
+  treatment before the 45,000–55,000-word target and new DOCX proof are
+  meaningful.
+
+**Next task:**
+
+- [ ] Expand Chapter 2 with a worked loss/gradient-descent narrative, then
+  continue the editorial pass chapter by chapter.
+- [ ] Add a chapter-by-chapter diagram/evidence checklist to turn the
+  word-count target into reviewable editorial work.

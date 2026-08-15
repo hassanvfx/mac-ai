@@ -100,3 +100,16 @@ cd site && npm ci && npm start
 
 Book prose, diagrams, and illustrations are all-rights-reserved. The code is
 available under the MIT License.
+
+## Editorial audit and beta target
+
+Run the canonical prose audit before each editorial checkpoint:
+
+```bash
+make audit-book
+```
+
+It checks required lesson sections, local runnable-code links, citation keys,
+and the manuscript word budget. The current beta target is 45,000–55,000 words
+(roughly 180–220 6×9 pages); the audit reports progress without treating word
+count alone as evidence of editorial quality.
