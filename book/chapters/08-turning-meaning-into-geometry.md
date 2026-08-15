@@ -177,6 +177,58 @@ produce chunks; chunks produce ranked candidates; candidates preserve paths.
 Chapters 9 through 12 add answers, structured plans, and approval state on top
 of this contract without granting retrieval itself write authority.
 
+## Worked retrieval audit: from a question to inspectable evidence
+
+Take the fixture question, “Where is cosine similarity explained?” The right
+way to judge the result is not to celebrate a number in the terminal. First,
+the evaluator builds an index only from its frozen `research/`,
+`book/chapters/`, `experiments/`, and `benchmarks/` directories. It deliberately
+does not crawl the parent checkout, a home directory, or an arbitrary path
+named in a Markdown link. That bounded input is what makes a returned relative
+path meaningful.
+
+Second, it asks for a small ranked set and checks that
+`evals/fixture_corpus/research/embeddings.md` occurs among the candidates. That
+fixture source says what
+normalization and cosine comparison mean and carries the
+`reimers2019sentencebert` citation key. A useful display therefore includes
+the path, excerpt, and key—not just “similarity score: 0.42.” The reader can
+open the note, locate the cited claim in `research/references.bib`, and decide
+whether it answers the question. If the model had instead returned only a
+benchmark record mentioning the word *similarity*, that would be a candidate
+to inspect, not evidence that the explanation was found.
+
+Third, repeat the same query against the unchanged fixture. The deterministic
+baseline must return the same ordered paths. This is a regression property,
+not a semantic-quality result: hash collisions can still make the order
+unhelpful. Its practical value is that a changed order now has a short list of
+possible causes—fixture text, tokenization, chunking, vector dimensions, or
+the tie-break rule—rather than an unexplained hosted-service change.
+
+Finally, probe the refusal edges. A blank query produces an all-zero query
+vector, so the retriever returns no candidates and the grounded-answer layer
+must say that no indexed evidence matched. An absent corpus produces an empty
+index and the same refusal. A deliberately unsafe fixture link to a path above
+the corpus root is reported by the reviewer as an escaped link; it is never
+followed. These cases make the boundary concrete: retrieval can name evidence
+inside its declared corpus, but it cannot invent an answer or use a link as
+permission to read elsewhere.
+
+Run the frozen audit with:
+
+```bash
+uv run pytest tests/test_book_intelligence.py \
+  tests/test_book_intelligence_evaluation.py tests/test_reliability.py
+uv run python evals/run_reliability.py
+```
+
+The expected result is that the versioned cases pass. It is not an expected
+retrieval score, a claim that learned embeddings are installed, or a claim
+about the quality of a model on a different corpus. When replacing the hash
+baseline with the optional encoder, retain this exact audit shape and add a
+separate versioned relevance set before asserting that learned retrieval is an
+improvement.
+
 ## What broke
 
 Three failure modes matter immediately. Empty input has no evidence and must

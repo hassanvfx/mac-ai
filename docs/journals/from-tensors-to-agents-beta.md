@@ -2296,3 +2296,28 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass prose expansion with Chapters 8–9, then run the
   full Python, site, and DOCX interim-proof validation batch.
+
+### 2026-08-15 — Chapter 8 fourth-pass retrieval audit
+
+**What changed:**
+
+- Added a worked retrieval audit to Chapter 8. It traces a fixture question
+  through bounded corpus indexing, provenance/citation inspection,
+  deterministic reranking, blank and empty-corpus refusal, and unsafe-link
+  reporting.
+- Distinguished every regression assertion from a learned-retrieval quality,
+  latency, or score claim. The audit remains usable without a model download.
+
+**Verification:**
+
+- `make audit-book` passed at 35,032 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_intelligence.py tests/test_book_intelligence_evaluation.py
+  tests/test_reliability.py` passed (11 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the Chapter 9 fourth-pass grounded-answer case, then run the full
+  Python, site, and DOCX interim-proof validation batch.
