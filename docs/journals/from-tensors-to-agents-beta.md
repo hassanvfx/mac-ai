@@ -2197,3 +2197,26 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue fourth-pass prose expansion with Chapters 4–6 and 8–9, then
   broaden fixture failure cases and repeat the full Python/site/DOCX validation
   batch.
+
+### 2026-08-15 — Chapter 4 fourth-pass framework case
+
+**What changed:**
+
+- Added a worked framework-comparison case to Chapter 4. It walks through the
+  fixture invariants, identity confusion-matrix agreement, non-comparable
+  loss/timing observations, and the order for investigating a later divergence.
+- Preserved the limited claim: the existing record demonstrates correctness on
+  one synthetic task, not a framework speed or real-vision ranking.
+
+**Verification:**
+
+- `make audit-book` passed at 33,974 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group tensorflow
+  pytest tests/test_vision.py tests/test_tensorflow_vision.py` passed (4 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass prose expansion with Chapter 5's CNN error-analysis
+  case, then Chapters 6, 8, and 9; broaden fixture failures afterward.

@@ -186,6 +186,41 @@ the correctness comparison. A fair speed protocol needs matching devices or a
 scoped CPU-only condition, repeated warmups, matching batch semantics, and a
 defined timing boundary.
 
+### Worked comparison: agreement on the task, not on every number
+
+Start with the four invariant checks from the record. Both programs receive
+16×16 grayscale strokes from the same deterministic generator; each class has
+32 training, 16 validation, and 16 test examples; the labels remain vertical,
+horizontal, and diagonal; and both report held-out accuracy, a confusion matrix,
+and mistakes. The one necessary layout conversion is visible: the shared NCHW
+fixture becomes NHWC for Keras. A reviewer can therefore test whether the
+learning question stayed the same before reading either training API.
+
+The recorded result is a three-by-three identity confusion matrix with sixteen
+examples in every diagonal cell for all three runs. PyTorch MPS, PyTorch CPU,
+and TensorFlow/Keras CPU each report 1.000 train, validation, and test
+accuracy with an empty mistake list. This is task-level agreement on a
+deliberately separable synthetic fixture. It does not show that the frameworks
+will agree on natural images, an imbalanced dataset, another random seed, or a
+more difficult split.
+
+Now compare the fields that should *not* be collapsed. Final train loss is
+0.275691 for the recorded PyTorch MPS run and 0.001079 for TensorFlow/Keras.
+Their parameter initialization and implementation details are not identical,
+so the loss values are not a winner/loser score. Elapsed time is also scoped:
+the MPS, PyTorch CPU, and TensorFlow CPU observations are 2323.301 ms, 404.449
+ms, and 1015.773 ms respectively, each from a single declared run with unequal
+device and batching conditions. Those values are an environment trace, not a
+speed table.
+
+If a new Keras run produced an off-diagonal error, investigate the contract in
+order. Confirm that `to_nhwc` preserved image values and labels; confirm the
+fixture split/counts and fixed seed; then inspect sparse-label loss/logit
+conventions, batch behavior, and epoch budget. Only after those match should
+you inspect initializer or kernel differences. This sequence turns a surprising
+metric into a localized experiment question instead of a claim that one
+framework's philosophy is better.
+
 ## What broke
 
 Framework setup was the first practical difference. The core project does not
