@@ -2491,6 +2491,32 @@ and generated-DOCX inspection have all happened.
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
 
+### 2026-08-15 — Canonical ten-day learning sprint
+
+**What changed:**
+
+- Added Appendix H, *Ten Days of Learning by Building*. It sequences the
+  project from reproducible Day 0 setup through tensors, vision, transformers,
+  local models, retrieval, structured planning, approval state, workflow
+  comparison, and a beta candidate—while preserving all user-owned release
+  decisions.
+
+**Verification:**
+
+- `make audit-book` passed at 44,123 words; Appendix H contributes 880 words.
+  The manuscript is 877 words below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  eight appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the remaining canonical teaching material needed to reach the beta
+  word target, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
+
 ### 2026-08-15 — Canonical comparison-methods appendix
 
 **What changed:**
