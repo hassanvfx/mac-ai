@@ -22,6 +22,13 @@ prior that a vertical edge is still a vertical edge when it shifts a few pixels.
 
 ![The tiny CNN changes channels and spatial resolution while preserving the batch.](../assets/vision/cnn-feature-flow.svg)
 
+The receptive field grows as layers compose. A first 3×3 filter sees a small
+patch; after pooling and a second convolution, a feature can depend on a wider
+region of the original 16×16 image. Global average pooling then summarizes each
+feature map across all remaining positions. This does not mean the network has
+learned human concepts such as “line” or “object.” It means the architecture
+offers a route from local pixel patterns to a translation-tolerant class score.
+
 ## Problem
 
 Train and inspect a small image classifier rather than treating a CNN as a black
@@ -88,6 +95,20 @@ individual fixture indexes to inspect. A zero-error matrix is not empty
 evidence; it documents that none of the declared error categories occurred on
 the frozen held-out data.
 
+The loss and metric answer different questions. Cross-entropy uses every logit
+and known target to create a differentiable learning signal; accuracy discards
+margin information and counts only whether the highest logit has the right
+class. A model can improve cross-entropy while accuracy stays unchanged, or
+reach the same accuracy with more or less decisive scores. Keep both when
+debugging training, then inspect examples and the confusion matrix before
+deciding whether either result is useful.
+
+Validation data guides choices such as epoch budget, architecture, or noise
+level. Test data estimates the final declared task after those choices are made.
+Repeatedly using the test score to select a configuration turns it into another
+validation set. This small fixture keeps all three splits because the habit is
+more important than the difficulty of the current images.
+
 ## Experiment
 
 The recorded PyTorch MPS run used 32 training examples per class, 16 validation
@@ -114,6 +135,14 @@ between train and validation accuracy. Each variation tests a concrete
 hypothesis about data, rather than asking a larger model to solve an undefined
 problem. Commit the changed generator settings and result before describing a
 robustness finding in prose.
+
+To create a controlled-difficulty follow-up, change exactly one generator
+condition: raise Gaussian noise, increase translation range, thin strokes, or
+reduce training examples. Keep class balance, test seed, topology, and metrics
+fixed. State the hypothesis before running—for example, “diagonal strokes will
+be confused with vertical strokes under larger offsets”—then inspect the matrix
+and saved mistakes. A harder score alone is not a finding until its error shape
+and changed condition are recorded.
 
 ## What broke
 
@@ -151,6 +180,14 @@ augmenting held-out examples invalidates the evaluation boundary. Residual CNNs
 can train deeper feature extractors, and vision transformers use patch tokens
 and attention instead of convolution. Both are useful later, but neither makes
 a tiny, perfectly separable fixture a proxy for real-world vision.
+
+There is also a lesson in the fixture's construction. Train, validation, and
+test images use separate random seeds, but share the same generating family.
+That is appropriate for a controlled lesson about the learning loop, while also
+limiting what the result establishes. A real deployment may have camera noise,
+backgrounds, labels, and class proportions that this generator never models.
+The correct response is not to claim robustness from a toy score; it is to
+create a new versioned evaluation question with those conditions represented.
 
 ## Takeaway
 

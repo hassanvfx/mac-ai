@@ -1419,3 +1419,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 5's CNN learning material with receptive-field intuition,
   train/validation/test roles, error-analysis procedure, and controlled-
   difficulty fixture design.
+
+### 2026-08-15 — Chapter 5 CNN second pass
+
+**What changed:**
+
+- Expanded Chapter 5 to 1,630 words. It now explains receptive-field growth,
+  global pooling as a task hypothesis, cross-entropy versus accuracy, and the
+  distinct roles of training, validation, and held-out test data.
+- Added a controlled-difficulty experiment protocol and explains why separate
+  fixture seeds still do not establish deployment robustness.
+- Retained the existing zero-error fixture observation without treating it as
+  real-world image-performance evidence.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 20,931 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_vision.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Complete a cross-chapter technical-editing pass for Chapters 1–7 and
+  Chapters 8–14, then strengthen the audit to enforce runnable code/research
+  evidence links before another full site and DOCX proof build.
