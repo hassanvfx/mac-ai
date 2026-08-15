@@ -1282,3 +1282,32 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 10's direct-SDK and structured-output comparison: schema
   validation, adapter failures, configuration boundaries, and the no-write plan
   contract.
+
+### 2026-08-15 — Chapter 10 structured-adapter expansion
+
+**What changed:**
+
+- Expanded Chapter 10 to a 1,202-word first editorial pass. It now treats a
+  schema as a data contract rather than a truth or permission contract, and
+  documents the fair-context requirement for comparing direct and composed
+  adapters.
+- Described concrete normalization: allow-listed evidence paths, caller-owned
+  objectives, cleared steps without evidence, forced approval, visible parse
+  failures, and environment-only optional API configuration.
+- Added future controlled-comparison conditions, parser-recovery limits, and
+  a practical choice rule for direct SDK versus orchestration abstraction.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 18,662 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_structured_planning.py` passed (7 tests).
+- The no-network adapter comparison preserved the same source path for both
+  adapters and reported approval required.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 11's state-machine material: explicit state data,
+  transition design, deterministic fallback, trace interpretation, and why
+  state graphs do not by themselves create safe agents.
