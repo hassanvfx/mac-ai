@@ -2066,5 +2066,30 @@ and generated-DOCX inspection have all happened.
 **Next task:**
 
 - [ ] Begin fourth-pass expansion of the opening chapters, starting with the
-  introduction's installation/reproducibility walkthrough; then regenerate the
-  DOCX for visual review once a meaningful batch is complete.
+ introduction's installation/reproducibility walkthrough; then regenerate the
+ DOCX for visual review once a meaningful batch is complete.
+
+### 2026-08-15 — Introduction fourth-pass setup walkthrough
+
+**What changed:**
+
+- Corrected the introduction's stale implementation status: Chapters 10–14
+  now have implemented deterministic Book Intelligence workflows, while all
+  chapters remain active drafts rather than final print artifacts.
+- Added an installation contract for optional groups, an evidence-first
+  disk-space and failure-diagnosis procedure, a fresh-machine first-session
+  walkthrough, and rules separating canonical Git content from generated local
+  caches/checkpoints/DOCX/PDF artifacts.
+
+**Verification:**
+
+- `make audit-book` passed at 32,702 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest tests/test_day1.py`
+  passed (6 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass expansion with Chapters 1–3 worked learning cases,
+  then rebuild the DOCX and inspect an updated 6×9 interim proof.

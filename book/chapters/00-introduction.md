@@ -47,10 +47,37 @@ recorded Day 1 benchmark. Chapters 4–5 now have a deterministic synthetic
 vision fixture plus matched PyTorch and TensorFlow/Keras CNN implementations.
 Chapters 6–7 add controlled transformer and MLX-LM observations. Chapters 8–9
 now have a provenance-preserving local retrieval baseline and learned embedding
-path; their prose and evaluation set remain under active development. The
-remaining chapters are deliberately marked as drafts until their evidence
-exists. The current project status and next task are maintained in
+path. Chapters 10–14 implement structured planning, persisted no-write
+approval, workflow comparison, and a deterministic reliability suite. All
+chapters are active manuscript drafts, not final editorial or print artifacts.
+The current project status and next task are maintained in
 `docs/journals/from-tensors-to-agents-beta.md`.
+
+### A setup contract before you install anything
+
+The commands in this chapter follow a simple contract. The base development
+group is required for the shared tests. TensorFlow, Transformers, MLX,
+embeddings, and agent orchestration are optional learning milestones, each in a
+separate `uv` group. An optional group may download wheels, native libraries,
+or model weights into caches outside Git; it therefore has a different storage
+and network footprint from the source checkout.
+
+Before any optional install, inspect the actual available filesystem with
+`df -h .`. There is no universal “enough disk” number: the right headroom
+depends on the package resolver, model cache, operating-system updates, and
+other work on the Mac. If the reported free space safely exceeds the expected
+download plus a comfortable working margin, install the group and record the
+result. If not, stop before the download, record the observed constraint, and
+continue with the deterministic or CPU-only portions of the book. Do not claim
+that an optional experiment ran merely because its code exists.
+
+When a command fails, diagnose from the lowest-cost boundary outward. First
+check the command and working directory; then the Python version and `uv` lock;
+then optional-group installation; then disk/cache state; then device/model
+availability; and only then the lesson's algorithm or framework. Preserve the
+first clear error and the command that produced it. Reinstalling every package
+or switching frameworks before identifying the boundary makes a local setup
+less reproducible, not more.
 
 ## Prerequisites
 
@@ -109,6 +136,32 @@ uv run python benchmarks/01-day1/run.py --device auto --epochs 250 --runs 5 --se
 
 Recorded results are machine-specific evidence, not promises of performance on
 another Mac. Read `benchmarks/01-day1/README.md` before drawing conclusions.
+
+### First-session walkthrough
+
+On a fresh machine, make the first session intentionally small. Run the base
+install, lint, tests, and the three Day 1 programs before adding a heavyweight
+framework. The expected outcome is not a particular MPS speed: it is a clean
+environment, numerical checks that pass, visible tensor/gradient output, and a
+tiny training run that selects MPS when it is available or clearly reports CPU
+fallback. This establishes that the repository, interpreter, and core package
+set agree before optional caches complicate diagnosis.
+
+Then choose one branch of the learning path. Chapters 4–5 need TensorFlow only
+when you are ready to compare matched fixtures; Chapter 6 needs Transformers
+for tokenizer and classifier inspection; Chapter 7 needs MLX on Apple Silicon;
+Chapters 8–9 can use deterministic retrieval before learned weights; Chapters
+10–14 can run their no-network fixture workflows without selecting an API
+provider. Every branch has an evidence record and a fallback. Completing an
+earlier branch is more useful than installing every optional group in advance.
+
+At the end of a session, leave three artifacts: the command sequence that ran,
+the relevant benchmark or test result, and a concise journal note explaining
+what changed or what prevented progress. Generated caches, indexes, SQLite
+checkpoints, DOCX files, and PDFs remain local/ignored; canonical prose, source
+diagrams, experiment code, research notes, and benchmark descriptions belong
+in Git. This division is the foundation for both reproducible lessons and a
+clean future print release.
 
 ## Optional TensorFlow/Keras installation
 
