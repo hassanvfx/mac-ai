@@ -2117,3 +2117,26 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass worked learning cases with Chapters 2–3, then
   rebuild the DOCX and inspect an updated 6×9 interim proof.
+
+### 2026-08-15 — Chapter 2 fourth-pass gradient case
+
+**What changed:**
+
+- Added a hand-checkable five-step gradient-descent trace to Chapter 2 for the
+  scalar autograd example, including weight, prediction, loss, and gradient.
+- Added a learning-rate-1.0 overshoot contrast to distinguish a correct local
+  derivative from an unstable update configuration; linked the scope of the
+  table to the existing deterministic gradient test.
+
+**Verification:**
+
+- `make audit-book` passed at 33,319 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest tests/test_day1.py`
+  passed (6 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass worked learning cases with Chapter 3, then rebuild
+  the DOCX and inspect an updated 6×9 interim proof.

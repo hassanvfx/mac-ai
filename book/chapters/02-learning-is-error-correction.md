@@ -206,6 +206,43 @@ same examples and repeat. Write down which values double and which remain
 stable. This turns a framework default into a visible mathematical choice that
 matters later when batch sizes and metrics change.
 
+### Worked case: five corrections toward one target
+
+Use the opening scalar model with target 10, initial weight 3, and learning
+rate 0.1. Its gradient is `4 × (2 × weight - 10)`, and the update subtracts
+0.1 times that quantity. The first five pre-update states are:
+
+```text
+step    weight     prediction     loss         gradient
+0       3.00000    6.00000        16.000000    -16.00000
+1       4.60000    9.20000         0.640000     -3.20000
+2       4.92000    9.84000         0.025600     -0.64000
+3       4.98400    9.96800         0.001024     -0.12800
+4       4.99680    9.99360         0.000041     -0.02560
+```
+
+The numbers make three ideas visible. First, the negative gradient produces an
+upward weight update because gradient descent subtracts it. Second, the loss
+falls rapidly here because this is a simple smooth quadratic and the chosen
+learning rate is conservative. Third, the gradient magnitude shrinks as the
+prediction approaches the target; it is feedback about the current parameter,
+not a fixed instruction that the weight should always increase.
+
+Now repeat the calculation with a learning rate of 1.0. The first update moves
+from 3 to 19, producing a prediction of 38 and a much larger loss. The next
+gradient points back in the other direction, so the weight overshoots again.
+This does not contradict autograd: the derivative is still correct at each
+point. The optimizer configuration uses a step too large for this curvature.
+Separating “the gradient is wrong” from “the update rule is unstable” is one of
+the most useful early debugging distinctions.
+
+The test in `tests/test_day1.py` anchors the opening derivative at -16. A
+finite-difference check would approximate the same local slope, while the
+five-step table checks the update arithmetic. Neither establishes that a neural
+network will generalize; it establishes that a small declared objective,
+derivative, and update are internally consistent before more data and layers
+obscure the calculation.
+
 ## What broke
 
 Two beginner errors reveal important boundaries. A tensor without
