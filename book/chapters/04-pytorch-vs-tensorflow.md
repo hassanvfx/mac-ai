@@ -33,6 +33,15 @@ visibility, and history object are framework or runtime choices. Separating
 these categories is useful whenever results differ: inspect a violated
 invariant before attributing the change to a framework philosophy.
 
+![The shared task branches only where framework presentation requires it, then converges on one held-out evaluation contract.](../assets/vision/framework-contract.svg)
+
+The visual is a practical review tool. Start at the shared fixture and trace
+every arrow. A value may change layout when it crosses into Keras, but its class
+meaning, split membership, and evaluation label must not change. A training
+loop may become a `fit` call, but the declared optimizer, loss, and epoch budget
+must remain recognizable. The branches may differ in presentation; they must
+not silently define different learning questions.
+
 ## Problem
 
 Train the same small convolutional classifier in PyTorch and TensorFlow/Keras
@@ -79,6 +88,19 @@ changes. Omitting this conversion could produce an error, but worse, a shape
 that happens to be accepted might make a different network from the one being
 compared.
 
+For a comparison to be reviewable, write a protocol before running either
+program. Name the question, freeze the fixture revision, list inputs and split
+rule, declare preprocessing/layout conversion, define topology and optimizer,
+state seed and budget, select metrics, and state what will not be compared.
+Elapsed time is recorded here as an observation but excluded from any
+framework-speed conclusion.
+
+When results diverge, debug in order. Compare data counts, class names, labels,
+and split membership. Then inspect preprocessing and tensor layout. Next compare
+logits/loss conventions, optimizer settings, batch rule, and epoch count. Only
+then investigate initialization, kernels, device visibility, or defaults. This
+order keeps a mundane data error from becoming a grand framework argument.
+
 ## Real implementation: compare the contract before the syntax
 
 The comparison record at `benchmarks/02-vision/README.md` fixes the train,
@@ -119,6 +141,13 @@ about controlled task behavior into a fragile implementation test. Requiring
 the declared fixture, held-out evaluation, and error report instead makes the
 comparison useful and reproducible.
 
+The comparison needs a stopping rule. Once both implementations meet the
+declared held-out contract on this toy fixture, attempts to match every loss
+digit do not improve the lesson. They can overfit the experiment to details.
+Record remaining differences and design a new question when one matters: a
+custom gradient step, export path, data-pipeline constraint, deployment target,
+or controlled performance workload.
+
 ## Experiment
 
 On the recorded Mac, PyTorch 2.13.0 completed the fixture with MPS selected and
@@ -150,6 +179,13 @@ versions, selected device, data layout conversion, and observed final metrics;
 then treat an unexpected divergence as an investigation prompt. A seed narrows
 uncertainty; it is not a promise that every numerical detail is portable.
 
+Device visibility is a difference that should remain in the record rather than
+be normalized away. The recorded TensorFlow install exposed CPU only, while the
+PyTorch `auto` run selected MPS. That prevents an accelerator comparison but not
+the correctness comparison. A fair speed protocol needs matching devices or a
+scoped CPU-only condition, repeated warmups, matching batch semantics, and a
+defined timing boundary.
+
 ## What broke
 
 Framework setup was the first practical difference. The core project does not
@@ -170,6 +206,11 @@ boundary, both frameworks may report excellent held-out accuracy while the
 evaluation question has been compromised. The fixture uses distinct declared
 seeds for its splits. When replacing it with a real dataset, preserve the split
 manifest and fit normalization statistics only on the training partition.
+
+Configuration drift is another failure mode. A helper's default shuffling, loss
+reduction, data format, or seed behavior can change across an upgrade. Capture
+resolved versions and print runtime choices with each run. A lockfile makes
+installation repeatable; it does not prove unprinted defaults stayed equivalent.
 
 ## Alternatives and when to use them
 
@@ -193,6 +234,11 @@ cost, and repeat across declared seeds. Only after correctness is fixed should
 a separate performance protocol select matching devices, warm-ups, precision,
 batch sizes, run counts, and timers. The two reports then answer different
 questions without smuggling one conclusion into the other.
+
+The same protocol applies beyond these two libraries. A JAX implementation,
+high-level PyTorch trainer, or exported inference runtime should inherit the
+shared dataset and evaluation harness before it earns a comparison table. The
+goal is not identical programs; it is localized differences a reader can judge.
 
 ## Evidence trail
 

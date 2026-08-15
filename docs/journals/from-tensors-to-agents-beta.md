@@ -1600,3 +1600,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Begin the third pass on the vision chapters with Chapter 4: expand the
   matched-framework methodology into a reusable comparison protocol, then add
   a print-quality data-layout or evaluation visual where it improves reading.
+
+### 2026-08-15 — Chapter 4 third editorial pass and framework visual
+
+**What changed:**
+
+- Expanded Chapter 4 from 1,678 to 2,099 words and added
+  `book/assets/vision/framework-contract.svg`, an editable print-quality visual
+  of the shared fixture, PyTorch NCHW branch, Keras NHWC conversion branch, and
+  common held-out evaluation contract.
+- Added a reusable comparison protocol, diagnostic order, stopping rule,
+  device-visibility boundary, configuration-drift warning, and guidance for
+  extending the same evaluation harness to another runtime.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 23,747 words, still below the
+  45,000–55,000 beta target.
+- Vision and TensorFlow fixture tests passed: 4 tests.
+- Docusaurus production build and DOCX build both passed; the new SVG converted
+  through the existing print pipeline. `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 5 a third-pass expansion: move from the existing CNN
+  explanation to receptive-field examples, feature-map interpretation limits,
+  controlled robustness experiments, and train/validation/test decision rules.
