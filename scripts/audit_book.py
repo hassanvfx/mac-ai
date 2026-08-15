@@ -7,6 +7,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CHAPTERS = ROOT / "book" / "chapters"
+APPENDICES = ROOT / "book" / "appendices"
 BIBLIOGRAPHY = ROOT / "research" / "references.bib"
 REQUIRED = ("Intuition", "Problem", "Minimal implementation", "Experiment", "What broke", "Takeaway")
 CITATION = re.compile(r"@([A-Za-z0-9_-]+)")
@@ -35,11 +36,13 @@ def main() -> None:
     bibliography = set(BIB_KEY.findall(BIBLIOGRAPHY.read_text(encoding="utf-8")))
     total_words = 0
     findings: list[str] = []
-    for chapter in sorted(CHAPTERS.glob("[0-9][0-9]-*.md")):
+    manuscript_files = [*sorted(CHAPTERS.glob("[0-9][0-9]-*.md")), *sorted(APPENDICES.glob("*.md"))]
+    for chapter in manuscript_files:
         text = chapter.read_text(encoding="utf-8")
         words = len(re.findall(r"\b[\w'-]+\b", text))
         total_words += words
-        if not chapter.name.startswith("00-"):
+        is_chapter = chapter.parent == CHAPTERS
+        if is_chapter and not chapter.name.startswith("00-"):
             headings = {line[3:].strip() for line in text.splitlines() if line.startswith("## ")}
             missing = [section for section in REQUIRED if section not in headings]
             if missing:
@@ -55,7 +58,7 @@ def main() -> None:
         for path_reference in CODE_PATH.findall(text):
             if not (ROOT / path_reference).is_file():
                 findings.append(f"{chapter.relative_to(ROOT)}: unresolved repository path: {path_reference}")
-        chapter_number = chapter.name[:2]
+        chapter_number = chapter.name[:2] if is_chapter else ""
         expected_research = EXPECTED_RESEARCH.get(chapter_number)
         if expected_research and expected_research not in text:
             findings.append(f"{chapter.relative_to(ROOT)}: missing research evidence reference: {expected_research}")

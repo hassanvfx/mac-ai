@@ -2384,3 +2384,31 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue substantive expansion of the short workflow and reliability
   chapters toward the 45,000-word beta minimum; repeat the interim DOCX proof
   after the next editorial batch.
+
+### 2026-08-15 — Canonical lab-notebook appendix
+
+**What changed:**
+
+- Added Appendix A, *A Lab Notebook Protocol for Reproducible AI Work*. It
+  documents bounded questions, experimental envelopes, device/download checks,
+  measurement boundaries, qualitative-output review, regression fixtures, and
+  pre-commit evidence checks. It links the book's learning labs to the same
+  reproducibility and no-write principles used by the capstone.
+- Updated the DOCX builder to include canonical Markdown from
+  `book/appendices/` after the 14 chapters.
+- Updated the manuscript audit to count and link-check appendices while
+  retaining chapter-only requirements for the chapter editorial rhythm.
+
+**Verification:**
+
+- `./scripts/build-book.sh` produced the ignored interim DOCX with Appendix A.
+- `make audit-book` passed at 36,886 words; Appendix A contributes 1,416
+  words. The manuscript remains below the 45,000-word beta minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add further canonical lab appendices for setup/debugging and evaluation,
+  then repeat the full interim validation and DOCX render sampling.

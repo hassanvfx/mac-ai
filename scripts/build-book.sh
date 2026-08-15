@@ -18,10 +18,15 @@ fi
 
 mkdir -p "$output_dir"
 mkdir -p "$prepared_dir/chapters"
+mkdir -p "$prepared_dir/appendices"
 cp -R "$root_dir/book/assets" "$prepared_dir/assets"
 chapter_files=()
-for source_file in "$root_dir"/book/chapters/*.md; do
-  prepared_file="$prepared_dir/chapters/$(basename "$source_file")"
+for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.md; do
+  section_dir="chapters"
+  if [[ "$source_file" == *"/appendices/"* ]]; then
+    section_dir="appendices"
+  fi
+  prepared_file="$prepared_dir/$section_dir/$(basename "$source_file")"
   # Docusaurus needs YAML front matter for sidebar metadata. Pandoc treats the
   # same blocks as document metadata and lets a chapter title overwrite the
   # manuscript title, so remove only a leading front-matter block in this
