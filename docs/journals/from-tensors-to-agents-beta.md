@@ -1729,3 +1729,30 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 9 a third-pass expansion: make grounded-context assembly,
   citations, missing-evidence refusal, query/data boundaries, and answer
   evaluation concrete without allowing retrieved text to masquerade as proof.
+
+### 2026-08-15 — Chapter 9 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 9 from 1,410 to 2,102 words. It now defines the evidence
+  packet as an auditable case file, clarifies that retrieved corpus text is data
+  rather than instructions, and distinguishes a missing-evidence response from
+  a claim that no answer exists anywhere.
+- Added a future generator contract, context-assembly trace requirements,
+  citation-precision evaluation, over-refusal diagnostics, and source-boundary
+  guidance for external or changing material.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 26,908 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_intelligence.py tests/test_book_intelligence_evaluation.py`
+  passed (10 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 10 a third-pass expansion: make direct versus structured
+  output contracts, model/provider configuration, validation failures, and
+  evidence-bound plans concrete while preserving the no-write approval gate.

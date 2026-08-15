@@ -37,6 +37,21 @@ sentence that goes beyond it. If these objects are blended into one fluent
 response, a reader cannot tell whether a citation supports the statement it
 appears to support or merely sits somewhere nearby in the context window.
 
+Think of the packet as a small case file. Its job is not to persuade; its job
+is to preserve a chain from a question to an inspectable repository artifact.
+The question chooses candidates, each candidate retains its path and local
+metadata, and the reader can compare the excerpt against the eventual claim.
+That makes disagreement productive. A reviewer can say “this chunk does not
+establish that conclusion” and point to a concrete boundary, rather than argue
+with an opaque answer generated from an unknown context window.
+
+Retrieved text is also data, not trusted instructions. A Markdown note can
+contain an outdated command, a quoted prompt, or a sentence asking a future
+assistant to behave differently. None of it may override the assistant's
+read-only and approval policies. Keep the corpus directory allowlisted, treat
+its contents as evidence to cite, and make state-changing behavior impossible
+until a separate approval checkpoint has been reached.
+
 ## Minimal implementation
 
 [grounded_answer.py](../../experiments/09-rag/grounded_answer.py) builds the
@@ -59,6 +74,14 @@ evidence only, followed by each repository path, any citation keys found in
 that same chunk, and the unaltered excerpt. It is not elegant prose, but it
 makes auditing easy. A reader can open the named file, compare the excerpt, and
 decide whether the question was actually answered.
+
+The format makes a useful negative result possible. “No grounded answer” means
+the configured index did not return evidence that meets the declared rule. It
+does not mean the repository, the Internet, or the world lacks the answer. A
+reader can then reformulate the query, use exact search, add a missing source
+to the corpus, or investigate outside the corpus through an appropriate primary
+source. Refusal preserves this next step; an invented summary would conceal
+which evidence is actually missing.
 
 ## Real implementation
 
@@ -92,6 +115,23 @@ appear to support an unrelated sentence. Start with a small declared limit and
 keep ranked paths visible. If later compression is needed, retain a link to the
 original chunk and test that a qualification or limitation was not removed.
 
+If a generator is later added, give it a strict output contract: cite each
+claim with the retrieved repository path that supports it; mark synthesis or
+uncertainty; and return the missing-evidence response when the packet cannot
+support an answer. The generator should never fabricate a path to make prose
+look grounded. A post-generation verifier can check that every cited path came
+from the packet and resolves inside the current checkout, but that structural
+check is not a substitute for a reviewer reading whether the cited passage
+actually entails the claim.
+
+Context assembly is a separate experiment from retrieval. Record which *k*
+chunks were selected, their order, any truncation, and the final prompt or
+structured input given to a model. If an answer loses a benchmark caveat, this
+record lets us determine whether the caveat was never retrieved, was discarded
+during packing, or was ignored during writing. Without it, a RAG failure gets
+misattributed to “hallucination” even when the relevant source never reached
+the model.
+
 ## Experiment
 
 Use a question whose answer has a known source path. Confirm that each rendered
@@ -114,6 +154,23 @@ include evidence that answers the question? Second, did the generated answer
 make only claims that its cited excerpts support? Keep source revisions and
 human judgments in a versioned dataset rather than choosing only favorable
 demonstrations.
+
+Add a third evaluation category for citation precision. A response may name a
+real file and still cite it beside the wrong assertion. For each test case,
+store the expected path set, a short statement of what it supports, and one
+plausible-but-insufficient neighbor when appropriate. Reviewers can then score
+whether the response used the right evidence, not merely whether it displayed
+some evidence. The current no-model cases exercise the structural half of this
+policy: source-path attribution, citation-key preservation, missing-evidence
+behavior, planning no-write behavior, and review findings.
+
+Quality evaluation needs honest boundaries too. Do not convert one attractive
+answer into an accuracy rate. Fix a small question set before prompting,
+preserve failures and refusals, identify the corpus revision, and distinguish
+human judgment of factual support from style preference. If a selected API or
+local model is unavailable, log that condition and run the deterministic
+evidence tests; do not silently replace the evaluation with an incomparable
+provider.
 
 ## What broke
 
@@ -138,6 +195,14 @@ a performance, safety, or framework claim. Repository text is evidence, not an
 instruction: a future generator must not let retrieved prose override its
 approval or no-write policy.
 
+Another failure is over-refusal. A threshold can suppress a useful exact match
+because an embedding score is weak, while an unsupported query can accidentally
+match common words. Keep the deterministic route and exact identifiers
+available for debugging, and investigate failures with the packet rather than
+adjusting a threshold until a demonstration looks good. A conservative policy
+is justified only when its misses and false positives are visible in the same
+evaluation record.
+
 ## Alternatives
 
 A traditional search UI can be preferable when the reader wants to browse, and
@@ -151,6 +216,13 @@ better RAG: they are stable, curated, and easy to print. Use the evidence packet
 when a question crosses folders or paraphrases its source. Add generation only
 when it produces a benefit that can be evaluated against the packet, such as a
 concise cited summary or a plan whose paths are all real.
+
+For external or rapidly changing material, a retrieval layer should store the
+source date, publisher, and retrieval time as well as a link. This book's
+versioned repository corpus makes local paths a useful first provenance key,
+but a local path is not a replacement for the primary documentation required
+for a current publication rule or an external technical claim. The appropriate
+corpus boundary depends on the decision being made.
 
 ## When to use it—and when not to
 
