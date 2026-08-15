@@ -891,3 +891,22 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Expand Chapter 4 around the matched PyTorch/TensorFlow comparison and
   turn its measured limitations into reader-facing guidance.
+
+### 2026-08-15 — Chapter 4 editorial expansion (first pass)
+
+**What changed:**
+
+- Began the substantive Chapter 4 pass with framework-comparison methodology,
+  PyTorch/Keras loop-boundary trade-offs, and the explicit channels-first to
+  channels-last data-layout contract.
+
+**Verification:**
+
+- `make audit-book` passed with no structural, citation, or local-link findings.
+- `git diff --check` passed; manuscript count is 12,839 words.
+
+**Next task:**
+
+- [ ] Continue Chapter 4 with evidence-table interpretation, timing limits,
+  leakage failure analysis, and framework-selection guidance before starting
+  Chapter 5.

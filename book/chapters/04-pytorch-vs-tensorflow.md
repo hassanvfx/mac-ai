@@ -17,6 +17,14 @@ The useful comparison is therefore not a contest of short code samples. It is
 one learning question implemented twice with the data split, seed, topology,
 metric, and limits declared in advance.
 
+That discipline protects against an appealing but weak comparison: placing two
+unrelated tutorials side by side and judging whichever one has fewer lines. A
+framework program includes data layout, initialization, batching, device
+selection, defaults, and measurement boundaries as well as model layers. If
+those differ, an observed difference may come from the experiment rather than
+from the framework. The comparison here is intentionally narrow enough to
+inspect, then clear about the questions it cannot answer.
+
 ## Problem
 
 Train the same small convolutional classifier in PyTorch and TensorFlow/Keras
@@ -45,6 +53,23 @@ encapsulates it in `model.fit` while keeping the model definition readable.
 TensorFlow is an opt-in project group, not a requirement for the first three
 chapters. The official TensorFlow installation guide is the authority for
 supported platform details [@tensorflow2026install].
+
+The two APIs make different trade-offs in visibility. In the PyTorch program,
+the reader can see the forward call, loss, `backward()`, and optimizer update in
+the source. This makes it easy to insert a diagnostic or change the training
+rule. In the Keras program, `compile` declares the optimizer and loss, and
+`fit` owns the standard loop. This removes routine code and collects a training
+history, but custom behavior moves into callbacks or a custom training step.
+Neither presentation changes the underlying objective; choose the boundary that
+makes the current task easiest to verify.
+
+Layout is a practical example. PyTorch convolution layers conventionally read
+images as `(batch, channels, height, width)`. The Keras implementation receives
+the same fixture after an explicit conversion to `(batch, height, width,
+channels)`. The values and labels are shared; only their documented layout
+changes. Omitting this conversion could produce an error, but worse, a shape
+that happens to be accepted might make a different network from the one being
+compared.
 
 ## Real implementation: compare the contract before the syntax
 
