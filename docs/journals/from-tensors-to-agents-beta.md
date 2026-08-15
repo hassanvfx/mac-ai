@@ -342,6 +342,49 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 
 ## Journal Entries
 
+### 2026-08-15 — Shared online-cover hero
+
+**What changed:**
+
+- Reused the approved online-edition cover as the GitHub repository image and
+  the GitHub Pages landing-page hero. The site serves a static copy while the
+  README references the canonical versioned book asset.
+
+**Verification:**
+
+- `cd site && npm run build` passed after the README image was changed to its
+  public `main`-branch raw URL, avoiding a generated-MDX relative-path error.
+- The landing page serves the same approved cover from `site/static/img/`.
+
+---
+
+### 2026-08-15 — Chapter lab bridge and publication synchronization
+
+**Decision:**
+
+- The `main` branch is the intentionally live reader path. Every numbered
+  chapter has a runnable lab and receives a generated end-of-chapter QR panel;
+  the introduction receives a generated course-start panel.
+- `book/qrcode-manifest.json` is the single source of truth for chapter,
+  command, benchmark, Pages URL, and QR data. Changes to prose, runnable code,
+  benchmark, manifest, QR assets, Pages lab, and PDFs are one publishing unit.
+
+**Completion checks:**
+
+- Build the temporary print chapters from the manifest, generate QR SVGs, and
+  validate all fourteen paths before publishing.
+- Rebuild contents after final pagination for every review edition, verify the
+  resulting interior and online wrapper by hash, and record the data in the
+  generated publication manifest. Apply the same rule to the later Word/Lulu
+  export; never hand-maintain page numbers.
+
+**Next action:**
+
+- [ ] Run the full review-publication build, inspect the generated panels and
+  contents pages, then commit the validated bridge.
+
+---
+
 ### 2026-08-15 — Public repository and GitHub Pages
 
 **What changed:**

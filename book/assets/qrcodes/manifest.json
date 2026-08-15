@@ -1,71 +1,76 @@
 [
   {
-    "chapter": "01",
+    "target": "start-here",
+    "url": "https://hassanvfx.github.io/mac-ai/",
+    "svg": "book/assets/qrcodes/start-here.svg"
+  },
+  {
+    "target": "chapter-01-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/01",
     "svg": "book/assets/qrcodes/chapter-01-lab.svg"
   },
   {
-    "chapter": "02",
+    "target": "chapter-02-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/02",
     "svg": "book/assets/qrcodes/chapter-02-lab.svg"
   },
   {
-    "chapter": "03",
+    "target": "chapter-03-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/03",
     "svg": "book/assets/qrcodes/chapter-03-lab.svg"
   },
   {
-    "chapter": "04",
+    "target": "chapter-04-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/04",
     "svg": "book/assets/qrcodes/chapter-04-lab.svg"
   },
   {
-    "chapter": "05",
+    "target": "chapter-05-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/05",
     "svg": "book/assets/qrcodes/chapter-05-lab.svg"
   },
   {
-    "chapter": "06",
+    "target": "chapter-06-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/06",
     "svg": "book/assets/qrcodes/chapter-06-lab.svg"
   },
   {
-    "chapter": "07",
+    "target": "chapter-07-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/07",
     "svg": "book/assets/qrcodes/chapter-07-lab.svg"
   },
   {
-    "chapter": "08",
+    "target": "chapter-08-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/08",
     "svg": "book/assets/qrcodes/chapter-08-lab.svg"
   },
   {
-    "chapter": "09",
+    "target": "chapter-09-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/09",
     "svg": "book/assets/qrcodes/chapter-09-lab.svg"
   },
   {
-    "chapter": "10",
+    "target": "chapter-10-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/10",
     "svg": "book/assets/qrcodes/chapter-10-lab.svg"
   },
   {
-    "chapter": "11",
+    "target": "chapter-11-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/11",
     "svg": "book/assets/qrcodes/chapter-11-lab.svg"
   },
   {
-    "chapter": "12",
+    "target": "chapter-12-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/12",
     "svg": "book/assets/qrcodes/chapter-12-lab.svg"
   },
   {
-    "chapter": "13",
+    "target": "chapter-13-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/13",
     "svg": "book/assets/qrcodes/chapter-13-lab.svg"
   },
   {
-    "chapter": "14",
+    "target": "chapter-14-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/14",
     "svg": "book/assets/qrcodes/chapter-14-lab.svg"
   }

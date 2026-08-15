@@ -8,6 +8,8 @@ review manuscript PDF.
 from __future__ import annotations
 
 import io
+import hashlib
+import json
 from pathlib import Path
 
 from PIL import Image
@@ -58,6 +60,17 @@ def main() -> None:
     )
     with OUTPUT.open("wb") as destination:
         writer.write(destination)
+    manifest_path = INTERIOR.parent / "publication-manifest.json"
+    if not manifest_path.exists():
+        raise SystemExit("Missing publication manifest; rebuild the provisional interior first.")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    interior_hash = hashlib.sha256(INTERIOR.read_bytes()).hexdigest()
+    if manifest.get("interior_sha256") != interior_hash:
+        raise SystemExit("Provisional interior differs from the TOC-verified publication manifest.")
+    manifest["online_pdf"] = str(OUTPUT.relative_to(ROOT))
+    manifest["online_sha256"] = hashlib.sha256(OUTPUT.read_bytes()).hexdigest()
+    manifest["online_page_count"] = len(writer.pages)
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {OUTPUT} ({len(writer.pages)} pages; online edition, not Lulu-compliant).")
 
 

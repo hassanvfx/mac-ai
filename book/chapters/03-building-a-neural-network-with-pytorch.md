@@ -28,7 +28,7 @@ can be repeated. A small synthetic task lets us inspect shapes, loss values,
 device selection, and seed behavior without a download, a lengthy run, or a
 dataset whose quirks dominate the lesson.
 
-![The explicit six-step PyTorch training loop.](../assets/day1/training-loop.png)
+![The explicit six-step PyTorch training loop.](../assets/day1/training-loop.svg)
 
 ## Problem
 

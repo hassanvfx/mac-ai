@@ -12,3 +12,11 @@
   border-radius: 4px;
   padding: 0.08rem 0.28rem;
 }
+
+.bookHero {
+  display: block;
+  width: min(100%, 360px);
+  margin: 1.5rem auto 2rem;
+  border: 1px solid #d9e2ec;
+  box-shadow: 0 12px 30px rgb(23 63 115 / 18%);
+}

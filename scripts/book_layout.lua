@@ -11,6 +11,12 @@ function Para(el)
   end
 end
 
+function RawBlock(el)
+  if el.text == "\\newpage" then
+    return page_break()
+  end
+end
+
 function Header(el)
   -- Every canonical chapter starts on a fresh page. The front matter uses its
   -- own explicit breaks, preserving the intended recto sequence.

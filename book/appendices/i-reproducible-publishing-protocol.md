@@ -43,10 +43,13 @@ trim, and render it to pages. Use the same order every time:
 uv run ruff check .
 uv run pytest
 make audit-book
+make validate-reader-bridge
+make qrcodes
 make book
 make provisional-pdf
+make pdf-online
 make preflight
-make cover
+make validate-publication
 make release-manifest
 ```
 
@@ -55,6 +58,21 @@ this machine. It is intentionally named *provisional*. The release candidate
 is produced by opening the same DOCX in Microsoft Word on macOS and exporting
 to PDF with the final printer settings. Never rename a provisional PDF to make
 it look like a release artifact. The filename is part of the safety boundary.
+
+The reader bridge is one synchronized publishing unit. Its manifest maps every
+numbered chapter to the live `main`-branch lab URL, code command, expected
+result, benchmark, and QR image. The print build derives each chapter-end lab
+panel from that manifest; the course build derives its lab pages from the same
+source. Update prose, command, benchmark, manifest, QR, Pages output, and PDF
+in the same publication change.
+
+After LibreOffice renders the interior, the publishing step locates chapter
+starts in that exact file and generates the contents page from the measured
+pagination. It then applies folios and records hashes, page counts, and TOC
+entries in the publication manifest. The online PDF is accepted only when it
+wraps that exact verified interior. The future Microsoft Word/Lulu export must
+repeat this render → derive contents → validate sequence; page numbers are
+never maintained by hand.
 
 The build script handles a subtle but important source-sharing detail. Chapter
 files carry Docusaurus front matter for course navigation. Pandoc would treat

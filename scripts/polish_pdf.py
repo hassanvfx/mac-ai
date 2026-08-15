@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import io
+import hashlib
+import json
 import re
 import sys
 from pathlib import Path
@@ -17,18 +19,19 @@ BLUE = HexColor("#173F73")
 INK = HexColor("#44515E")
 
 
-def titles() -> list[str]:
-    result: list[str] = []
+def titles() -> list[tuple[str, str]]:
+    result: list[tuple[str, str]] = []
     for pattern in ("book/chapters/*.md", "book/appendices/*.md"):
         for path in sorted(ROOT.glob(pattern)):
             text = path.read_text(encoding="utf-8")
-            match = re.search(r"^title:\s*[\"']?(.+?)[\"']?\s*$", text, re.MULTILINE)
-            if match:
-                result.append(match.group(1).strip('"'))
+            if path.name == "00-introduction.md":
+                result.append(("Introduction and Setup", "What you are building"))
                 continue
+            match = re.search(r"^title:\s*[\"']?(.+?)[\"']?\s*$", text, re.MULTILINE)
+            display = match.group(1).strip('"') if match else None
             heading = re.search(r"^#\s+(.+?)\s*$", text, re.MULTILINE)
             if heading:
-                result.append(heading.group(1))
+                result.append((display or heading.group(1), heading.group(1)))
     return result
 
 
@@ -89,17 +92,21 @@ def footer(width: float, height: float, page_number: int) -> PdfReader:
     return PdfReader(io.BytesIO(stream.getvalue()))
 
 
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def main() -> None:
     if len(sys.argv) != 3:
         raise SystemExit("Usage: polish_pdf.py input.pdf output.pdf")
     source, output = map(Path, sys.argv[1:])
     reader = PdfReader(str(source))
-    entries = [(title, locate(reader, title)) for title in titles()]
+    entries = [(display, search, locate(reader, search)) for display, search in titles()]
     writer = PdfWriter()
     writer.add_page(reader.pages[0])
     width = float(reader.pages[0].mediabox.width)
     height = float(reader.pages[0].mediabox.height)
-    writer.add_page(contents_page(width, height, entries).pages[0])
+    writer.add_page(contents_page(width, height, [(title, page) for title, _, page in entries]).pages[0])
     for index, page in enumerate(reader.pages[1:], start=1):
         overlay = footer(float(page.mediabox.width), float(page.mediabox.height), index)
         page.merge_page(overlay.pages[0])
@@ -108,6 +115,22 @@ def main() -> None:
     writer.add_metadata({"/Subject": "Beta reading PDF with generated contents and page folios"})
     with output.open("wb") as handle:
         writer.write(handle)
+    toc_entries = [
+        {"title": title, "search_title": search, "page": page + 1 if page is not None else None}
+        for title, search, page in entries
+    ]
+    manifest = {
+        "edition": "provisional review interior",
+        "source_pdf": str(source.relative_to(ROOT)),
+        "source_sha256": digest(source),
+        "interior_pdf": str(output.relative_to(ROOT)),
+        "interior_sha256": digest(output),
+        "page_count": len(writer.pages),
+        "toc_entries": toc_entries,
+    }
+    (output.parent / "publication-manifest.json").write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8"
+    )
     print(f"Wrote {output} with {len(writer.pages)} pages and generated contents.")
 
 

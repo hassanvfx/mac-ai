@@ -1,42 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc">
-  <title id="title">From Tensors to Agents source-of-truth map</title>
-  <desc id="desc">Research notes, experiments, and benchmarks inform canonical book chapters, which produce a course site and a print manuscript.</desc>
-  <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L9,3 z" fill="#243447"/>
-    </marker>
-    <style>
-      .box { stroke:#243447; stroke-width:3; rx:18; }
-      .source { fill:#e8f1fb; }
-      .canonical { fill:#eaf6ed; }
-      .output { fill:#fff3df; }
-      .label { fill:#17212b; font-family:Arial, Helvetica, sans-serif; font-weight:700; font-size:30px; }
-      .detail { fill:#33485c; font-family:Arial, Helvetica, sans-serif; font-size:21px; }
-      .arrow { stroke:#243447; stroke-width:4; fill:none; marker-end:url(#arrow); }
-      .caption { fill:#5d6f80; font-family:Arial, Helvetica, sans-serif; font-size:20px; font-style:italic; }
-    </style>
-  </defs>
-  <rect width="1200" height="620" fill="#ffffff"/>
-  <text x="600" y="48" text-anchor="middle" class="label" font-size="34px">One canonical manuscript, two reading formats</text>
-  <rect x="55" y="125" width="300" height="120" class="box source"/>
-  <text x="205" y="172" text-anchor="middle" class="label">Research notes</text>
-  <text x="205" y="208" text-anchor="middle" class="detail">Markdown + BibTeX</text>
-  <rect x="55" y="365" width="300" height="120" class="box source"/>
-  <text x="205" y="412" text-anchor="middle" class="label">Experiments</text>
-  <text x="205" y="448" text-anchor="middle" class="detail">Code + benchmark records</text>
-  <rect x="445" y="230" width="320" height="150" class="box canonical"/>
-  <text x="605" y="286" text-anchor="middle" class="label">book/chapters/</text>
-  <text x="605" y="322" text-anchor="middle" class="detail">Canonical published prose</text>
-  <text x="605" y="350" text-anchor="middle" class="detail">with links to evidence</text>
-  <rect x="855" y="125" width="290" height="120" class="box output"/>
-  <text x="1000" y="172" text-anchor="middle" class="label">Course site</text>
-  <text x="1000" y="208" text-anchor="middle" class="detail">Docusaurus + GitHub Pages</text>
-  <rect x="855" y="365" width="290" height="120" class="box output"/>
-  <text x="1000" y="402" text-anchor="middle" class="label">Print manuscript</text>
-  <text x="1000" y="438" text-anchor="middle" class="detail">Pandoc DOCX → Word PDF</text>
-  <path d="M355 185 H435" class="arrow"/>
-  <path d="M355 425 H405 Q425 425 425 395 V380 H445" class="arrow"/>
-  <path d="M765 270 H845" class="arrow"/>
-  <path d="M765 340 H815 Q835 340 835 380 V425 H845" class="arrow"/>
-  <text x="600" y="558" text-anchor="middle" class="caption">Generated DOCX and PDF artifacts remain out of Git; source prose and editable SVG remain versioned.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1100" viewBox="0 0 1000 1100" role="img" aria-labelledby="t d">
+<title id="t">One canonical manuscript, two reading formats</title><desc id="d">Research notes and experiments inform canonical chapters, which produce the course site and print manuscript.</desc>
+<style>.title{font-family:Arial,sans-serif;font-size:48px;font-weight:700;fill:#17212b;text-anchor:middle}.label{font-family:Arial,sans-serif;font-size:40px;font-weight:700;fill:#17212b;text-anchor:middle}.detail{font-family:Arial,sans-serif;font-size:30px;fill:#33485c;text-anchor:middle}.box{fill:#f7f9fc;stroke:#243447;stroke-width:4}.core{fill:#edf8f1;stroke:#247348;stroke-width:4}.out{fill:#fff5df;stroke:#9a6719;stroke-width:4}.arrow{fill:none;stroke:#425466;stroke-width:7;marker-end:url(#m)}</style><defs><marker id="m" markerWidth="15" markerHeight="15" refX="12" refY="7" orient="auto"><path d="M0 0 L15 7 L0 14 Z" fill="#425466"/></marker></defs><rect width="1000" height="1100" fill="white"/>
+<text class="title" x="500" y="70">One manuscript, two reading formats</text>
+<g transform="translate(90 145)"><rect class="box" width="350" height="160" rx="18"/><text class="label" x="175" y="66">Research notes</text><text class="detail" x="175" y="115">Markdown + BibTeX</text></g><g transform="translate(560 145)"><rect class="box" width="350" height="160" rx="18"/><text class="label" x="175" y="66">Experiments</text><text class="detail" x="175" y="115">Code + benchmarks</text></g>
+<path class="arrow" d="M265 325V410H500V470"/><path class="arrow" d="M735 325V410H500"/>
+<g transform="translate(130 490)"><rect class="core" width="740" height="180" rx="20"/><text class="label" x="370" y="72">book/chapters/</text><text class="detail" x="370" y="122">canonical published prose with evidence links</text></g>
+<path class="arrow" d="M500 690V750"/><path class="arrow" d="M500 750H280V820"/><path class="arrow" d="M500 750H720V820"/>
+<g transform="translate(90 840)"><rect class="out" width="380" height="150" rx="18"/><text class="label" x="190" y="62">Course site</text><text class="detail" x="190" y="110">GitHub Pages</text></g><g transform="translate(530 840)"><rect class="out" width="380" height="150" rx="18"/><text class="label" x="190" y="62">Print manuscript</text><text class="detail" x="190" y="110">DOCX → Word PDF</text></g>
 </svg>

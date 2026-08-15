@@ -27,7 +27,7 @@ what operations are meaningful. Six values can form either two examples with
 three features or three examples with two features. The values are identical,
 but the program’s question has changed.
 
-![A feature bias broadcasts across every example in a batch.](../assets/day1/tensor-broadcasting.png)
+![A feature bias broadcasts across every example in a batch.](../assets/day1/tensor-broadcasting.svg)
 
 ## Problem
 

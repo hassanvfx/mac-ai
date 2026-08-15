@@ -1,4 +1,4 @@
-.PHONY: test lint audit-book site book provisional-pdf pdf-online preflight cover qrcodes release-manifest
+.PHONY: test lint audit-book site book provisional-pdf pdf-online preflight cover qrcodes release-manifest validate-reader-bridge validate-publication publish-review
 
 test:
 	uv run pytest
@@ -29,6 +29,14 @@ cover:
 
 qrcodes:
 	uv run python scripts/generate_qr_codes.py
+
+validate-reader-bridge:
+	uv run python scripts/validate_reader_bridge.py
+
+validate-publication:
+	uv run python scripts/validate_publication.py
+
+publish-review: validate-reader-bridge qrcodes book provisional-pdf pdf-online preflight validate-publication
 
 release-manifest:
 	uv run python scripts/release_manifest.py

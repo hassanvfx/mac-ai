@@ -29,17 +29,10 @@ for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.
     section_dir="appendices"
   fi
   prepared_file="$prepared_dir/$section_dir/$(basename "$source_file")"
-  # Docusaurus needs YAML front matter for sidebar metadata. Pandoc treats the
-  # same blocks as document metadata and lets a chapter title overwrite the
-  # manuscript title, so remove only a leading front-matter block in this
-  # temporary print-only copy.
-  awk '
-    NR == 1 && $0 == "---" { in_front_matter = 1; next }
-    in_front_matter && $0 == "---" { in_front_matter = 0; next }
-    # The temporary chapter copies live one directory deeper than the original
-    # chapters, so make canonical book assets relative to the temporary root.
-    !in_front_matter { gsub(/]\(\.\.\/assets\//, "](assets/"); print }
-  ' "$source_file" > "$prepared_file"
+  # Keep canonical Markdown free of generated publishing furniture. This
+  # temporary print copy strips Docusaurus front matter and appends the QR lab
+  # panel from the single reader-bridge manifest.
+  python3 "$root_dir/scripts/prepare_print_chapter.py" "$source_file" "$prepared_file"
   chapter_files+=("$prepared_file")
 done
 pandoc "${chapter_files[@]}" --metadata-file="$root_dir/book/manuscript.yaml" \

@@ -4,6 +4,8 @@
 
 By Hassan Uriostegui · Waken AI Labs
 
+![Cover of AI From Tensors to Agents on Mac Silicon](https://raw.githubusercontent.com/hassanvfx/mac-ai/main/book/assets/cover/pdf-online-cover.png)
+
 This is the companion repository for an English-language book and course that
 moves from tensors and gradients to RAG and agentic systems. It targets Python
 3.11 and Apple Silicon, including an M4 with 24 GB unified memory.
@@ -111,6 +113,11 @@ Mac, then open the experiment source and run its displayed command. The lab
 also links to the benchmark record, expected behavior, tests, and the next
 exercise. QR codes are convenience links, not a replacement for cloning the
 repository: experiments run locally on your Mac.
+
+The live learning path deliberately follows the repository's `main` branch.
+When a chapter changes, update its prose, manifest entry, command, benchmark,
+QR target, Pages lab, and regenerated PDFs together. The build validates this
+bridge before publishing; do not hand-edit PDF contents page numbers.
 
 ## Learn this with your AI copilot
 

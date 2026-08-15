@@ -18,15 +18,16 @@ def main() -> None:
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     generated: list[dict[str, str]] = []
-    for chapter in data["chapters"]:
-        url = f"{data['base_url']}/{chapter}"
+    targets = [("start-here", data["start_here"]["url"])]
+    targets.extend((f"chapter-{chapter['id']}-lab", f"{data['base_url']}/{chapter['id']}") for chapter in data["chapters"])
+    for name, url in targets:
         widget = qr.QrCodeWidget(url)
         bounds = widget.getBounds()
         drawing = Drawing(bounds[2] - bounds[0], bounds[3] - bounds[1])
         drawing.add(widget)
-        target = OUTPUT / f"chapter-{chapter}-lab.svg"
+        target = OUTPUT / f"{name}.svg"
         renderSVG.drawToFile(drawing, str(target))
-        generated.append({"chapter": chapter, "url": url, "svg": str(target.relative_to(ROOT))})
+        generated.append({"target": name, "url": url, "svg": str(target.relative_to(ROOT))})
     (OUTPUT / "manifest.json").write_text(json.dumps(generated, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(generated)} QR assets to {OUTPUT}")
 

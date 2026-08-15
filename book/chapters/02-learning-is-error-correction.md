@@ -58,7 +58,7 @@ coordinate. Gradient descent subtracts that whole vector. A component near zero
 does not mean its feature is unimportant; it means this loss is locally
 insensitive to that parameter at this point.
 
-![The forward pass computes a loss; the backward pass propagates its gradient to the parameter.](../assets/day1/gradient-flow.png)
+![The forward pass computes a loss; the backward pass propagates its gradient to the parameter.](../assets/day1/gradient-flow.svg)
 
 ## Minimal implementation
 
