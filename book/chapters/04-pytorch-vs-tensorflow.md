@@ -25,6 +25,14 @@ those differ, an observed difference may come from the experiment rather than
 from the framework. The comparison here is intentionally narrow enough to
 inspect, then clear about the questions it cannot answer.
 
+Think of the comparison as a checklist of invariants. The class meaning,
+fixture generator, split seeds, labels, topology, optimizer family, learning
+rate, epoch budget, and evaluation outputs belong to the problem contract. The
+tensor layout, loop API, initializer implementation, batching mechanism, device
+visibility, and history object are framework or runtime choices. Separating
+these categories is useful whenever results differ: inspect a violated
+invariant before attributing the change to a framework philosophy.
+
 ## Problem
 
 Train the same small convolutional classifier in PyTorch and TensorFlow/Keras
@@ -94,6 +102,23 @@ loss trajectories and elapsed time, so they are documented rather than hidden.
 The educational question is whether both programs solve the declared held-out
 task, not whether their internal states are bit-for-bit identical.
 
+The confusion matrix is not decoration. Rows represent actual classes and
+columns predicted classes in the shared helper. An identity matrix with sixteen
+examples on each diagonal says every held-out stroke type was predicted as
+itself in this fixture. The accompanying empty mistake list has meaning only
+because its index space, labels, and split are fixed. On a harder task, save
+representative mistakes and inspect whether they cluster around one class,
+noise level, or preprocessing transformation.
+
+The topology is equivalent at the level that matters to this lesson, not a
+claim of identical parameter tensors. Both models apply same-padded 3×3
+convolutions, ReLUs, pooling, global average pooling, and three final logits.
+Different libraries initialize weights differently and may order or fuse
+operations differently. Requiring bit-for-bit agreement would turn a lesson
+about controlled task behavior into a fragile implementation test. Requiring
+the declared fixture, held-out evaluation, and error report instead makes the
+comparison useful and reproducible.
+
 ## Experiment
 
 On the recorded Mac, PyTorch 2.13.0 completed the fixture with MPS selected and
@@ -117,6 +142,13 @@ is small. It is also not proof that CPU is generally faster. The only supported
 statement is the one in the record: these wall-clock values were observed under
 the declared, one-run conditions. Treat any broader conclusion as a hypothesis
 requiring a larger, repeated, device-matched experiment.
+
+Reproducibility also has levels. Fixed fixture generation and explicit seeds
+make this CPU-friendly teaching task repeatable. They do not guarantee identical
+floating-point traces across library versions, devices, or kernels. Record the
+versions, selected device, data layout conversion, and observed final metrics;
+then treat an unexpected divergence as an investigation prompt. A seed narrows
+uncertainty; it is not a promise that every numerical detail is portable.
 
 ## What broke
 
@@ -153,6 +185,14 @@ interfaces when an explicit loop remains clearest. Avoid choosing from
 benchmark headlines when hardware, model size, precision, data pipeline, or
 deployment target differs from the work at hand. A repeatable question and a
 maintained test fixture are more durable assets than a short-lived ranking.
+
+For a production comparison, expand the fixture before expanding the rhetoric.
+Use a versioned real-data manifest or a more varied synthetic generator,
+preserve train-only preprocessing, select a metric that reflects actual error
+cost, and repeat across declared seeds. Only after correctness is fixed should
+a separate performance protocol select matching devices, warm-ups, precision,
+batch sizes, run counts, and timers. The two reports then answer different
+questions without smuggling one conclusion into the other.
 
 ## Takeaway
 

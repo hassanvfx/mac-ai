@@ -1393,3 +1393,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Begin the Chapter 4 framework-comparison second pass, making data/split/
   metric equivalence, backend/device limits, and what the measured comparison
   does not establish more concrete.
+
+### 2026-08-15 — Chapter 4 framework-comparison second pass
+
+**What changed:**
+
+- Expanded Chapter 4 to 1,644 words. It now separates shared task invariants
+  from framework/runtime choices, makes the confusion matrix and empty error
+  list interpretable, and defines task-level topology equivalence without
+  requiring identical parameters.
+- Added explicit reproducibility limits across kernels/versions/devices and a
+  two-report design: establish correctness first, then run an independently
+  declared performance protocol if one is needed.
+- No measured result was changed or reinterpreted as framework-speed evidence.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 20,562 words, still below the
+  45,000–55,000 beta target.
+- Vision and TensorFlow fixture tests passed: 4 tests.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 5's CNN learning material with receptive-field intuition,
+  train/validation/test roles, error-analysis procedure, and controlled-
+  difficulty fixture design.
