@@ -2220,3 +2220,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass prose expansion with Chapter 5's CNN error-analysis
   case, then Chapters 6, 8, and 9; broaden fixture failures afterward.
+
+### 2026-08-15 — Chapter 5 fourth-pass error-analysis case
+
+**What changed:**
+
+- Added a worked confusion-matrix case to Chapter 5 using the existing unit
+  test's horizontal-to-diagonal error. It explains what an off-diagonal cell
+  supports, how to inspect the indexed example, and how to formulate a
+  one-variable robustness follow-up.
+- Clarified why the zero-error baseline and any harder variant must retain
+  separate versioned matrices and mistake lists.
+
+**Verification:**
+
+- `make audit-book` passed at 34,265 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest tests/test_vision.py`
+  passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass prose expansion with Chapters 6, 8, and 9, then
+  broaden fixture failure cases and repeat the full validation batch.

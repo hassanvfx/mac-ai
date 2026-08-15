@@ -188,6 +188,46 @@ mistakes, and limitations. Otherwise a later noisy run can overwrite the
 perfect baseline and make it impossible to identify what changed. Benchmark
 records preserve this history; prose should point to the executable condition.
 
+### Worked error-analysis case: accuracy needs a direction
+
+The current baseline has no held-out mistakes, so use the small confusion-matrix
+unit test to practice reading a non-perfect result. Its actual labels are
+`[vertical, horizontal, horizontal]`, while its predictions are
+`[vertical, diagonal, horizontal]`. With actual classes as rows and predicted
+classes as columns, the matrix is:
+
+```text
+                 predicted
+actual       vertical  horizontal  diagonal
+vertical          1         0          0
+horizontal        0         1          1
+diagonal          0         0          0
+```
+
+The single off-diagonal cell says more than “two out of three were correct.”
+One horizontal example was predicted as diagonal. It does not say that every
+horizontal image is hard, that diagonal filters are wrong, or that the network
+needs another layer. It identifies a direction for inspection: open the named
+fixture index, compare its stroke position, thickness, and noise with correct
+horizontal examples, and verify the label and preprocessing before changing an
+architecture.
+
+Turn that observation into a narrow hypothesis. For example: “larger vertical
+offsets make horizontal strokes resemble diagonals after pooling.” Create a new
+fixture configuration that changes only the offset range, preserve the class
+balance and split seeds, and run the same train/validation/test protocol. If
+the horizontal-to-diagonal cell grows while other conditions stay fixed, the
+result supports a specific robustness question. If it does not, the original
+mistake may have been an isolated noisy example rather than evidence for a
+design change.
+
+The baseline's identity matrix remains valuable beside this hypothetical case.
+It establishes that the declared easy distribution has no errors; the variant
+would establish how one changed distribution behaves. Do not overwrite the
+identity matrix or report only the worse aggregate accuracy. Versioned matrices
+and mistake lists let a future reader distinguish a changed task from a
+regression in the original one.
+
 ## What broke
 
 The easy failure is to report training accuracy alone. A model can memorize a
