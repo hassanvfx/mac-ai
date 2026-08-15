@@ -652,3 +652,49 @@ human-approval boundary before any source, Git, or external write.
   structured-output path over identical retrieved evidence.
 - [ ] Add LangGraph persistence, interrupt/resume, approval/rejection, and
   unavailable-model/API fallback tests before writing Chapters 10–13.
+
+---
+
+### 2026-08-14 — Milestone 5A structured planning comparison
+
+**What changed:**
+
+- Checked 46 GiB free before installing the optional `agents` dependency group:
+  OpenAI Python SDK 2.54.0, LangChain 1.3.15, and LangChain OpenAI 1.5.1.
+- Added direct OpenAI-compatible and LangChain structured-plan/review adapters
+  in `src/from_tensors_to_agents/structured_planning.py`. Both take the same
+  retrieved `Evidence` results and apply the same allowed-path and approval
+  policy after parsing.
+- Added Pydantic schemas, source-path filtering, empty-evidence warnings,
+  malformed-LangChain handling, and configuration validation that occurs before
+  any remote request. No adapter can write sources, Git state, or services.
+- Added the no-network comparison experiment, research note, benchmark record,
+  optional installation instructions, and substantive Chapter 10.
+
+**Recorded observation and limits:**
+
+- The default comparison uses fixture responses, not a provider. Both paths
+  received the same retrieval result and returned the same allowed source path
+  with approval required.
+- API mode is intentionally unrun because no endpoint configuration was
+  supplied. It requires `BOOK_INTELLIGENCE_API_KEY`,
+  `BOOK_INTELLIGENCE_API_BASE`, and `BOOK_INTELLIGENCE_MODEL` in the process
+  environment; no credentials were requested, displayed, or stored.
+- This is a contract comparison, not a model-quality, price, latency, token,
+  or provider-reliability benchmark.
+
+**Verification:**
+
+- `uv run --group tensorflow --group transformers --group mlx --group embeddings --group agents ruff check .` — passed.
+- `uv run --group tensorflow --group transformers --group mlx --group embeddings --group agents pytest` — 36 passed.
+- `uv run --group agents python experiments/10-systems/compare_structured_planning.py` — both fixture adapters returned the same allowed path and required approval.
+- `cd site && npm run build` — passed.
+- `./scripts/build-book.sh` — produced the draft DOCX. Rendered 32 pages and
+  inspected the Chapter 10 opening; no visible clipping or overlap was found.
+
+**Next task:**
+
+- [ ] Continue Milestone 5 with LangGraph state, checkpoint/resume, interrupt,
+  approval/rejection, and deterministic unavailable-model fallback.
+- [ ] Write Chapters 11–12 only after those state transitions have tests and a
+  recorded no-network experiment.

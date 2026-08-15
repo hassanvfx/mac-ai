@@ -196,6 +196,25 @@ to produce a complete natural-language answer. Read
 `benchmarks/05-book-intelligence/README.md` for the recorded environment and
 limitations.
 
+## Optional structured-system installation
+
+Chapter 10 compares the direct OpenAI-compatible SDK path with LangChain over
+the same retrieved evidence. The installed package group does not call an API
+or require a key; its default example is a no-network fixture comparison:
+
+```bash
+df -h .
+uv sync --group agents
+uv run --group agents python experiments/10-systems/compare_structured_planning.py
+```
+
+An intentionally separate `--api` mode requires all three process environment
+variables: `BOOK_INTELLIGENCE_API_KEY`, `BOOK_INTELLIGENCE_API_BASE`, and
+`BOOK_INTELLIGENCE_MODEL`. Never place their values in project files. A missing
+value fails before a request is made. See
+`benchmarks/06-structured-systems/README.md` for the narrowly recorded adapter
+comparison and its limits.
+
 ## Site and manuscript builds
 
 Build the course site with its own Node lockfile:

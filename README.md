@@ -59,6 +59,16 @@ hashed-vector baseline instead of loading the learned encoder. See
 `benchmarks/05-book-intelligence/README.md` for the recorded observation and
 its limits.
 
+The direct-SDK/LangChain comparison is another opt-in group. Its default is
+fully local and uses fixture model responses; `--api` is an explicitly separate
+mode that requires environment-only credentials:
+
+```bash
+df -h .
+uv sync --group agents
+uv run --group agents python experiments/10-systems/compare_structured_planning.py
+```
+
 For the course site, use Node 20:
 
 ```bash

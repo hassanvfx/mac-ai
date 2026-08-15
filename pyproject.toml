@@ -7,6 +7,11 @@ requires-python = ">=3.11,<3.12"
 dependencies = ["numpy>=2.0", "torch>=2.4", "psutil>=6.0", "pypdf>=5.0"]
 
 [dependency-groups]
+agents = [
+    "langchain>=1.0,<2.0",
+    "langchain-openai>=1.0,<2.0",
+    "openai>=2.0,<3.0",
+]
 dev = ["pytest>=8.3", "ruff>=0.8"]
 embeddings = [
     "sentence-transformers>=5.0,<6.0",
