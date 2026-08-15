@@ -1341,3 +1341,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Begin a second editorial pass on the shortest chapters (7, 4, 5, 6),
   adding missing worked examples, evidence interpretation, and diagrams while
   keeping performance claims tied to benchmark records.
+
+### 2026-08-15 — Chapter 7 local-inference second pass
+
+**What changed:**
+
+- Expanded Chapter 7 to 1,338 words. It now separates disk/download capacity
+  from unified-memory capacity, rules out invalid cross-task runtime rankings,
+  and explains the declared load, warm-up, generation, RSS, Metal, and MLX-LM
+  measurement boundaries.
+- Added quality-boundary guidance for the fixed prompt, a reproducible local
+  failure taxonomy, and clearer task-specific/local/remote runtime alternatives.
+- Retained the existing single-workload MLX-LM observation without adding any
+  unmeasured latency, capacity, or quality claims.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 19,720 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_local_models.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 6's transformer inference material with an explicit
+  token-to-logit walkthrough, prompt/context failure cases, and model/pipeline
+  interpretation boundaries.

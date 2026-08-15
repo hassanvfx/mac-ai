@@ -22,11 +22,24 @@ or make a model's context free. The practical question is therefore not whether
 an advertised parameter count sounds small, but whether this exact model and
 workload leave enough headroom for the rest of the machine.
 
+Storage and memory are separate constraints. The first model download needs
+disk space for weights and tokenizer files; a later generation needs available
+unified memory for the loaded model, runtime buffers, prompt, key/value cache,
+and everything else running on the Mac. Checking `df -h .` before an optional
+download prevents a simple disk failure, but it says nothing about whether a
+long prompt will fit comfortably at inference time.
+
 ## Problem
 
 Run one local MLX-LM inference workload whose inputs and measurement boundary
 are visible. A fair PyTorch-MPS-versus-MLX comparison comes later, after the
 same generative model and protocol are available in both runtimes.
+
+That restraint prevents an invalid comparison. Chapter 3 measures a tiny
+PyTorch training loop; Chapter 6 runs a classifier; this chapter streams a
+quantized instruction model. Their elapsed times represent different tasks,
+token counts, warm-up behavior, and memory methods. A “fastest runtime” table
+would look precise while answering no coherent engineering question.
 
 ## Minimal implementation
 
@@ -70,6 +83,21 @@ generation peak does not accidentally include first-use initialization. That is
 not a universal memory accounting method; it is a declared observation method
 that a reader can reproduce and improve.
 
+Interpret the fields as a timeline. Model load is the cold-start cost after
+weights are locally cached. The warm-up triggers lazy setup but is excluded from
+measured generation. The generation timer begins immediately before streaming
+and ends after the final response. If an application cares about a first
+interactive response, record first-token latency separately; if it cares about
+batch throughput, declare batch size and queueing. Do not reuse this one token
+rate for either question.
+
+The memory fields are observations with different owners. Process RSS includes
+what the operating system attributes to Python; Metal active and peak fields
+describe MLX allocator views; MLX-LM returns its own peak figure. They may move
+together without being additive. For a longer-context experiment, preserve all
+three labels and record a pressure event rather than estimate capacity from one
+successful run.
+
 ## Experiment
 
 On the recorded Mac, MLX 0.31.2 and MLX-LM 0.31.3 generated 64 tokens after a
@@ -85,6 +113,13 @@ versions, and warmed-up run. They are not a claim that MLX is faster than
 PyTorch MPS, that 4-bit models always fit a given Mac, or that the completion
 is correct. The response stopped at the declared 64-token limit and was not
 quality-scored.
+
+The fixed prompt exercises chat-template rendering, tokenization, generation,
+and stop behavior without claiming to measure reasoning, factuality, safety, or
+instruction following. It ends at the configured length limit, so completion
+length is a workload parameter rather than a quality signal. A future quality
+evaluation needs a versioned prompt set, scoring rubric, and human or task-based
+judgments.
 
 ## What broke
 
@@ -104,6 +139,13 @@ can depend on other work running on the computer, caches, and longer prompts.
 Check available storage before downloading models and use an explicit workload
 before increasing model size or context length.
 
+Classify a local failure before changing frameworks. A missing optional package
+is an installation problem; a cache/download error is a storage or network
+problem; a chat-template error is a model-interface problem; memory pressure is
+a workload/capacity problem; and an unhelpful completion is an evaluation
+problem. Each needs a different record and remedy. Collapsing them into “the
+model does not work on my Mac” makes the project impossible to reproduce.
+
 ## Alternatives and when to use them
 
 Use MLX-LM when you want a native local inference path and can make model,
@@ -113,6 +155,13 @@ credentials environment-configured and preserve the same evidence discipline.
 PyTorch MPS is a valuable alternative for models and training workflows already
 expressed in PyTorch. Do not choose on a slogan: choose after measuring the
 actual workload.
+
+Smaller task-specific models can be better local choices than a general
+instruction model for classification, extraction, or embedding. Quantized
+GGUF-style toolchains are another alternative with their own formats and
+measurement rules. A remote service can simplify distribution but changes
+privacy, cost, latency, and outage behavior. State which trade-off matters
+before choosing a runtime.
 
 ## Takeaway
 
