@@ -44,6 +44,20 @@ The negative value means that a small increase in this particular weight
 reduces the loss locally. The goal is to verify that PyTorch’s autograd system
 constructs the same derivative from ordinary tensor operations.
 
+The chain rule makes the calculation less mysterious. Let `r = prediction -
+target`, so the loss is `r²`. A small change in `weight` changes prediction by
+two times that amount; changing `r` changes the squared loss by `2r`. At
+`weight = 3`, residual `r` is `-4`, so the local rates multiply to
+`2 × (-4) × 2 = -16`. Backpropagation is this bookkeeping repeated through a
+longer computation graph. It is not a second model that discovers a learning
+rule; it evaluates derivatives of the forward function already defined.
+
+For a vector of parameters, the gradient has one component per parameter. If
+`w = (w₁, w₂)`, then `∇L = (∂L/∂w₁, ∂L/∂w₂)` describes the local slope in each
+coordinate. Gradient descent subtracts that whole vector. A component near zero
+does not mean its feature is unimportant; it means this loss is locally
+insensitive to that parameter at this point.
+
 ![The forward pass computes a loss; the backward pass propagates its gradient to the parameter.](../assets/day1/gradient-flow.png)
 
 ## Minimal implementation
@@ -123,6 +137,32 @@ store a user-visible gradient. This is why a training loop reads gradients from
 model parameters, not from every temporary result. It is also why retaining
 large computation graphs accidentally can consume significant memory.
 
+### Reduction defines the scale of a gradient
+
+Suppose two identical examples appear in a batch. With a summed squared-error
+loss, duplicating the batch doubles both the loss and its gradient. With a mean
+loss, duplicating the batch leaves their expected scale approximately unchanged.
+Neither choice is universally correct, but it changes the effective learning
+rate a reader experiences. When a script switches from a mean to a sum, or
+changes batch size, record it before concluding an optimizer became unstable.
+
+Autograd normally needs a scalar output for `backward()` because reverse mode
+answers “how does this one scalar objective change with every parameter?” A
+vector-valued result can still be differentiated if code supplies an upstream
+vector, but that is a different contract. In ordinary supervised learning,
+reducing per-example errors to one declared loss makes the target and gradient
+scale visible.
+
+### Reading a gradient without overinterpreting it
+
+A negative scalar gradient in the opening example tells us that increasing the
+weight slightly lowers the current loss. It does not tell us that increasing
+the weight forever is safe. At `weight = 5`, the prediction reaches the target
+and the gradient is zero. On the other side, the residual changes sign and the
+gradient becomes positive, so subtraction moves the weight back down. This is
+a local feedback signal in a simple quadratic bowl, not a general promise about
+every neural-network loss surface.
+
 ## Experiment
 
 Change the starting weight and target in the autograd script. Calculate the
@@ -152,6 +192,20 @@ both introduce error. This comparison is valuable when implementing a custom
 operation: finite differences are slow, but they can reveal whether a gradient
 is wildly wrong before a large training run hides the source of the problem.
 
+Choose epsilon with care. If it is too large, the finite difference measures a
+wide nonlinear interval instead of the local derivative. If it is too small,
+the two floating-point loss values can round together and make subtraction
+noisy. Try a small range of epsilons and look for agreement over a stable
+region. The scalar exercise is ideal because its analytic answer is known; for
+a custom layer, compare only a few chosen parameters so the diagnostic stays
+inexpensive and understandable.
+
+Add a reduction experiment as well. Compute squared errors for two examples,
+then compare `.sum()` and `.mean()` losses and their gradients. Duplicate the
+same examples and repeat. Write down which values double and which remain
+stable. This turns a framework default into a visible mathematical choice that
+matters later when batch sizes and metrics change.
+
 ## What broke
 
 Two beginner errors reveal important boundaries. A tensor without
@@ -176,6 +230,13 @@ input ranges, and reduce the problem to the first batch that fails. Gradient
 clipping, normalization, and more stable loss implementations are tools for
 particular problems, not substitutes for identifying where the invalid value
 first appeared.
+
+Detaching tensors is another quiet failure. Calling `.item()`, converting to
+NumPy, or using `.detach()` at the wrong point removes a value from the graph.
+That is correct for logging a finished loss, but wrong for a value that must
+still influence a later differentiable computation. Keep logging and model
+calculation separate: compute the loss, call `backward()`, then detach only the
+small values intended for display or storage.
 
 ## Alternatives and when to use them
 

@@ -1549,3 +1549,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 2 the same third-pass treatment: derive the scalar gradient,
   connect it to vector/matrix gradients, show finite-difference checks and loss
   reduction behavior, and keep the claims tied to the runnable autograd lesson.
+
+### 2026-08-15 — Chapter 2 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 2 from 1,503 to 2,078 words with a chain-rule derivation of
+  the scalar result, vector-gradient interpretation, batch reduction/gradient
+  scaling, and local-gradient limits.
+- Added concrete finite-difference epsilon guidance, a sum-versus-mean
+  experiment, and a detachment/logging boundary that preserves autograd
+  correctness.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 22,702 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_day1.py` passed (6 tests).
+- The autograd experiment printed the expected prediction `6.0`, loss `16.0`,
+  and gradient `-16.0`. `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 3 a third-pass expansion: trace the tiny regressor's data,
+  parameter, loss, optimizer, and device contracts; then connect observed loss
+  curves to held-out evaluation boundaries without making speed claims.
