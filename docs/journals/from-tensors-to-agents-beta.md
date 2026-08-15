@@ -1968,3 +1968,28 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass worked cases with Chapter 12's scope/retention and
   rejection-revision scenario, then Chapters 14, 07, and 10.
+
+### 2026-08-15 — Chapter 12 fourth-pass worked scenario
+
+**What changed:**
+
+- Added a worked stale-proposal scenario to Chapter 12. It distinguishes a
+  path that merely still resolves from evidence that remains current, explains
+  stale-thread handling and rejection recovery, and specifies a second,
+  diff-scoped approval for any future writer.
+- Kept the beta boundary explicit: its persisted approval/rejection outcomes
+  remain incapable of modifying tracked files.
+
+**Verification:**
+
+- `make audit-book` passed at 31,262 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_approval_workflow.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass worked cases with Chapter 14's beta release gate,
+  then Chapters 07 and 10; afterwards expand the early chapters and regenerate
+  the DOCX for visual review.

@@ -146,6 +146,39 @@ when the graph reaches the expected node. A future usability evaluation can
 use scripted review cases, but it should preserve the same safety rule: a
 positive label is not evidence of an executed or correct change.
 
+### Worked scenario: a proposal becomes stale
+
+Imagine a reviewer pauses a proposal to improve the embeddings chapter. The
+checkpoint names `book/chapters/08-turning-meaning-into-geometry.md`, stores a
+plan and critique, and asks only whether the proposal should proceed to its
+current beta terminal state. While the workflow is paused, another editor
+rewrites the retrieval experiment and changes the chapter's evidence trail. The
+stored path still resolves, but the evidence and intended revision are no
+longer necessarily the same work the reviewer first saw.
+
+The safe response is not “approved once, therefore write now.” First compare
+the current evidence revision or content hash with the one that informed the
+proposal. If it differs, record the proposal as stale; retain its local history
+for the configured retention period; and start a new retrieval/plan cycle with
+a new thread ID. The old approval or rejection remains a fact about the old
+proposal, not a permission or prohibition that automatically transfers to a
+different manuscript state.
+
+Suppose instead the reviewer rejects because the plan lacks a benchmark record.
+The checkpoint ends `rejected_no_write`; no source is changed and no ambiguous
+“pending” state remains. A later author can add the missing evidence, but that
+creates a new objective and must produce a new proposal. The original rejected
+thread remains useful as an audit clue, while the new thread avoids silently
+erasing why the earlier plan was declined.
+
+Only after a future writer has re-read the current evidence should it calculate
+one proposed diff. The reviewer must see that diff, its target file, the
+evidence paths, and the expected test commands in a second scoped approval.
+Even then the writer should receive only that target and diff—not unrestricted
+repository access. This two-approval shape is intentionally stricter than the
+beta graph, whose useful demonstration is that both approval and rejection are
+durable while still incapable of changing a tracked file.
+
 ## What broke
 
 An interrupt node restarts from the beginning when resumed. Therefore code
