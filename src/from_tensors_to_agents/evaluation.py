@@ -36,6 +36,16 @@ def evaluate(root: Path, cases: list[dict[str, object]], output: Path) -> list[d
             answer = grounded_evidence([])
             passed = bool(case["must_refuse"]) and answer.startswith("No grounded answer")
             detail = answer
+        elif task == "blank-query":
+            results_for_blank_query = retrieve(index, str(case["question"]))
+            answer = grounded_answer(index, str(case["question"]))
+            passed = not results_for_blank_query and answer.startswith("No grounded answer")
+            detail = f"retrieved={results_for_blank_query}; answer={answer}"
+        elif task == "empty-corpus":
+            empty_index = build_index(output.parent / "absent-fixture-corpus")
+            answer = grounded_answer(empty_index, str(case["question"]))
+            passed = empty_index == [] and answer.startswith("No grounded answer")
+            detail = f"index_size={len(empty_index)}; answer={answer}"
         elif task == "grounded-answer":
             answer = grounded_answer(index, str(case["question"]))
             expected = str(case["must_cite"])
@@ -62,6 +72,12 @@ def evaluate(root: Path, cases: list[dict[str, object]], output: Path) -> list[d
             expected = str(case["must_flag"])
             passed = expected in findings
             detail = f"findings={findings}"
+        elif task == "deterministic-ranking":
+            first = [item.evidence.source for item in retrieve(index, str(case["question"]))]
+            second = [item.evidence.source for item in retrieve(index, str(case["question"]))]
+            expected = str(case["must_cite"])
+            passed = first == second and expected in first
+            detail = f"first={first}; second={second}"
         else:
             detail = f"unsupported task: {task}"
         results.append({"id": case["id"], "passed": passed, "detail": detail})

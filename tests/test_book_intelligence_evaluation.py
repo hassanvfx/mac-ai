@@ -16,5 +16,9 @@ def test_versioned_book_intelligence_evaluation_passes_without_a_model(tmp_path:
         "grounded-path-attribution",
         "citation-key-preservation",
         "unsupported-claim",
+        "blank-query-refusal",
+        "empty-corpus-refusal",
+        "escaped-link-review",
+        "deterministic-ranking",
     }
     assert (tmp_path / "evaluation.json").exists()

@@ -1,6 +1,10 @@
 {"id":"locate-evidence","task":"retrieve","question":"Where is cosine similarity explained?","must_cite":"research/embeddings.md"}
 {"id":"grounded-path-attribution","task":"grounded-answer","question":"Where is cosine similarity explained?","must_cite":"research/embeddings.md"}
-{"id":"citation-key-preservation","task":"citation","question":"sentence transformer embeddings","must_cite":"research/embeddings.md","must_preserve_key":"reimers2019sentencebert"}
+{"id":"citation-key-preservation","task":"citation","question":"reimers2019sentencebert","must_cite":"research/embeddings.md","must_preserve_key":"reimers2019sentencebert"}
 {"id":"unsupported-claim","task":"grounding","question":"What is the ISBN for this book?","must_refuse":true}
+{"id":"blank-query-refusal","task":"blank-query","question":"   "}
+{"id":"empty-corpus-refusal","task":"empty-corpus","question":"Where is cosine similarity explained?"}
 {"id":"plan-experiment","task":"plan","question":"Propose an embeddings experiment without changing source files.","must_include":"human explicitly approves"}
 {"id":"review-alternatives","task":"review","must_flag":"book/chapters/08-draft.md: missing Alternatives section"}
+{"id":"escaped-link-review","task":"review","must_flag":"book/chapters/09-unsafe-link.md: link escapes corpus ../../../../etc/hosts"}
+{"id":"deterministic-ranking","task":"deterministic-ranking","question":"Where is cosine similarity explained?","must_cite":"research/embeddings.md"}

@@ -2268,3 +2268,31 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass prose expansion with Chapters 8–9, then broaden
   fixture failure cases and repeat the full validation batch.
+
+### 2026-08-15 — Book Intelligence failure-fixture expansion
+
+**What changed:**
+
+- Added versioned evaluation cases for blank-query refusal, an absent corpus,
+  deterministic ranking, and an escaped local Markdown link.
+- Added a deliberately unsafe fixture link. The corpus reviewer must report it
+  without following it or reading outside the configured corpus.
+- Tightened the citation-preservation case to query its citation key directly;
+  this keeps the assertion about provenance rather than making it dependent on
+  the broad-query ranking of unrelated fixture files.
+
+**Verification:**
+
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_intelligence.py tests/test_book_intelligence_evaluation.py
+  tests/test_reliability.py` passed (11 tests).
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run python
+  evals/run_reliability.py` passed (10 cases).
+- `make audit-book` passed at 34,598 words, still below the 45,000-word beta
+  minimum.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass prose expansion with Chapters 8–9, then run the
+  full Python, site, and DOCX interim-proof validation batch.
