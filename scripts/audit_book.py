@@ -29,6 +29,7 @@ EXPECTED_RESEARCH = {
     "12": "research/07-workflow-graphs/notes.md",
     "13": "research/07-workflow-graphs/notes.md",
     "14": "research/07-workflow-graphs/notes.md",
+    "15": "research/08-generative-ai-lab/notes.md",
 }
 
 

@@ -302,17 +302,10 @@ the result release-ready.
 
 ## Optional ClineFlow journaling
 
-Use [ClineFlow](https://github.com/hassanvfx/clineflow) when persistent journals
-and project context would make AI-assisted development easier to resume. It is
-an optional workflow aid: this companion repository neither installs nor
-depends on it at runtime.
-
-To adopt the same journal workflow, follow ClineFlow's current README in the
-repository root and then create a project journal under `docs/journals/`. For
-this project the long-lived journal is
-`docs/journals/from-tensors-to-agents-beta.md`. Begin each work session by
-reading its current status; before each commit, record the decision, changed
-paths, commands and results, failures, and next smallest action.
+Read [The Author's Toolkit](./00-preamble-the-authors-toolkit.md) for the
+optional ClineFlow workflow, its portable OKF knowledge-bundle rationale, and a
+small journal exercise. This companion repository neither installs nor depends
+on ClineFlow at runtime.
 
 ## How to learn with the repository
 

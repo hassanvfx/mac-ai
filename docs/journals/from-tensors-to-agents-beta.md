@@ -137,6 +137,54 @@ model-quality or performance claim.
 
 ## Current Implemented State
 
+### 2026-08-15 — Standalone high-resolution print cover panels
+
+**What changed:**
+
+- Added separate front and back PNG panels under `covers-print/` for manual Photoshop assembly, without changing the GitHub Pages cover or existing book-cover assets.
+- Preserved the existing GitHub Pages front cover unchanged (including its artwork and all typography), enlarging it with Lanczos resampling only. Generated complementary Rottweiler pen-and-ink art with ChatGPT Image 2 for the back panel, where the book summary and approved short author bio are composed as sharp raster text.
+- Exported both panels at 7500 × 11100 px with 1200 ppi metadata; they deliberately exclude a spine, ISBN, barcode, and printer-specific wrap template.
+
+**Verification:**
+
+- Checked the final PNG dimensions, RGB mode, DPI metadata, and visual composition.
+
+**Status:** Complete.
+
+### 2026-08-15 — The Author's Toolkit and Generative AI Lab
+
+**Decision:** Add an unnumbered preamble before the introduction and Chapter 15
+as the final numbered lesson. Keep ClineFlow optional and retain Lyrics Refiner
+and Newsmusic as externally maintained linked case studies rather than vendored
+dependencies.
+
+**Evidence and safety boundaries:**
+
+- The ClineFlow preamble uses only its documented Git-native journal/OKF
+  workflow and Google Cloud's public OKF rationale. It makes no claim of Google
+  certification, endorsement, independent production-scale validation, or
+  user-count verification.
+- Lyrics Refiner is presented as a local, source-preserving arrangement
+  workflow; its browser-exposed API-key boundary is explicit.
+- Newsmusic is presented through its dry-run path, local credential handling,
+  disabled third-party-footage download, and private review gate. No book
+  command performs generation, spends credits, or uploads media.
+
+**Implementation record:**
+
+- Added canonical preamble and Chapter 15 Markdown, a local no-secret
+  case-study guide, a documentation-led evidence record, and a research note.
+- Extended the reader bridge, QR manifest, lab generator, chapter audit, and
+  generated TOC logic from 14 to 15 numbered chapters.
+- Updated print preparation so the unnumbered preamble renders before the
+  introduction and does not receive the introduction's course-start QR panel.
+
+**Verification completed:** The companion guide, chapter audit, reader-bridge
+validation, QR generation, and site build passed. The provisional and online
+review PDFs were rebuilt; the generated manifest now records the preamble and
+Chapter 15 in the contents. Rendered review confirmed the preamble opening,
+Chapter 15 opening, and its unsplit QR lab panel.
+
 ### Repository foundation
 
 - Python project is managed by `uv`, targets Python 3.11, and has `uv.lock` committed.
@@ -2756,6 +2804,173 @@ and generated-DOCX inspection have all happened.
 - [ ] Add the remaining canonical teaching material needed to reach the beta
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
+
+### 2026-08-15 — Lulu ISBN and Global Distribution integration
+
+**What changed:**
+
+- Added `book/lulu-distribution.yaml` as the sole source for print and Lulu
+  Global Distribution metadata. It records the Lulu-assigned ISBN
+  `978-0-557-95054-6`, Lulu.com as the immutable ISBN imprint, and Waken AI
+  Labs as the editorial brand.
+- Reworked the print front matter into a title page followed by a copyright
+  page containing the title, subtitle, author, copyright date, and ISBN as
+  plain text. The barcode remains cover-only.
+- Retired the placeholder manuscript metadata source; the existing manuscript
+  build now consumes the centralized file. Cover production remains separate.
+- Added source validation for ISBN-13 integrity, barcode asset set and source
+  guide, required distribution fields, listing constraints, and interior
+  metadata. Added a test and a `make validate-lulu` command.
+
+**Verification:**
+
+- `make book` completed using the centralized metadata and produced the
+  ignored 6 x 9 DOCX.
+- `uv run python scripts/validate_lulu_distribution.py --interior
+  book/build/ai-from-tensors-to-agents-on-mac-silicon.docx` passed.
+- `uv run pytest` passed: 45 tests.
+
+**Next task:**
+
+- [ ] Enter the validated ISBN and matching title, subtitle, author, imprint,
+  description, categories, keywords, pricing, and payee into Lulu when the
+  publishing project is created. Cover production is user-managed separately.
+
+### 2026-08-15 — ISBN-only scope revision
+
+**Decision:**
+
+- The user will create and manage the cover separately. ISBN integration is
+  therefore limited to publication metadata, interior title/copyright pages,
+  the supplied barcode asset records, and metadata validation.
+
+**What changed:**
+
+- Removed the wrap-cover composer, layout example, wrap-specific preflight
+  behavior, cover documentation changes, and the provisional cover artifacts
+  generated during the prior verification pass.
+- Restored the pre-existing provisional-cover workflow and its placeholder
+  metadata file without changing its artwork or user-owned cover assets.
+
+**Verification:**
+
+- `make validate-lulu` passed for ISBN `978-0-557-95054-6`.
+- `make book` completed with the centralized distribution metadata.
+- `uv run pytest tests/test_lulu_distribution.py tests/test_book_audit.py`
+  passed (2 tests), and `git diff --check` passed.
+
+### 2026-08-15 — ISBN publication-flow review and beta re-export
+
+**Decision:**
+
+- Treat `book/lulu-distribution.yaml` as the distribution-metadata authority
+  for the assigned ISBN `978-0-557-95054-6`. The interior prints it as text;
+  the barcode remains excluded until Lulu supplies the final one-piece cover
+  template after page count is frozen.
+
+**What changed:**
+
+- Added `validate-lulu-interior` to the normal provisional-PDF dependency
+  chain. A DOCX cannot proceed to the review PDF unless its title/copyright
+  pages agree with the centralized ISBN metadata.
+- Corrected stale canonical prose that still called the ISBN a placeholder or
+  a pending decision. The remaining pending production decision is the final
+  Lulu wrap cover, its barcode placement, and proof approval.
+
+**Verification:**
+
+- Source validation and the dedicated ISBN test passed; the ISBN checksum,
+  required metadata, Lulu.com imprint, front matter, and SVG/PNG/PDF barcode
+  source assets agree.
+- Rebuilt the DOCX, provisional 6×9 review PDF, and online PDF. The DOCX
+  delivery check passed. The rendered copyright page visually shows the
+  assigned ISBN and the no-barcode interior policy.
+- Preflight passed: 196 single interior pages at 6×9. Reader-bridge validation
+  passed for 15 labs plus the Introduction; the Docusaurus production build
+  passed.
+- Microsoft Word is not installed on this Mac. LibreOffice outputs remain
+  review/beta artifacts, not a Lulu upload PDF.
+
+**Next task:**
+
+- [ ] Install or access Microsoft Word on macOS, export the frozen DOCX,
+  visually inspect every page, validate the final upload PDF, request Lulu's
+  exact wrap template, then create the user-managed cover with the assigned
+  ISBN barcode in Lulu's safe area.
+
+### 2026-08-15 — Front-matter correction after ISBN integration
+
+**Decision:**
+
+- Keep the real ISBN out of the first/title page. Lulu's current distribution
+  requirements call for title, subtitle, and author on the title page, followed
+  by title, subtitle, author, copyright date, and the ISBN as text on the
+  copyright page. The barcode remains cover-only.
+
+**What changed:**
+
+- Restored a minimal title page: title, subtitle, and author only. Removed the
+  unnecessary Lulu.com and editorial-brand lines from that page while retaining
+  the required publisher/imprint information on the copyright page.
+- Applied the established `Title`, `Subtitle`, and `Author` Word styles with
+  centered alignment only to the title-page elements; body, chapter, and
+  front-matter layout rules remain unchanged.
+
+**Verification:**
+
+- Rebuilt both beta PDFs and rendered the first interior pages for inspection.
+  The title page is recto and the copyright/ISBN page is verso; the visible
+  ISBN is `978-0-557-95054-6` and no interior barcode is present.
+
+### 2026-08-15 — Single beta master PDF
+
+**Decision:**
+
+- `book/build/pdf-online.pdf` is the one beta master for online reading and
+  interior-layout review. It reuses the existing online cover as the visual
+  interior title page. The user will create the exterior Lulu wrap separately.
+
+**What changed:**
+
+- Removed the generated/typographic duplicate title pages from the print path.
+  The master order is now: visual title page, copyright/ISBN page, one courtesy
+  blank page, generated contents, then the manuscript.
+- Retired the online wrapper behavior so it cannot prepend another cover.
+  `make master-pdf` is the canonical build command; the older targets are
+  compatibility aliases to the same output.
+- Made the publication validator assert the first four pages and derive TOC
+  positions from the same master PDF. Folios begin at editorial content.
+- Added an explicit preflight warning: the inherited title plate is 162 ppi at
+  6×9, acceptable only for the beta master and blocked by release preflight.
+
+**Verification:**
+
+- `make master-pdf` rebuilt the DOCX and master; metadata/ISBN validation
+  passed.
+- Rendered pages 1–4 show the specified sequence; publication validation,
+  reader-bridge validation, PDF preflight, and the ISBN test passed.
+
+**Next task:**
+
+- [ ] Replace the shared title plate with at least 300 ppi artwork before a
+  Word-exported Lulu upload candidate is approved.
+
+### 2026-08-15 — Commit checkpoint: beta master and ISBN workflow
+
+**Commit intent:**
+
+- Preserve the current project checkpoint before adding further reader tooling:
+  the centralized Lulu ISBN workflow, the single beta master PDF composition,
+  the 15-chapter reader bridge, and the new Author's Toolkit / Generative AI
+  Lab material.
+
+**Verification at checkpoint:**
+
+- Full Python suite: 45 passing tests.
+- Docusaurus production build, ISBN validation, reader-bridge validation, TOC
+  validation, and 6×9 master preflight passed.
+- Release preflight intentionally rejects the current 162 ppi title art; this
+  is recorded as a beta-only limitation rather than an upload approval.
 
 ### 2026-08-15 — Beta manuscript word target reached
 

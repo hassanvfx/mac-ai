@@ -184,14 +184,13 @@ def main() -> None:
             size.set(f"{{{W}}}h", HEIGHT_TWIPS)
         # The reference template applies consistent styles, but not page breaks
         # to Pandoc's front-matter blocks. Add them by structural role so the
-        # title, legal, author, acknowledgement, chapter, and appendix pages
+        # legal, author, acknowledgement, chapter, and appendix pages
         # have intentional starts in both Word and LibreOffice review renders.
         for paragraph in root.findall(".//w:body/w:p", NS):
             text = "".join(run.text or "" for run in paragraph.findall(".//w:t", NS))
             style = paragraph.find("w:pPr/w:pStyle", NS)
             style_name = style.get(f"{{{W}}}val") if style is not None else ""
             begins_section = text in {
-                "Copyright © 2026 Hassan Uriostegui. All rights reserved.",
                 "About the Author",
                 "Acknowledgements",
             }

@@ -46,18 +46,18 @@ make audit-book
 make validate-reader-bridge
 make qrcodes
 make book
-make provisional-pdf
-make pdf-online
+make master-pdf
 make preflight
 make validate-publication
 make release-manifest
 ```
 
-The provisional PDF route uses LibreOffice only to make layout review easy on
-this machine. It is intentionally named *provisional*. The release candidate
-is produced by opening the same DOCX in Microsoft Word on macOS and exporting
-to PDF with the final printer settings. Never rename a provisional PDF to make
-it look like a release artifact. The filename is part of the safety boundary.
+The LibreOffice route produces one beta master at `book/build/pdf-online.pdf`.
+It is both the online reading edition and the interior-layout review artifact:
+visual title page, copyright/ISBN page, courtesy blank, generated contents, and
+manuscript. The release candidate is produced by opening the same DOCX in
+Microsoft Word on macOS and exporting to PDF with the final printer settings.
+Never label the beta master as a release artifact.
 
 The reader bridge is one synchronized publishing unit. Its manifest maps every
 numbered chapter to the live `main`-branch lab URL, code command, expected
@@ -66,13 +66,14 @@ panel from that manifest; the course build derives its lab pages from the same
 source. Update prose, command, benchmark, manifest, QR, Pages output, and PDF
 in the same publication change.
 
-After LibreOffice renders the interior, the publishing step locates chapter
-starts in that exact file and generates the contents page from the measured
-pagination. It then applies folios and records hashes, page counts, and TOC
-entries in the publication manifest. The online PDF is accepted only when it
-wraps that exact verified interior. The future Microsoft Word/Lulu export must
-repeat this render → derive contents → validate sequence; page numbers are
-never maintained by hand.
+After LibreOffice renders the body, the publishing step creates the one master
+sequence: shared visual title page, copyright/ISBN page, one blank courtesy
+page, contents, then the remaining manuscript. It locates chapter starts in
+that same result, generates the contents from measured pagination, applies
+folios only after the front matter, and records hashes and page counts in the
+publication manifest. The future Microsoft Word/Lulu export must repeat this
+render → derive contents → validate sequence; page numbers are never maintained
+by hand.
 
 The build script handles a subtle but important source-sharing detail. Chapter
 files carry Docusaurus front matter for course navigation. Pandoc would treat
@@ -84,12 +85,13 @@ The web and print readers still receive the same prose.
 ## Inspecting the interior
 
 Review pages in a sequence rather than scrolling randomly. Begin with the
-half-title, title, copyright, author, acknowledgements, and contents pages.
-Confirm that the dummy ISBN is visibly marked invalid for distribution and that
-there is no accidental barcode. Then inspect every chapter opener: it should
-have a clear title, breathing room, and a stable relationship to the preceding
-chapter. Inspect every chapter ending for an isolated takeaway heading, a lone
-line, or a next-step reference that points nowhere.
+shared visual title page, copyright, courtesy blank page, and contents page.
+Confirm that the assigned ISBN matches the centralized Lulu distribution
+metadata and that there is no accidental barcode in the interior. The barcode
+belongs only in Lulu's final cover-template area. Then inspect every chapter
+opener: it should have a clear title, breathing room, and a stable relationship
+to the preceding chapter. Inspect every chapter ending for an isolated takeaway
+heading, a lone line, or a next-step reference that points nowhere.
 
 Next inspect the technical pages. Code should remain readable without forcing
 the reader to rotate the book. Figure captions must stay with their figures.
@@ -117,15 +119,15 @@ spine is a promise to trim incorrectly.
 Keep two cover decisions separate. The first is editorial: is the title,
 subtitle, illustration, author credit, and imprint communicating the book?
 The second is production: does the final one-piece back/spine/front PDF match
-the exact Lulu template, include safe margins and bleed, and contain the real
-ISBN barcode only when that ISBN has been assigned? The first can be repeated
+the exact Lulu template, include safe margins and bleed, and contain the
+assigned ISBN barcode in Lulu's designated safe area? The first can be repeated
 locally. The second begins after the page count is frozen.
 
-Do not turn a placeholder number into a barcode. Placeholder metadata is useful
-because it reserves the correct editorial space, but it is not publication
-metadata. When a real ISBN is chosen, update one metadata source, rebuild the
-front matter and cover, regenerate the manifest, and visually compare the
-changes before upload.
+Do not reuse the provisional cover's placeholder metadata or make a barcode
+outside Lulu's final template. The assigned ISBN is recorded in
+`book/lulu-distribution.yaml` and printed as text in the interior; once Lulu
+provides the final wrap template, regenerate the cover from that same metadata,
+regenerate the manifest, and visually compare the results before upload.
 
 ## Handling a proof finding
 

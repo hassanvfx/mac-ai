@@ -101,8 +101,8 @@ publication.
 
 GitHub publishing requires a chosen remote and intentional deployment. Print
 release requires a Word-exported PDF, full preflight and page inspection,
-frozen page count, final cover template, metadata/ISBN decisions, and a Lulu
-proof. These remain human-owned decisions.
+frozen page count, a final Lulu cover template carrying the assigned ISBN,
+and a Lulu proof. These remain human-owned decisions.
 
 ## Daily habit
 

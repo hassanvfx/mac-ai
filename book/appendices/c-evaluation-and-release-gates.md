@@ -102,7 +102,8 @@ separate, scoped approval.
 - The final Word PDF is preflighted and every page is reviewed.
 - Release notes distinguish observations from unmeasured work.
 
-After beta, freeze the text, copyedit, finalize page count, create the cover,
-make metadata/ISBN decisions, and order a Lulu proof. Proof findings create
-new tracked corrections and another preflight. A successful build is necessary;
-an approved proof is the evidence needed before publication.
+After beta, freeze the text, copyedit, finalize page count, create the cover
+from Lulu's exact template using the assigned ISBN metadata, and order a Lulu
+proof. Proof findings create new tracked corrections and another preflight. A
+successful build is necessary; an approved proof is the evidence needed before
+publication.

@@ -19,10 +19,10 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def locate_after_contents(reader: PdfReader, title: str) -> int | None:
-    needle = re.sub(r"\s+", " ", title).lower()
-    for number, page in enumerate(reader.pages[2:], start=3):
-        if needle in re.sub(r"\s+", " ", page.extract_text()).lower():
+def locate_after_contents(page_texts: list[str], title: str) -> int | None:
+    needle = re.sub(r"\s+", " ", title).replace("’", "'").replace("‘", "'").lower()
+    for number, text in enumerate(page_texts[4:], start=5):
+        if needle in text:
             return number
     return None
 
@@ -32,21 +32,29 @@ def main() -> None:
         raise SystemExit("Missing publication manifest; run make provisional-pdf first.")
     data = json.loads(MANIFEST.read_text(encoding="utf-8"))
     interior = ROOT / data["interior_pdf"]
-    online = ROOT / data.get("online_pdf", "")
     if not interior.is_file() or digest(interior) != data["interior_sha256"]:
-        raise SystemExit("TOC-verified interior is missing or has changed since contents generation.")
+        raise SystemExit("Master PDF is missing or has changed since contents generation.")
     reader = PdfReader(str(interior))
     if len(reader.pages) != data["page_count"]:
-        raise SystemExit("Interior page count differs from publication manifest.")
+        raise SystemExit("Master PDF page count differs from publication manifest.")
+    page_texts = [
+        re.sub(r"\s+", " ", page.extract_text() or "").replace("’", "'").replace("‘", "'").lower()
+        for page in reader.pages
+    ]
+    if page_texts[0].strip():
+        raise SystemExit("Master page 1 must be the visual title page, without a generated text title.")
+    copyright_text = page_texts[1]
+    if "copyright © 2026 hassan uriostegui" not in copyright_text or "isbn" not in copyright_text:
+        raise SystemExit("Master page 2 must be the copyright page with the assigned ISBN.")
+    if page_texts[2].strip():
+        raise SystemExit("Master page 3 must be the courtesy blank page.")
+    if "contents" not in page_texts[3]:
+        raise SystemExit("Master page 4 must be the generated contents page.")
     for entry in data["toc_entries"]:
-        actual = locate_after_contents(reader, entry.get("search_title", entry["title"]))
+        actual = locate_after_contents(page_texts, entry.get("search_title", entry["title"]))
         if actual != entry["page"]:
             raise SystemExit(f"TOC mismatch for {entry['title']!r}: expected {entry['page']}, found {actual}")
-    if not online.is_file() or digest(online) != data.get("online_sha256"):
-        raise SystemExit("Online PDF is missing or differs from the TOC-verified publication manifest.")
-    if len(PdfReader(str(online)).pages) != data.get("online_page_count"):
-        raise SystemExit("Online PDF page count differs from publication manifest.")
-    print("Publication validation passed: TOC, interior, and online PDF are synchronized.")
+    print("Publication validation passed: master page order and generated contents are synchronized.")
 
 
 if __name__ == "__main__":

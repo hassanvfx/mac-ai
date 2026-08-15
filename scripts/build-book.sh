@@ -3,6 +3,7 @@ set -euo pipefail
 
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 template="$root_dir/book/templates/lulu-us-trade-interior-template.dotx"
+metadata="$root_dir/book/lulu-distribution.yaml"
 output_dir="$root_dir/book/build"
 prepared_dir="$(mktemp -d)"
 
@@ -15,6 +16,10 @@ if [[ ! -f "$template" ]]; then
   echo "Missing $template. See book/templates/README.md." >&2
   exit 1
 fi
+if [[ ! -f "$metadata" ]]; then
+  echo "Missing $metadata." >&2
+  exit 1
+fi
 
 mkdir -p "$output_dir"
 mkdir -p "$prepared_dir/chapters"
@@ -23,7 +28,17 @@ cp -R "$root_dir/book/assets" "$prepared_dir/assets"
 front_matter="$prepared_dir/front-matter.md"
 cp "$root_dir/book/front-matter.md" "$front_matter"
 chapter_files=("$front_matter")
-for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.md; do
+source_files=(
+  "$root_dir/book/chapters/00-preamble-the-authors-toolkit.md"
+  "$root_dir/book/chapters/00-introduction.md"
+)
+for source_file in "$root_dir"/book/chapters/[0-9][0-9]-*.md; do
+  [[ "$(basename "$source_file")" == "00-preamble-the-authors-toolkit.md" ]] && continue
+  [[ "$(basename "$source_file")" == "00-introduction.md" ]] && continue
+  source_files+=("$source_file")
+done
+source_files+=("$root_dir"/book/appendices/*.md)
+for source_file in "${source_files[@]}"; do
   section_dir="chapters"
   if [[ "$source_file" == *"/appendices/"* ]]; then
     section_dir="appendices"
@@ -35,7 +50,8 @@ for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.
   python3 "$root_dir/scripts/prepare_print_chapter.py" "$source_file" "$prepared_file"
   chapter_files+=("$prepared_file")
 done
-pandoc "${chapter_files[@]}" --metadata-file="$root_dir/book/manuscript.yaml" \
+pandoc "${chapter_files[@]}" --metadata-file="$metadata" \
+  --metadata title="" --metadata subtitle="" --metadata author="" \
   --resource-path="$prepared_dir:$root_dir/book" --reference-doc="$template" \
   --standalone --lua-filter="$root_dir/scripts/book_layout.lua" --citeproc \
   --output="$output_dir/ai-from-tensors-to-agents-on-mac-silicon.docx"

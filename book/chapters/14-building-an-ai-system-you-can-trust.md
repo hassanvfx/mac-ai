@@ -256,11 +256,11 @@ course without a chosen GitHub remote and Pages configuration.
 
 Finally, keep the release record honest about exclusions. This repository has
 not run a configured API comparison, so it has no comparative API latency,
-token-cost, or quality result. It has no final cover because page count is not
-frozen. It has no ISBN or proof-order decision. These are not failed tests;
-they are deliberate user-gated production decisions. Naming them prevents a
-green local suite from being mistaken for authorization to publish or spend
-money.
+token-cost, or quality result. The assigned ISBN is recorded in the print
+metadata and interior, but it has no final cover because page count is not
+frozen and no proof-order decision. These are not failed tests; they are
+deliberate user-gated production decisions. Naming them prevents a green local
+suite from being mistaken for authorization to publish or spend money.
 
 ## Evidence trail
 

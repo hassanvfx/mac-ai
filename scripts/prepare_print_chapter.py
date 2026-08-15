@@ -68,7 +68,10 @@ def main() -> None:
     chapter_id = source.name[:2]
     text = without_front_matter(source.read_text(encoding="utf-8"))
     text = text.replace("](../assets/", "](assets/")
-    panel = panel_for(chapter_id) if source.parent.name == "chapters" else ""
+    # The preamble deliberately sorts before the introduction but is not a lab.
+    # Only the actual introduction receives the course-start panel.
+    has_lab_panel = source.parent.name == "chapters" and source.name != "00-preamble-the-authors-toolkit.md"
+    panel = panel_for(chapter_id) if has_lab_panel else ""
     output.write_text(text.rstrip() + panel + "\n", encoding="utf-8")
 
 

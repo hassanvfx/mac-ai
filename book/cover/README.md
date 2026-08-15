@@ -14,6 +14,9 @@ and real ISBN/metadata are available. Lulu's downloaded cover template—not an
 inferred spine calculation—controls the final back/spine/front dimensions and
 barcode safe zone.
 
-`pdf-online-cover.png` is the supplied screen-edition cover. `make pdf-online`
-uses it as the first page of `book/build/pdf-online.pdf`; that PDF is explicitly
-not Lulu-compliant and is intended for online reading only.
+`pdf-online-cover.png` is the shared beta title plate. `make master-pdf` fits
+it proportionally onto the first 6×9 interior page, then adds copyright,
+one courtesy blank page, generated contents, and the manuscript. The same
+`book/build/pdf-online.pdf` is the online reading edition and interior-layout
+review master; it is not a Lulu upload file because LibreOffice produced it and
+the current title art is below 300 ppi at full interior size.

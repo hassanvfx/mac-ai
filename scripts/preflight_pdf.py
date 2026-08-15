@@ -6,12 +6,14 @@ import argparse
 import sys
 from pathlib import Path
 
+from PIL import Image
 from pypdf import PdfReader
 
 POINTS_PER_INCH = 72
 SIZE_TOLERANCE_POINTS = 2.0  # LibreOffice review export may round Word twips.
 INTERIOR = (6 * POINTS_PER_INCH, 9 * POINTS_PER_INCH)
 FRONT_COVER = (6.25 * POINTS_PER_INCH, 9.25 * POINTS_PER_INCH)
+TITLE_ART = Path(__file__).resolve().parents[1] / "book/assets/cover/pdf-online-cover.png"
 
 
 def page_size(page: object) -> tuple[float, float]:
@@ -23,6 +25,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("pdf", type=Path)
     parser.add_argument("--kind", choices=("interior", "front-cover", "wrap-cover"), default="interior")
+    parser.add_argument("--release", action="store_true", help="Fail for beta-only title artwork below 300 ppi.")
     args = parser.parse_args()
     reader = PdfReader(str(args.pdf))
     if not reader.pages:
@@ -45,6 +48,17 @@ def main() -> int:
     if reader.is_encrypted:
         print("ERROR: PDF is encrypted or password protected")
         failures += 1
+    if args.kind == "interior" and TITLE_ART.is_file():
+        with Image.open(TITLE_ART) as image:
+            effective_ppi = min(image.width / 6, image.height / 9)
+        message = f"Title artwork effective resolution is {effective_ppi:.0f} ppi at 6 x 9 in."
+        if effective_ppi < 300:
+            print(f"WARNING: {message} The beta master is not a final Lulu upload artifact.")
+            if args.release:
+                print("ERROR: Release preflight requires title artwork at 300 ppi or higher.")
+                failures += 1
+        else:
+            print(f"PASS: {message}")
     if failures:
         return 1
     print(f"PASS: {len(reader.pages)} single page(s) at {expected_label} in.")

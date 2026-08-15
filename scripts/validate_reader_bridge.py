@@ -17,7 +17,7 @@ def fail(message: str) -> None:
 
 def main() -> None:
     data = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
-    expected_ids = [f"{number:02d}" for number in range(1, 15)]
+    expected_ids = [f"{number:02d}" for number in range(1, 16)]
     ids = [chapter["id"] for chapter in data["chapters"]]
     if ids != expected_ids:
         fail(f"expected chapter IDs {expected_ids}, found {ids}")
@@ -37,7 +37,7 @@ def main() -> None:
             fail(f"chapter {lab['id']} title does not match its canonical Markdown")
         if not lab["command"].startswith("uv run "):
             fail(f"chapter {lab['id']} does not have a reproducible uv command")
-    print("Reader bridge validation passed for 14 labs and the introduction start page.")
+    print(f"Reader bridge validation passed for {len(expected_ids)} labs and the introduction start page.")
 
 
 if __name__ == "__main__":

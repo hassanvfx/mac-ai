@@ -1,5 +1,11 @@
 ::: {.copyright-page}
 
+AI From Tensors to Agents on Mac Silicon
+
+Learning Modern AI by Building It on Apple Silicon
+
+Hassan Uriostegui
+
 Copyright © 2026 Hassan Uriostegui. All rights reserved.
 
 The book text, diagrams, illustrations, and cover artwork are protected by
@@ -7,15 +13,16 @@ copyright and may not be reproduced without written permission. The companion
 software is available under the MIT License; see `LICENSE` in the source
 repository.
 
-Published by Waken AI Labs
+Published by Lulu.com
 
-Beta edition · 2026
+Editorial brand: Waken AI Labs
 
-ISBN: **PLACEHOLDER — NOT VALID FOR DISTRIBUTION**
+First edition · 2026
 
-No barcode is included in this beta edition. Replace this placeholder with a
-real ISBN and a validated barcode only after the final interior page count and
-Lulu cover template are available.
+ISBN 978-0-557-95054-6
+
+The ISBN barcode appears only on the print cover, in the Lulu-provided barcode
+area. Lulu.com is the ISBN imprint; Waken AI Labs is the editorial brand.
 
 :::
 
@@ -41,7 +48,7 @@ learning path for Apple Silicon developers.
 # Acknowledgements
 
 This beta edition is a working manuscript. Technical review, copyediting,
-print-proof acknowledgements, and final publication metadata will be added
+print-proof acknowledgements, and final cover production will be completed
 before commercial distribution.
 
 :::

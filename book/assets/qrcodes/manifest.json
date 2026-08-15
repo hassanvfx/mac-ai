@@ -73,5 +73,10 @@
     "target": "chapter-14-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/14",
     "svg": "book/assets/qrcodes/chapter-14-lab.svg"
+  },
+  {
+    "target": "chapter-15-lab",
+    "url": "https://hassanvfx.github.io/mac-ai/labs/15",
+    "svg": "book/assets/qrcodes/chapter-15-lab.svg"
   }
 ]

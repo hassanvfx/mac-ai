@@ -1,4 +1,4 @@
-.PHONY: test lint audit-book site book provisional-pdf pdf-online preflight cover qrcodes release-manifest validate-reader-bridge validate-publication publish-review
+.PHONY: test lint audit-book site book master-pdf provisional-pdf pdf-online preflight cover qrcodes release-manifest validate-reader-bridge validate-publication validate-lulu validate-lulu-interior publish-review
 
 test:
 	uv run pytest
@@ -16,13 +16,16 @@ book:
 	./scripts/build-book.sh
 
 preflight:
-	uv run python scripts/preflight_pdf.py book/build/ai-from-tensors-to-agents-on-mac-silicon-provisional.pdf --kind interior
+	uv run python scripts/preflight_pdf.py book/build/pdf-online.pdf --kind interior
 
-provisional-pdf: book
+master-pdf: book validate-lulu-interior
 	./scripts/export-provisional-pdf.sh
 
-pdf-online: provisional-pdf
-	uv run python scripts/build_online_pdf.py
+provisional-pdf: master-pdf
+	@echo "Compatibility target: the single beta master is book/build/pdf-online.pdf."
+
+pdf-online: master-pdf
+	@echo "The online reading edition is the same beta master PDF."
 
 cover:
 	uv run python scripts/build-cover.py
@@ -36,7 +39,13 @@ validate-reader-bridge:
 validate-publication:
 	uv run python scripts/validate_publication.py
 
-publish-review: validate-reader-bridge qrcodes book provisional-pdf pdf-online preflight validate-publication
+validate-lulu:
+	uv run python scripts/validate_lulu_distribution.py
+
+validate-lulu-interior:
+	uv run python scripts/validate_lulu_distribution.py --interior book/build/ai-from-tensors-to-agents-on-mac-silicon.docx
+
+publish-review: validate-reader-bridge qrcodes master-pdf preflight validate-publication
 
 release-manifest:
 	uv run python scripts/release_manifest.py

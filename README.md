@@ -154,21 +154,25 @@ available under the MIT License.
 ## Publishing workflow
 
 The Markdown manuscript builds into a 6×9 Lulu-oriented DOCX using the
-versioned Word template. A provisional LibreOffice PDF can be generated for
-layout review; a final upload PDF must be exported through Microsoft Word on
-macOS and visually inspected page by page. The front cover is reproducible
-from `book/cover/metadata-placeholder.yaml`; its dummy ISBN is deliberately
-not a barcode and is invalid for distribution.
+versioned Word template. `book/build/pdf-online.pdf` is the single beta master:
+it is both the online reading PDF and the interior-layout review artifact. Its
+first page reuses the shared visual title plate, followed by copyright with the
+assigned ISBN, a courtesy blank page, and a generated contents page. A final
+upload PDF must still be exported through Microsoft Word on macOS and visually
+inspected page by page. Cover production remains a separate workflow.
 
 ```bash
 make book
-make provisional-pdf
+make master-pdf
 make preflight
-make cover
+make validate-lulu
 ```
 
-See `book/cover/README.md` for the page-count and Lulu-template boundary that
-prevents a provisional cover from being mistaken for an upload-ready wrap.
+The current title art is approximately 162 ppi at 6×9, so the master remains a
+beta/review artifact. `make preflight` warns about this; a release preflight
+will fail until it is replaced with 300 ppi artwork. See `book/cover/README.md`
+for the page-count and Lulu-template boundary that prevents a provisional cover
+from being mistaken for an upload-ready wrap.
 
 ## Editorial audit and beta target
 
