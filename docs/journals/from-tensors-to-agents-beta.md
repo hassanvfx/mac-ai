@@ -2437,3 +2437,29 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Add a canonical evaluation-and-release appendix, then run the full
   Python/site/reliability batch and render a fresh interim DOCX proof.
+
+### 2026-08-15 — Canonical evaluation and release appendix
+
+**What changed:**
+
+- Added Appendix C, *Evaluation and Release Gates*. It distinguishes tests,
+  frozen evaluations, benchmarks, and human review; documents code/site/DOCX
+  gates; and keeps provider comparisons, PDF production, GitHub publishing,
+  Lulu cover/metadata, and proof ordering at their appropriate human decision
+  boundaries.
+
+**Verification:**
+
+- `make audit-book` passed at 38,809 words; Appendix C contributes 713 words.
+  The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  three appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue canonical manuscript expansion with the remaining teaching
+  appendices, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
