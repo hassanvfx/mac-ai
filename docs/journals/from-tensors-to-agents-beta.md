@@ -1494,3 +1494,32 @@ and generated-DOCX inspection have all happened.
 - [ ] Run the full Python/site/DOCX gates after this cross-chapter update,
   render a fresh DOCX proof for visual inspection, then prioritize a larger
   third editorial pass to close the remaining manuscript-length gap.
+
+### 2026-08-15 — Full gate run and refreshed DOCX proof
+
+**What changed:**
+
+- Ran the full Python, editorial, site, and DOCX gates after the cross-chapter
+  evidence-trail update.
+- Rendered the DOCX proof to PNG pages for layout inspection. This exposed a
+  Chapter 1 Markdown table that broke across the print layout and detached its
+  cell text. Replaced it with an equivalent compact definition-list paragraph;
+  the repaired page renders cleanly.
+
+**Verification:**
+
+- Ruff passed; all 44 Python tests passed; `make audit-book` passed; and the
+  Docusaurus production build passed. The harmless Docusaurus update-check
+  permissions warning did not affect the generated static site.
+- Pandoc built `book/build/from-tensors-to-agents.docx` with SVG conversion
+  available. The rendered proof is 75 pages. Sampled front matter, prose,
+  code, diagrams, workflow pages, and bibliography were legible and unclipped;
+  the Chapter 1 table defect was fixed and re-rendered successfully.
+- This is an interim DOCX proof, not a Word-exported final PDF or a 180–220
+  page manuscript. No final-PDF, Lulu, or release claim is made.
+
+**Next task:**
+
+- [ ] Plan and execute the larger third editorial pass needed to move from the
+  current 21k-word/75-page proof toward the 45k–55k-word/180–220-page target;
+  retain the full gate suite after each substantial batch.

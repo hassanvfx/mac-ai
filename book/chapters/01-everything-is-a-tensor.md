@@ -70,14 +70,12 @@ the result before running it. The expected first row is `[1.1, 2.2, 3.3]`; if
 you instead expected each number in the first column to change by `0.1`, you
 have correctly identified the feature axis.
 
-The point of the exercise is not the arithmetic. It is the prediction. Make a
-small shape table before you run a tensor expression:
-
-| Name | Shape | Meaning |
-| --- | --- | --- |
-| `examples` | `(2, 3)` | two observations, three features each |
-| `bias` | `(3,)` | one offset for each feature |
-| `shifted` | `(2, 3)` | the same two observations after the offset |
+The point of the exercise is not the arithmetic. It is the prediction. Before
+you run a tensor expression, name each value and its role: `examples` has shape
+`(2, 3)` and means two observations with three features each; `bias` has shape
+`(3,)` and means one offset per feature; `shifted` returns to shape `(2, 3)` and
+means the same two observations after the offset. This compact definition list
+prints more robustly than a table while preserving the shape contract.
 
 This habit scales. For an image classifier, `(32, 3, 224, 224)` is not just a
 four-dimensional box: it means 32 images, RGB channels, and two spatial axes.
