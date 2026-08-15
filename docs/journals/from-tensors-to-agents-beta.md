@@ -342,6 +342,24 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 
 ## Journal Entries
 
+### 2026-08-15 — Public repository and GitHub Pages
+
+**What changed:**
+
+- Completed GitHub device authentication for `hassanvfx`, including the
+  `workflow` scope required to publish CI and Pages workflows.
+- Created public repository `https://github.com/hassanvfx/mac-ai`, configured
+  `origin`, and pushed `main`.
+- Enabled GitHub Pages with GitHub Actions as its deployment source. The public
+  course address is `https://hassanvfx.github.io/mac-ai/`.
+
+**Next action:**
+
+- [ ] Trigger and verify the first Pages deployment, then check the live
+  onboarding, course, labs, and QR destinations.
+
+---
+
 ### 2026-08-15 — Public reader access, labs, and QR bridge
 
 **What changed:**
