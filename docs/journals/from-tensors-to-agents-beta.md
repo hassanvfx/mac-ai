@@ -2351,3 +2351,36 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Run the full Python, site, and DOCX interim-proof validation batch,
   then continue expanding the shortest chapters toward the manuscript target.
+
+### 2026-08-15 — Interim full validation and DOCX proof
+
+**What changed:**
+
+- Rebuilt the manuscript DOCX after the Chapters 8–9 expansion.
+- Rendered the DOCX to PNG pages for visual QA. The interim proof contains 120
+  pages, up from the prior 114-page proof; it is still below the 180–220 page
+  production target.
+
+**Verification:**
+
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run ruff check .` passed.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest` passed (44
+  tests).
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run python
+  evals/run_reliability.py` passed (10 cases).
+- `make audit-book` passed at 35,470 words, still below the 45,000-word beta
+  minimum.
+- `npm run build` in `site/` completed successfully. Docusaurus printed a
+  non-blocking update-check permission warning after the successful build.
+- `./scripts/build-book.sh` produced the ignored interim DOCX.
+- The document renderer produced 120 pages under
+  `/private/tmp/ai-on-mac-docx-render-20260815-interim`. Visual samples of
+  pages 1, 30, 60, 90, and 120 found no clipping, missing glyphs, or diagram
+  rendering problem. This is a sampling pass only; the final Word-exported PDF
+  must be preflighted and every page reviewed before a print release claim.
+
+**Next task:**
+
+- [ ] Continue substantive expansion of the short workflow and reliability
+  chapters toward the 45,000-word beta minimum; repeat the interim DOCX proof
+  after the next editorial batch.
