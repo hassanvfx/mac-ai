@@ -157,6 +157,40 @@ was not part of the original request. A human can decide to rerun the workflow
 under a declared model configuration; that is a new experiment, not automatic
 recovery.
 
+### Worked trace: reject, reopen, and approve
+
+Begin with a fresh thread ID such as `chapter-11-reject`. The graph receives an
+objective and the evidence path for Chapter 8. Its deterministic plan node
+creates three review steps; its critique node adds two checks; then the approval
+node emits an interrupt payload. At this point the persisted state has an
+objective, one evidence path, plan, critique, deterministic model status, and
+an explicit action message: no source, Git, or external action will follow.
+It has no file diff and no writer capability.
+
+Resume that same thread with `{"approved": false}`. The conditional edge
+selects the rejected node, which records `rejected_no_write`. The test places a
+small source fixture beside its SQLite database and compares its text after the
+terminal state; it remains `original`. The lesson is not that rejection is
+hard to implement. It is that the rejected route is a named, durable outcome
+with a direct assertion against the side effect we refuse to permit.
+
+For persistence, start a separate `chapter-11-approve` thread and stop at the
+same interrupt. Close the SQLite connection completely. Reopen the database in
+a new connection, rebuild the graph with its checkpointer, and resume with
+`{"approved": true}`. The terminal status becomes `approved_no_write`. The
+reopened process did not reconstruct a proposal from a chat transcript: it read
+the checkpoint associated with that thread ID. Yet approval still did not grant
+write authority, so the positive path is as safe to exercise in a test as the
+negative path.
+
+Finally, invoke the graph with an empty evidence list. The plan is empty and
+the saved `model_status` becomes `deterministic_fallback_no_evidence`, while
+the graph still pauses for inspection. This trace prevents an important
+shortcut: a workflow cannot replace absent evidence with a confident default
+plan simply because it has a route to an approval screen. In a real review, the
+human should reject or restart with retrieval; the test asserts only the
+deterministic, no-model contract.
+
 ## What broke
 
 The first synchronous SQLite run failed because Python normally binds a

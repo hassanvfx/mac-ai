@@ -1944,3 +1944,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue the fourth-pass worked-case expansion with Chapter 11's
   persisted approval trace, then Chapters 12, 14, 07, and 10.
+
+### 2026-08-15 — Chapter 11 fourth-pass worked trace
+
+**What changed:**
+
+- Added a concrete persisted workflow trace to Chapter 11: deterministic plan
+  and critique, interrupted review, rejected no-write terminal state, SQLite
+  close/reopen with approved no-write resume, and empty-evidence fallback.
+- The narrative maps each observed state to the actual test contract, including
+  the source-fixture no-write assertion, rather than treating a final label as
+  the only evidence of human control.
+
+**Verification:**
+
+- `make audit-book` passed at 30,949 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_approval_workflow.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass worked cases with Chapter 12's scope/retention and
+  rejection-revision scenario, then Chapters 14, 07, and 10.
