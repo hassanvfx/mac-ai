@@ -10,3 +10,6 @@ site/build/
 book/build/
 *.pdf
 *.DS_Store
+
+# ClineFlow - per-developer config
+.clineflow.local

@@ -1,0 +1,22 @@
+# ClineFlow Reference System Configuration
+# Copy this file to .clineflow.local and edit with your repository paths
+#
+# 💡 PRO TIP: Instead of manual setup, you can ask Cline:
+#    "I need to setup cline refs to project-a and project-b 
+#     which live in the parent folder. Can you help me?"
+#
+# Cline will create this config and run setup-refs.sh automatically!
+
+# Example: Backend API repository
+# BACKEND_API_PATH="/Users/yourname/projects/backend-api"
+
+# Example: Frontend application repository
+# FRONTEND_APP_PATH="/Users/yourname/projects/frontend-app"
+
+# Example: Shared library repository
+# SHARED_LIB_PATH="/Users/yourname/projects/shared-library"
+
+# Add more repositories as needed
+# Variable names must end with _PATH
+# The symlink name will be derived from the variable name
+# Example: BACKEND_API_PATH → clineflow/backend-api
