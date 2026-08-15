@@ -1225,3 +1225,30 @@ and generated-DOCX inspection have all happened.
   embedding trade-offs, retrieval-quality checks, and an editable visual; then
   continue Chapters 9–11 to bring the agent half of the manuscript toward its
   page budget.
+
+### 2026-08-15 — Chapter 8 retrieval-contract expansion
+
+**What changed:**
+
+- Expanded Chapter 8 to a 1,265-word first editorial pass, covering cosine
+  interpretation, paragraph chunking trade-offs, chunk-scoped metadata, the
+  stable hashed-vector control, and the shared `Evidence` contract used by
+  learned retrieval.
+- Added a concrete evaluation-design boundary: compare acceptable and
+  misleading paths across declared corpus/model/chunk revisions, and keep
+  retrieval recall distinct from grounded-answer attribution.
+- Documented cache staleness and corpus-boundary validation, plus practical
+  lexical, hybrid, and persistent-store alternatives.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 17,454 words, still below the
+  45,000–55,000 beta target.
+- Targeted retrieval and evaluation tests passed: 14 tests total.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 9's grounded-answer material: chunk-to-answer citation
+  mechanics, retrieval failures, context budgeting, and the distinction between
+  repository evidence and a generative response.
