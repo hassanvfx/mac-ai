@@ -822,3 +822,26 @@ and Lulu proof).
   continue the editorial pass chapter by chapter.
 - [ ] Add a chapter-by-chapter diagram/evidence checklist to turn the
   word-count target into reviewable editorial work.
+
+### 2026-08-15 — Chapter 2 editorial expansion
+
+**What changed:**
+
+- Expanded Chapter 2 from a short autograd example into a 1,465-word lesson on
+  loss as a training measurement, local gradients, gradient-descent updates,
+  learning-rate trade-offs, minibatch reduction, computation-graph lifetime,
+  finite-difference checking, numerical failures, and optimizer alternatives.
+- Linked the explanation to the committed Day 1 regression benchmark without
+  converting its machine-specific result into a general performance claim.
+
+**Verification:**
+
+- `make audit-book` passed with no missing required sections, invalid citations,
+  or unresolved relative links.
+- Manuscript count is now 11,572 words against the 45,000–55,000 beta target.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 3 around the existing tiny-network/MPS experiment, then
+  add the first chapter-by-chapter diagram and evidence checklist.
