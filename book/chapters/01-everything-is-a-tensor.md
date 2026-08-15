@@ -93,6 +93,51 @@ safe, such as turning a `(batch, channels, height, width)` image batch into a
 permutation when an API expects the same axes in another order. In both cases,
 write the before-and-after shapes and inspect a deliberately tiny example.
 
+### A worked axis audit
+
+Consider two image batches that contain the same number of values. One has
+shape `(2, 3, 4, 5)` and is intended for a PyTorch convolution: two images,
+three channels, four rows, and five columns. The other has shape
+`(2, 4, 5, 3)` and is intended for a channels-last API: two images, four rows,
+five columns, and three channels. A `permute(0, 2, 3, 1)` converts the first
+meaning into the second. A `reshape(2, 4, 5, 3)` merely regroups adjacent
+values. It may produce the desired shape while scrambling which values belong
+to which channel and position.
+
+This difference is worth testing with a recognizable tiny value. Make one
+image whose red, green, and blue channels contain different constants—say 10,
+20, and 30. After a permutation, every pixel still has the same three channel
+values in a new axis order. After an unjustified reshape, those constants can
+appear interleaved across positions. Shape checks pass in both cases; checking
+one known location catches the semantic error. A good tensor test therefore
+asserts both shape and a few values with known meaning.
+
+The same audit applies to language-model inputs. A token-ID tensor normally has
+shape `(batch, sequence)`, while an embedding lookup returns
+`(batch, sequence, hidden)`. Adding a positional embedding of shape
+`(sequence, hidden)` is usually intentional: it broadcasts across the batch.
+Adding a tensor of shape `(batch, hidden)` is not interchangeable. It either
+fails or applies a per-example quantity across every token, which may be a
+different model. Write the intended expansion in words before relying on
+PyTorch's compact syntax.
+
+### Shapes, dtypes, and devices form one contract
+
+Shape is only one part of a tensor boundary. A floating-point feature matrix,
+an integer class-label vector, a boolean attention mask, and a model parameter
+can have compatible dimensions while requiring different operations. For a
+classifier, logits often have shape `(batch, classes)` and floating-point dtype;
+targets have shape `(batch,)` and an integer class-index dtype. Cross-entropy
+uses those two meanings together. Converting targets to floating point merely
+to make an error disappear changes the loss contract rather than fixing it.
+
+Device placement is part of the same sentence. `inputs`, model parameters, and
+any auxiliary tensors used in a computation need compatible devices. A CPU
+tensor and an MPS tensor can display the same values and shapes, but they cannot
+participate in one ordinary PyTorch operation. At a data boundary, record a
+small contract: name, shape, dtype, device, and semantic axes. This takes a few
+seconds and eliminates much of the guesswork behind common tensor errors.
+
 ## A more realistic implementation
 
 Neural-network batches use the same idea at larger scale. A linear layer maps
@@ -123,6 +168,25 @@ It does not need a Python loop: PyTorch treats the leading axes as a collection
 of positions. That convenience is powerful, but only if the programmer has
 already decided that the two-token axis should be preserved.
 
+Matrix multiplication supplies another useful boundary check. If `X` has shape
+`(batch, features)` and `W` has shape `(outputs, features)`, then `X @ W.T` has
+shape `(batch, outputs)`. The inner feature dimensions must agree; the batch
+dimension is not multiplied away. For a sequence tensor `(batch, tokens,
+features)`, the same multiplication acts at every token and returns `(batch,
+tokens, outputs)`. This is convenient when it is intended and dangerous when a
+reader thought tokens had been pooled already. Annotate the reduction or
+pooling operation that removes an axis; never assume a later linear layer did
+it for you.
+
+Broadcasting can also create accidental memory pressure when code materializes
+a repeated tensor instead of using a view-like expansion. A bias with shape
+`(features,)` carries one value per feature. Repeating it into
+`(batch, features)` duplicates values and can be expensive for large batches,
+yet it usually changes no mathematical result. Prefer the smallest tensor that
+states the intended sharing rule. Profile only after the axis meanings are
+correct; optimizing a mistaken representation makes a wrong program harder to
+notice.
+
 The companion experiment is intentionally small enough to modify and rerun in
 seconds: [broadcasting.py](../../experiments/01-tensors/broadcasting.py).
 Later examples use the same contracts for a batch of training examples,
@@ -149,6 +213,14 @@ input shapes, expected output, and actual output. This first record establishes
 the format used by the repository's later benchmarks: an observation is more
 useful when another reader can reproduce the exact question it answers.
 
+Add two negative tests to this exercise. First, assert that `(2, 3) + (2,)`
+raises a shape error; the failure confirms that PyTorch aligned dimensions from
+the right rather than guessing an axis. Second, construct a valid but wrong
+example: add a `(2, 1)` tensor to a `(2, 3)` batch and verify that it applies a
+different offset to each *example*, not each feature. The expected result is
+useful because it teaches the more dangerous case: successful execution is not
+evidence that the chosen axes match the intended mathematics.
+
 ## What broke
 
 The most useful early failure is a shape mismatch. Do not immediately reshape
@@ -171,6 +243,13 @@ tensors, and compare one result with a hand calculation. Once the small case is
 understood, restore the real data. This discipline also makes tests clearer:
 a numerical test can show the expected values while a shape test protects the
 meaning of the operation.
+
+When a library reports an error such as “size of tensor a must match tensor b,”
+turn the message into an axis comparison. Write both shapes below one another,
+align them from the right, and label each axis. Ask whether a size-one axis is
+an intentional reusable quantity or an accidental singleton created by slicing
+or `unsqueeze`. This method is slower than trying transformations at random for
+one minute, but it produces a reusable explanation instead of a fragile patch.
 
 ## Alternatives and when to use them
 

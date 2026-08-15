@@ -1523,3 +1523,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Plan and execute the larger third editorial pass needed to move from the
   current 21k-word/75-page proof toward the 45k–55k-word/180–220-page target;
   retain the full gate suite after each substantial batch.
+
+### 2026-08-15 — Chapter 1 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 1 from 1,671 to 2,439 words with a worked axis audit:
+  permutation versus reshape, image and language-model axis contracts,
+  dtype/device boundaries, matrix-multiplication preservation of leading axes,
+  and memory implications of materializing broadcasts.
+- Added an experiment design that distinguishes an incompatible broadcast from
+  a valid but semantically wrong `(2, 1)` broadcast, plus a repeatable method
+  for turning a shape error into an axis comparison.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 22,127 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_day1.py` passed (6 tests).
+- The Chapter 1 broadcasting example ran and printed the expected shapes and
+  values. `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 2 the same third-pass treatment: derive the scalar gradient,
+  connect it to vector/matrix gradients, show finite-difference checks and loss
+  reduction behavior, and keep the claims tied to the runnable autograd lesson.
