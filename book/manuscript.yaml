@@ -1,0 +1,9 @@
+title: "From Tensors to Agents"
+subtitle: "Learning Modern AI by Building It on Apple Silicon"
+author: "Hassan"
+lang: en-US
+papersize: "6x9"
+toc: true
+fontsize: 10.5pt
+mainfont: "Aptos"
+bibliography: ../research/references.bib

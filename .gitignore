@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.book-intelligence/
+site/node_modules/
+site/.docusaurus/
+site/build/
+book/build/
+*.pdf
+*.DS_Store

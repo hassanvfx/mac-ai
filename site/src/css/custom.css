@@ -1,0 +1,8 @@
+:root {
+  --ifm-color-primary: #365c8d;
+  --ifm-code-font-size: 92%;
+}
+
+.markdown h1 {
+  letter-spacing: -0.03em;
+}
