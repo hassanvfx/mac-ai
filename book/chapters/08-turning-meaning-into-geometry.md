@@ -14,6 +14,12 @@ it is a retrieval heuristic whose output still needs inspection. Sentence-BERT
 made this practical by training a BERT-derived model to produce sentence-level
 vectors suited to similarity comparison [@reimers2019sentencebert].
 
+Similarity changes the first question from “which exact words occur?” to
+“which stored passages might help?” It does not change the second question:
+whether a returned passage supports the answer. The assistant therefore treats
+a vector score as a routing signal and retains the evidence a reader needs to
+inspect.
+
 ## Problem
 
 Before adding a vector database, framework, or language model, we need to

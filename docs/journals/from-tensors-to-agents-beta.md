@@ -1085,3 +1085,11 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue Chapter 7's remaining workload/quality boundaries and expand
   Chapter 8's embedding/retrieval teaching prose and visual.
+
+### 2026-08-15 — Chapter 8 retrieval boundary (start)
+
+- Began Chapter 8's editorial pass by making its central safety distinction
+  explicit: similarity ranks candidate evidence; it does not prove an answer.
+  Provenance must remain available for reader inspection.
+- Next: expand chunking, learned-index provenance, retrieval failures, and the
+  embedding/retrieval visual.
