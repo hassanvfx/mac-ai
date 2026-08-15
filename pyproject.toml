@@ -8,6 +8,9 @@ dependencies = ["numpy>=2.0", "torch>=2.4", "psutil>=6.0", "pypdf>=5.0"]
 
 [dependency-groups]
 dev = ["pytest>=8.3", "ruff>=0.8"]
+embeddings = [
+    "sentence-transformers>=5.0,<6.0",
+]
 mlx = [
     "mlx>=0.31,<0.32",
     "mlx-lm>=0.31,<0.32",

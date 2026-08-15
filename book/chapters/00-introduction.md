@@ -45,7 +45,10 @@ human approval before any write. It does not modify the project autonomously.
 Chapters 1–3 have executable tensor, autograd, and PyTorch/MPS lessons with a
 recorded Day 1 benchmark. Chapters 4–5 now have a deterministic synthetic
 vision fixture plus matched PyTorch and TensorFlow/Keras CNN implementations.
-The remaining chapters are deliberately marked as drafts until their evidence
+Chapters 6–7 add controlled transformer and MLX-LM observations. Chapters 8–9
+now have a provenance-preserving local retrieval baseline and learned embedding
+path; their prose and evaluation set remain under active development. The
+remaining chapters are deliberately marked as drafts until their evidence
 exists. The current project status and next task are maintained in
 `docs/journals/from-tensors-to-agents-beta.md`.
 
@@ -166,6 +169,32 @@ cache. The script prints the exact model, declared 4-bit quantization, prompt,
 token counts, a warm-up, timing boundary, generation rate, and partial memory
 observations. It does not compare runtimes or rate answer quality; see
 `benchmarks/04-mlx/README.md` for the interpretation rules.
+
+## Optional learned-embedding installation
+
+Chapters 8–9 add semantic search and evidence-only RAG over this repository.
+The small deterministic baseline remains available for tests and offline
+inspection; the learned path uses a compact Sentence Transformers encoder. Its
+first use downloads public model weights into the local Hugging Face cache, not
+the repository:
+
+```bash
+df -h .
+uv sync --group embeddings
+uv run --group embeddings python experiments/08-embeddings/book_search.py \
+  --query 'Where do we record benchmark timing limitations?'
+uv run --group embeddings python experiments/09-rag/grounded_answer.py \
+  --query 'What should an experiment record?'
+uv run --group embeddings python evals/run_book_intelligence.py
+```
+
+Use `--deterministic` with either program to exercise the lightweight baseline
+without loading the optional model. The RAG demonstration returns retrieved
+excerpts, source paths, and citation keys where available. It refuses a query
+when retrieval is empty or below its conservative threshold; it does not claim
+to produce a complete natural-language answer. Read
+`benchmarks/05-book-intelligence/README.md` for the recorded environment and
+limitations.
 
 ## Site and manuscript builds
 

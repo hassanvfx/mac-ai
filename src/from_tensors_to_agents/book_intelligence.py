@@ -11,9 +11,10 @@ from pathlib import Path
 import numpy as np
 
 CORPUS_DIRECTORIES = ("research", "book/chapters", "experiments", "benchmarks")
-ALLOWED_SUFFIXES = {".md", ".py", ".txt"}
+ALLOWED_SUFFIXES = {".bib", ".md", ".py", ".txt"}
 TOKEN_PATTERN = re.compile(r"[A-Za-z0-9_]{2,}")
 CITATION_PATTERN = re.compile(r"@([A-Za-z0-9_-]+)")
+BIBTEX_ENTRY_PATTERN = re.compile(r"@\w+\s*\{\s*([^,\s]+)")
 LINK_PATTERN = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 
 
@@ -25,6 +26,7 @@ class Evidence:
     citations: tuple[str, ...]
     text: str
     vector: tuple[float, ...]
+    metadata: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -65,6 +67,17 @@ def chapter_identifier(relative_path: Path) -> str | None:
     return None
 
 
+def evidence_metadata(relative_path: Path) -> tuple[tuple[str, str], ...]:
+    """Keep lightweight, stable provenance available to every retrieval backend."""
+    metadata = [("corpus_kind", source_kind(relative_path))]
+    chapter = chapter_identifier(relative_path)
+    if chapter:
+        metadata.append(("chapter", chapter))
+    if len(relative_path.parts) > 1 and relative_path.parts[0] in {"experiments", "benchmarks"}:
+        metadata.append(("record_group", relative_path.parts[1]))
+    return tuple(metadata)
+
+
 def chunks(text: str, limit: int = 1200) -> list[str]:
     paragraphs = [paragraph.strip() for paragraph in text.split("\n\n") if paragraph.strip()]
     result: list[str] = []
@@ -79,6 +92,14 @@ def chunks(text: str, limit: int = 1200) -> list[str]:
     if current:
         result.append(current)
     return result
+
+
+def citation_keys(text: str, suffix: str) -> tuple[str, ...]:
+    keys = set(CITATION_PATTERN.findall(text))
+    if suffix == ".bib":
+        keys.update(BIBTEX_ENTRY_PATTERN.findall(text))
+        keys.difference_update({"article", "book", "inproceedings", "online"})
+    return tuple(sorted(keys))
 
 
 def corpus_files(root: Path) -> list[Path]:
@@ -102,9 +123,10 @@ def build_index(root: Path) -> list[Evidence]:
                     source=str(relative),
                     kind=source_kind(relative),
                     chapter=chapter_identifier(relative),
-                    citations=tuple(sorted(set(CITATION_PATTERN.findall(chunk)))),
+                    citations=citation_keys(chunk, relative.suffix),
                     text=chunk,
                     vector=embedding(chunk),
+                    metadata=evidence_metadata(relative),
                 )
             )
     return result
@@ -125,6 +147,7 @@ def load_index(path: Path) -> list[Evidence]:
             citations=tuple(item["citations"]),
             text=item["text"],
             vector=tuple(item["vector"]),
+            metadata=tuple(tuple(pair) for pair in item.get("metadata", ())),
         )
         for item in records
     ]
@@ -143,6 +166,11 @@ def retrieve(index: list[Evidence], query: str, limit: int = 4) -> list[SearchRe
 
 def grounded_answer(index: list[Evidence], query: str, limit: int = 3) -> str:
     results = [item for item in retrieve(index, query, limit) if item.score > 0]
+    return grounded_evidence(results)
+
+
+def grounded_evidence(results: list[SearchResult]) -> str:
+    """Render only retrieved corpus evidence; never synthesize an unsupported answer."""
     if not results:
         return "No grounded answer: no indexed evidence matched this question."
     excerpts = []

@@ -53,7 +53,7 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 
 **Gate:** Day 1 code/tests pass, the benchmark record is complete, and Chapters 1–3 contain real prose, experiments, and takeaways.
 
-**Status:** Complete. The next active work is Milestone 2.
+**Status:** Complete. Historical foundation; current active work is Milestone 5.
 
 ### Milestone 2 — Vision and Framework Comparison
 
@@ -79,11 +79,15 @@ observations, not cross-runtime performance or total-memory claims.
 
 ### Milestone 4 — Embeddings, RAG, and Book Intelligence
 
-- [ ] Replace the deterministic retrieval baseline with local learned embeddings while retaining deterministic fixture tests.
-- [ ] Add chunking, retrieval quality checks, citation-key propagation, and grounded-answer evaluation.
-- [ ] Expand Chapters 8–9 using this repository as the canonical corpus.
+- [x] Replace the deterministic retrieval baseline with local learned embeddings while retaining deterministic fixture tests.
+- [x] Add chunking, retrieval quality checks, citation-key propagation, and grounded-answer evaluation.
+- [x] Expand Chapters 8–9 using this repository as the canonical corpus.
 
 **Gate:** The assistant cites real repository paths, refuses unsupported answers, and passes the versioned evaluation dataset.
+
+**Status:** Complete. The learned path is local and provenance-preserving; its
+initial run is a correctness observation, not a retrieval-quality or
+performance benchmark.
 
 ### Milestone 5 — LangChain, LangGraph, and Agent Comparisons
 
@@ -186,7 +190,7 @@ Performance, memory, framework, and model-behavior statements must cite either `
 | 1–3 | tensors, gradients, PyTorch | substantive evidence-backed drafts | Day 1 examples, tests, MPS record, and diagrams committed |
 | 4–5 | TensorFlow comparison, vision | substantive evidence-backed drafts | matched CNN fixture, tests, results, and limitations committed |
 | 6–7 | transformers, Apple Silicon | substantive evidence-backed drafts | tokenizer/pipeline inspection, MPS/CPU result, MLX-LM observation, and records committed |
-| 8–9 | embeddings and RAG | initial baseline | deterministic fixture implementation exists; learned embeddings/evaluation pending |
+| 8–9 | embeddings and RAG | substantive evidence-backed drafts | local learned retrieval, evidence-only RAG, fixtures, and evaluation committed |
 | 10–13 | systems, graphs, agents | skeletons | direct SDK/LangChain/LangGraph comparison pending |
 | 14 | reliability | skeleton | full evaluation and policy audit pending |
 
@@ -233,20 +237,20 @@ This is the operational order of work. A later milestone may be designed early, 
 - [x] Record the exact Day 1 M4 Pro result: OS/device, Python/Torch versions, seed, workload, MPS/CPU selection, time, output checks, and observed limitations.
 - [x] Add a reproducible vision dataset fixture, CNN train/validation/test loop, metrics, and error-analysis output.
 - [x] Add a TensorFlow/Keras equivalent that explicitly matches data preprocessing, split, seed, epoch budget, and metrics.
-- [ ] Add tokenizer vocabulary/segmentation inspection and controlled pretrained-transformer inference.
-- [ ] Add MLX and MLX-LM local experiments only after selecting versions/models that run on the target Mac; document quantization and prompt workload.
+- [x] Add tokenizer vocabulary/segmentation inspection and controlled pretrained-transformer inference.
+- [x] Add MLX and MLX-LM local experiments only after selecting versions/models that run on the target Mac; document quantization and prompt workload.
 - [ ] Normalize benchmark methods before comparing PyTorch MPS, TensorFlow, MLX, and MLX-LM; do not imply comparisons from incompatible workloads.
 
 **Completion definition:** Claims in Chapters 1–7 link to committed scripts and records that a reader can rerun or accurately interpret as machine-specific.
 
 ### Track D — Book Intelligence Assistant
 
-- [ ] Define corpus ingestion contracts for Markdown, code, benchmark records, and BibTeX-backed research notes.
-- [ ] Preserve path, chapter identifier, citation key, source type, and experiment/benchmark metadata in every chunk.
-- [ ] Retain deterministic retrieval tests; add a local learned-embedding implementation behind a stable interface.
-- [ ] Add chunking configuration, retrieval-quality evaluation, citation-key propagation, and source-path validation.
-- [ ] Enforce grounded answers: each answer cites retrieved repository evidence or explicitly reports missing evidence.
-- [ ] Implement structured chapter/experiment plans and a critic that flags unsupported claims, missing evidence, broken links, and missing alternatives.
+- [x] Define corpus ingestion contracts for Markdown, code, benchmark records, and BibTeX-backed research notes.
+- [x] Preserve path, chapter identifier, citation key, source type, and experiment/benchmark metadata in every chunk.
+- [x] Retain deterministic retrieval tests; add a local learned-embedding implementation behind a stable interface.
+- [x] Add chunking configuration, retrieval-quality evaluation, citation-key propagation, and source-path validation.
+- [x] Enforce grounded answers: each answer cites retrieved repository evidence or explicitly reports missing evidence.
+- [x] Implement structured chapter/experiment plans and a critic that flags unsupported claims, missing evidence, broken links, and missing alternatives.
 - [ ] Implement direct SDK (optional environment configuration) and LangChain structured-output paths over the same retrieved context.
 - [ ] Implement LangGraph persistence, checkpoint/resume, interrupts, approval/rejection, unavailable-model/API fallback, and a strict no-write boundary.
 - [ ] Compare deterministic retrieval, single planner, and researcher/critic/writer graph using the same versioned book-maintenance evaluation tasks.
@@ -585,3 +589,66 @@ generative workload and benchmark method exists.
   ingestion over a frozen book-corpus fixture.
 - [ ] Preserve deterministic retrieval tests while adding learned retrieval and
   grounded-answer evaluation.
+
+---
+
+### 2026-08-14 — Learned retrieval, grounded evidence, and Milestone 4 closure
+
+**What changed:**
+
+- Added the optional `embeddings` dependency group with Sentence Transformers
+  5.7.0 and the local `sentence-transformers/all-MiniLM-L6-v2` encoder.
+- Added `learned_retrieval.py`, which preserves the existing `Evidence`
+  provenance record while locally encoding, normalizing, and ranking chunks.
+  The deterministic hashed-vector implementation remains the fixture-friendly
+  control; the interactive Chapter 8–9 scripts default to learned retrieval.
+- Extended ingestion metadata with corpus kind, chapter identifier, and a
+  stable experiment/benchmark record group. Saved indexes remain generated
+  `.book-intelligence/` artifacts.
+- Made both backends use an evidence-only answer formatter. The learned path
+  returns only thresholded retrieved excerpts, repository paths, and any
+  citation keys; it explicitly refuses empty or weak evidence.
+- Added a frozen non-sensitive corpus and versioned evaluation runner covering
+  evidence location, missing-evidence refusal, proposal/no-write behavior, and
+  editorial review. It needs no model download or credential.
+- Added the embeddings/RAG research note, Sentence-BERT citation, recorded
+  local observation, optional installation instructions, and substantive
+  Chapters 8–9.
+
+**Recorded observation:**
+
+- After confirming 53 GiB free storage, `uv sync --group embeddings` installed
+  the optional dependency group. The public model loaded locally; the Hugging
+  Face client emitted an unauthenticated-access warning, which is a rate-limit
+  concern rather than a correctness error.
+- Before the new Chapter 8–9 corpus material was added, the live search indexed
+  95 chunks for the recorded benchmark-limitation query. Its top path was
+  `benchmarks/03-transformers/README.md` at the script's rounded 0.556 score.
+  Corpus count/ranking will change with tracked prose and records; this is not
+  a quality, latency, memory, or accelerator claim.
+
+**Verification:**
+
+- `uv run --group tensorflow --group transformers --group mlx --group embeddings ruff check .` — passed.
+- `uv run --group tensorflow --group transformers --group mlx --group embeddings pytest` — 29 passed.
+- `uv run --group embeddings python evals/run_book_intelligence.py` — all four
+  frozen cases passed.
+- `cd site && npm run build` — passed after repository-only references were
+  made print-safe paths rather than invalid Docusaurus links.
+- `./scripts/build-book.sh` — produced the draft DOCX. Rendered 31 pages with
+  the Lulu template and inspected the Chapter 8–9 pages; no clipping or overlap
+  was observed. This remains a beta-draft layout, not a release PDF.
+
+**Decision:**
+
+Milestone 4 is complete. Do not describe the learned ranking as semantic truth,
+retrieval quality, or hardware performance. Later generative, LangChain, and
+LangGraph paths must consume the same evidence contract and retain the explicit
+human-approval boundary before any source, Git, or external write.
+
+**Next task:**
+
+- [ ] Start Milestone 5 with an optional direct-SDK adapter and a LangChain
+  structured-output path over identical retrieved evidence.
+- [ ] Add LangGraph persistence, interrupt/resume, approval/rejection, and
+  unavailable-model/API fallback tests before writing Chapters 10–13.

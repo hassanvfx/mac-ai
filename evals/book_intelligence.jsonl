@@ -1,3 +1,4 @@
-{"id":"retrieve-embeddings","question":"Where is cosine similarity introduced?","must_cite":["book/chapters/08-turning-meaning-into-geometry.md","research/01-tensors/notes.md"]}
-{"id":"review-alternatives","question":"Identify a chapter missing alternatives guidance.","must_flag":"missing Alternatives section"}
-{"id":"plan-experiment","question":"Propose an embeddings experiment without changing source files.","must_include":"human explicitly approves"}
+{"id":"locate-evidence","task":"retrieve","question":"Where is cosine similarity explained?","must_cite":"research/embeddings.md"}
+{"id":"unsupported-claim","task":"grounding","question":"What is the ISBN for this book?","must_refuse":true}
+{"id":"plan-experiment","task":"plan","question":"Propose an embeddings experiment without changing source files.","must_include":"human explicitly approves"}
+{"id":"review-alternatives","task":"review","must_flag":"book/chapters/08-draft.md: missing Alternatives section"}

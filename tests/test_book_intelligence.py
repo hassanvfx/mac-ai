@@ -29,6 +29,24 @@ def test_retrieval_preserves_source_and_citation(tmp_path: Path) -> None:
     results = retrieve(build_index(tmp_path), "cosine similarity embeddings")
     assert results[0].evidence.source == "research/notes.md"
     assert results[0].evidence.citations == ("vaswani2017attention",)
+    assert results[0].evidence.metadata == (("corpus_kind", "research"),)
+
+
+def test_experiment_and_benchmark_chunks_preserve_group_metadata(tmp_path: Path) -> None:
+    make_corpus(tmp_path)
+    evidence = build_index(tmp_path)
+    by_source = {item.source: item for item in evidence}
+    assert ("record_group", "search.py") in by_source["experiments/search.py"].metadata
+    assert ("record_group", "results.md") in by_source["benchmarks/results.md"].metadata
+
+
+def test_bibliography_entries_are_indexed_with_their_citation_key(tmp_path: Path) -> None:
+    make_corpus(tmp_path)
+    bibliography = tmp_path / "research" / "references.bib"
+    bibliography.write_text("@book{goodfellow2016deep, title={Deep Learning}}", encoding="utf-8")
+    evidence = build_index(tmp_path)
+    bib_chunk = next(item for item in evidence if item.source == "research/references.bib")
+    assert bib_chunk.citations == ("goodfellow2016deep",)
 
 
 def test_grounded_answer_refuses_missing_evidence(tmp_path: Path) -> None:

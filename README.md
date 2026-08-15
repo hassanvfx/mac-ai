@@ -42,6 +42,23 @@ If a later optional dependency is missing, first check available disk space;
 install it when there is adequate headroom, and report the space constraint
 rather than silently abandoning that part of the curriculum.
 
+Semantic search and evidence-only RAG are another optional group. The first
+learned run downloads the public encoder weights into the local Hugging Face
+cache, outside Git:
+
+```bash
+df -h .
+uv sync --group embeddings
+uv run --group embeddings python experiments/08-embeddings/book_search.py
+uv run --group embeddings python experiments/09-rag/grounded_answer.py
+uv run --group embeddings python evals/run_book_intelligence.py
+```
+
+Append `--deterministic` to either command to use the small fixture-friendly
+hashed-vector baseline instead of loading the learned encoder. See
+`benchmarks/05-book-intelligence/README.md` for the recorded observation and
+its limits.
+
 For the course site, use Node 20:
 
 ```bash
