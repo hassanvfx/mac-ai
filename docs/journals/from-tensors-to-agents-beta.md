@@ -767,3 +767,18 @@ versioned control that any future model-backed comparison must match.
 
 - [ ] Start Milestone 6: evaluation traces, reliability policy, failure
   fixtures, Chapter 14, and beta release-gate audit.
+
+---
+
+### 2026-08-15 — Milestone 6 reliability baseline
+
+- Added a no-secret reliability trace runner and regression test over the
+  versioned fixture evaluation. Generated traces stay in ignored local state.
+- Expanded Chapter 14 with the demonstrated reliability policy, known failures,
+  and strict production boundaries.
+- Full optional-group lint passed; 41 tests passed; reliability evaluation
+  passed all four fixture cases.
+
+**Next:** complete the broader beta audit: site/DOCX gates, chapter/citation
+audit, and document remaining non-code release blockers (remote, Word PDF,
+and Lulu proof).
