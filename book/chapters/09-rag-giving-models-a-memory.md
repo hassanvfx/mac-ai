@@ -172,6 +172,57 @@ local model is unavailable, log that condition and run the deterministic
 evidence tests; do not silently replace the evaluation with an incomparable
 provider.
 
+## Worked grounded-answer audit: a packet is not a conclusion
+
+Use the frozen corpus question, “Where is cosine similarity explained?” The
+deterministic retrieval layer returns a short ranked set. The grounded-answer
+function then performs a deliberately boring transformation: it drops
+non-positive candidates, prints a `Grounded evidence only` heading, and emits
+each remaining excerpt beneath its repository path. When a chunk contains a
+citation key, that key appears beside the same path. It does not infer a
+one-sentence answer such as “cosine similarity is the best retrieval metric,”
+because the packet does not establish that claim.
+
+An auditor follows four checks. First, each displayed relative path must be
+inside the configured corpus and resolve to a real current file. Second, the
+excerpt must actually contain the material being offered as evidence; a path
+alone is not enough. Third, a citation key must have travelled from that exact
+chunk rather than being copied from another result. Fourth, the auditor decides
+whether the excerpt entails a proposed statement. The first three checks are
+automated structural constraints; the fourth remains a reading task.
+
+Now change the question to “What is the ISBN for this book?” The repository
+fixture has no supporting evidence. The correct output is the fixed
+missing-evidence message, not a guessed identifier, a web search result, or a
+synthetic-looking citation. A blank query and an empty corpus must take the
+same safe path. These cases matter because an answer interface can otherwise
+make an empty retrieval set look like an invitation for a language model to be
+helpful. Here it is a stop condition.
+
+The test suite also makes a distinction that is easy to lose in a polished
+demo. It verifies that a grounded answer contains the expected fixture path
+and that citation-key preservation works. It does *not* certify that every
+retrieved passage is relevant to every natural-language formulation. A common
+word can still pull in a tangential benchmark. Treat that as an evaluation
+case: retain the query, paths, excerpts, corpus revision, and reviewer
+judgment; then decide whether to change the query, chunking rule, retriever,
+or source document.
+
+Run the evidence-only route explicitly:
+
+```bash
+uv run python experiments/09-rag/grounded_answer.py --deterministic \
+  --query 'What should an experiment record?'
+uv run pytest tests/test_book_intelligence.py \
+  tests/test_book_intelligence_evaluation.py
+```
+
+Read the printed packet before describing it in prose. If its evidence is too
+weak, preserve the refusal or present the packet as candidates; do not repair a
+weak retrieval result by writing a smoother answer. A later model-backed layer
+may summarize only after it has the packet, cites only paths in that packet,
+and remains subject to the same human review boundary.
+
 ## What broke
 
 RAG breaks in mundane ways: chunk boundaries omit a qualifier, a ranking favors

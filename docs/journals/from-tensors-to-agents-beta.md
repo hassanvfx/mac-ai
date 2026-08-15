@@ -2321,3 +2321,33 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Add the Chapter 9 fourth-pass grounded-answer case, then run the full
   Python, site, and DOCX interim-proof validation batch.
+
+### 2026-08-15 — Chapter 9 fourth-pass grounded-answer audit
+
+**What changed:**
+
+- Added a worked evidence-packet audit to Chapter 9. It separates path,
+  excerpt, citation-provenance, and entailment checks; demonstrates unsupported,
+  blank-query, and empty-corpus refusal; and preserves a reviewer task for
+  actual support judgment.
+- Added reproducible commands for the deterministic RAG route and its
+  structural tests. The prose explicitly does not treat a passing fixture as a
+  generative-answer quality result.
+
+**Verification:**
+
+- `make audit-book` passed at 35,470 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run python
+  experiments/09-rag/grounded_answer.py --deterministic --query 'What should
+  an experiment record?'` ran successfully and returned cited repository
+  excerpts.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_intelligence.py tests/test_book_intelligence_evaluation.py
+  tests/test_reliability.py` passed (11 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Run the full Python, site, and DOCX interim-proof validation batch,
+  then continue expanding the shortest chapters toward the manuscript target.
