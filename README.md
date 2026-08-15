@@ -1,6 +1,8 @@
-# From Tensors to Agents
+# AI From Tensors to Agents on Mac Silicon
 
 > Learning modern AI by building it on Apple Silicon.
+
+By Hassan Uriostegui · Waken AI Labs
 
 This is the companion repository for an English-language book and course that
 moves from tensors and gradients to RAG and agentic systems. It targets Python
@@ -100,6 +102,25 @@ cd site && npm ci && npm start
 
 Book prose, diagrams, and illustrations are all-rights-reserved. The code is
 available under the MIT License.
+
+## Publishing workflow
+
+The Markdown manuscript builds into a 6×9 Lulu-oriented DOCX using the
+versioned Word template. A provisional LibreOffice PDF can be generated for
+layout review; a final upload PDF must be exported through Microsoft Word on
+macOS and visually inspected page by page. The front cover is reproducible
+from `book/cover/metadata-placeholder.yaml`; its dummy ISBN is deliberately
+not a barcode and is invalid for distribution.
+
+```bash
+make book
+make provisional-pdf
+make preflight
+make cover
+```
+
+See `book/cover/README.md` for the page-count and Lulu-template boundary that
+prevents a provisional cover from being mistaken for an upload-ready wrap.
 
 ## Editorial audit and beta target
 

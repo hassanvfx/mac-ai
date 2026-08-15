@@ -342,6 +342,73 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 
 ## Journal Entries
 
+### 2026-08-15 — Print-ready beta workflow, identity, and provisional cover
+
+**What changed:**
+
+- Renamed the canonical manuscript and course identity to *AI From Tensors to
+  Agents on Mac Silicon: Learning Modern AI by Building It on Apple Silicon* by
+  Hassan Uriostegui, published under Waken AI Labs.
+- Added deterministic book front matter: title material, copyright/edition
+  notice, explicit non-distribution placeholder ISBN, author page, and beta
+  acknowledgements. The author bio is a concise factual summary based on
+  Hassan Uriostegui's public site and avoids unverified performance claims.
+- Added the print-only DOCX layout path: front matter is included before the
+  canonical chapters, chapter/appendix H1 pages begin deliberately, and the
+  generated DOCX is normalized from the template's bleed dimensions to 6×9
+  non-bleed interior trim.
+- Added `make provisional-pdf`, `make cover`, and `make release-manifest`.
+  LibreOffice creates a clearly named non-release review PDF; the committed
+  AppleScript remains the Microsoft Word release-PDF path.
+- Added an original text-free Rottweiler art plate and a deterministic front
+  cover compositor. It produces a 6.25×9.25 in full-bleed front-cover review
+  PDF with vector title, subtitle, author, and imprint text. No barcode, spine,
+  or guessed wraparound dimensions are created.
+- Added a substantive reproducible-publishing appendix covering build inputs,
+  proof review, human approvals, cover boundaries, correction handling, and
+  release checklist. The manuscript now reaches the planned beta page range.
+
+**Validation:**
+
+- `uv run ruff check .` — passed.
+- `uv run pytest` — 44 passed.
+- `make audit-book` — passed; 46,281 words within the 45,000–55,000 target.
+- `make book` — passed.
+- Provisional LibreOffice export passed 6×9 preflight with 183 single pages.
+- The provisional front cover passed 6.25×9.25 one-page preflight.
+- `cd site && npm run build` — passed.
+- Rendered DOCX pages were visually inspected for front matter, chapter starts,
+  technical pages, appendix ending, and spacing. Word should update the
+  generated table-of-contents field before the release export.
+
+**Known production boundaries:**
+
+- Microsoft Word is not installed, so the PDF produced this session is review
+  only and cannot be called Lulu release-ready.
+- The approved generated Rottweiler art plate has an effective source
+  resolution of roughly 158–173 ppi at the full-bleed front-cover size. The
+  compositor emits a 300 ppi review raster, but the source must be replaced or
+  professionally upscaled before any Lulu upload.
+- The final back/spine/front cover remains intentionally blocked until the
+  interior page count is frozen, a real ISBN is assigned, and Lulu supplies its
+  exact cover template.
+- GitHub CLI credentials for `hassanvfx` remain invalid. The public
+  `hassanvfx/mac-ai` repository, `origin`, and push are ready to be created
+  only after device authentication completes.
+
+**Next action:**
+
+- [ ] Commit this publishing workflow and approved cover direction.
+- [ ] Re-authenticate GitHub CLI as `hassanvfx`, create the public `mac-ai`
+  repository, set `origin`, push `main`, and then configure Pages.
+- [ ] Install Microsoft Word before producing the release candidate; replace or
+  professionally upscale the art plate; freeze the page count before requesting
+  Lulu's wraparound-cover template.
+
+**Status:** Beta manuscript and review cover are reproducible. Final print and
+public-remote steps remain intentionally gated by Word, high-resolution art,
+real ISBN/template inputs, and GitHub authentication.
+
 ### 2026-08-14 — Baseline and journaling setup
 
 **What changed:**

@@ -2,7 +2,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'From Tensors to Agents',
+  title: 'AI From Tensors to Agents on Mac Silicon',
   tagline: 'Learning modern AI by building it on Apple Silicon',
   url: 'https://YOUR_GITHUB_USERNAME.github.io',
   baseUrl: '/from-tensors-to-agents/',
@@ -19,7 +19,7 @@ const config = {
   ]],
   themeConfig: {
     navbar: {
-      title: 'From Tensors to Agents',
+      title: 'AI From Tensors to Agents',
       items: [
         {to: '/', label: 'Course', position: 'left'},
         {href: 'https://github.com/YOUR_GITHUB_USERNAME/from-tensors-to-agents', label: 'GitHub', position: 'right'}
@@ -28,7 +28,7 @@ const config = {
     footer: {
       style: 'dark',
       links: [],
-      copyright: 'Copyright © ' + new Date().getFullYear() + ' Hassan. Book content is all rights reserved.'
+      copyright: 'Copyright © ' + new Date().getFullYear() + ' Hassan Uriostegui · Waken AI Labs. Book content is all rights reserved.'
     },
     prism: {theme: prismThemes.github, darkTheme: prismThemes.dracula}
   }

@@ -4,7 +4,7 @@ title: Introduction and Setup
 slug: /
 ---
 
-# From Tensors to Agents
+# AI From Tensors to Agents on Mac Silicon
 
 This book is a build log for a software engineer learning modern AI on Apple
 Silicon. Each chapter connects an idea to runnable code, an experiment, a

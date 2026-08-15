@@ -20,7 +20,9 @@ mkdir -p "$output_dir"
 mkdir -p "$prepared_dir/chapters"
 mkdir -p "$prepared_dir/appendices"
 cp -R "$root_dir/book/assets" "$prepared_dir/assets"
-chapter_files=()
+front_matter="$prepared_dir/front-matter.md"
+cp "$root_dir/book/front-matter.md" "$front_matter"
+chapter_files=("$front_matter")
 for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.md; do
   section_dir="chapters"
   if [[ "$source_file" == *"/appendices/"* ]]; then
@@ -42,5 +44,8 @@ for source_file in "$root_dir"/book/chapters/*.md "$root_dir"/book/appendices/*.
 done
 pandoc "${chapter_files[@]}" --metadata-file="$root_dir/book/manuscript.yaml" \
   --resource-path="$prepared_dir:$root_dir/book" --reference-doc="$template" \
-  --citeproc --output="$output_dir/from-tensors-to-agents.docx"
-echo "Wrote $output_dir/from-tensors-to-agents.docx"
+  --standalone --lua-filter="$root_dir/scripts/book_layout.lua" --citeproc \
+  --output="$output_dir/ai-from-tensors-to-agents-on-mac-silicon.docx"
+python3 "$root_dir/scripts/normalize_docx_trim.py" \
+  "$output_dir/ai-from-tensors-to-agents-on-mac-silicon.docx"
+echo "Wrote $output_dir/ai-from-tensors-to-agents-on-mac-silicon.docx"

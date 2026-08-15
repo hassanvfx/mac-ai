@@ -4,7 +4,14 @@ version = "0.1.0"
 description = "Executable companion material for From Tensors to Agents"
 readme = "README.md"
 requires-python = ">=3.11,<3.12"
-dependencies = ["numpy>=2.0", "torch>=2.4", "psutil>=6.0", "pypdf>=5.0"]
+dependencies = [
+    "numpy>=2.0",
+    "pillow>=11.0",
+    "psutil>=6.0",
+    "pypdf>=5.0",
+    "reportlab>=4.2",
+    "torch>=2.4",
+]
 
 [dependency-groups]
 agents = [
