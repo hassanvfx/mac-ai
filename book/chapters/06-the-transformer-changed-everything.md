@@ -203,6 +203,40 @@ summarizing before classification introduces a second model and failure mode.
 Choose the policy from the task and evaluate boundary cases, not from whichever
 option makes an API call easiest.
 
+### Worked audit: from tokens to one ranked label
+
+Take the favorable fixture sentence and begin with the printed token sequence:
+`[CLS] this small experiment is clear and useful . [SEP]`. The special boundary
+tokens and all-ones mask are part of the model input, while the displayed words
+are only a decoded aid for the reader. The token IDs are opaque vocabulary
+indexes; do not compare their magnitude or treat them as sentiment features.
+The first audit question is simply whether the tokenizer, mask, maximum length,
+and selected model revision describe the input you intended to classify.
+
+The manual path then produces two logits, applies softmax, and ranks labels
+using the loaded model's `id2label` mapping. In the recorded MPS observation,
+the top label is `POSITIVE` at 0.999802 for this sentence. The companion
+pipeline uses the same model, tokenizer, truncation setting, and input; its
+top label and score match the manual path. The test helper enforces the small
+structural version of this rule: when manual logits rank `POSITIVE` first and a
+pipeline result reports the same score, the comparison records equal labels and
+zero absolute score difference.
+
+This agreement is an interface check, not a truth check. It shows that two
+routes through one declared artifact present the same top result for a selected
+input. It does not show that 0.999802 is calibrated on another domain, that
+sentiment is an objective property of the sentence, or that a high-attention
+token caused the label. The unfavorable fixture sentence supplies a second
+control input; an evaluation would need a versioned set of many unselected
+examples and a decision rule for mistakes.
+
+To diagnose a disagreement, work backwards from the output. Confirm the label
+mapping before assuming the label name; compare tokenizer IDs and mask; verify
+the model/tokenizer revision pair; then compare truncation, maximum length,
+batch order, and device. A different top label after changing `--max-length`
+may be a context-policy observation, not a pipeline bug. Preserve both JSON
+records so the first changed contract remains visible.
+
 ## What broke
 
 The first practical surprise is storage. Loading a pretrained model downloads

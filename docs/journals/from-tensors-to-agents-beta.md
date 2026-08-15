@@ -2244,3 +2244,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass prose expansion with Chapters 6, 8, and 9, then
   broaden fixture failure cases and repeat the full validation batch.
+
+### 2026-08-15 — Chapter 6 fourth-pass inference audit
+
+**What changed:**
+
+- Added a worked tokenizer-to-ranked-label audit to Chapter 6: inspect special
+  tokens/mask/model revision, rank manual logits via the loaded label map,
+  compare the pipeline route, and diagnose a disagreement from the output
+  contract backwards.
+- Explicitly scoped direct/pipeline agreement as an interface check, not a
+  calibration, explanation, or model-quality claim.
+
+**Verification:**
+
+- `make audit-book` passed at 34,598 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group transformers
+  pytest tests/test_transformers_helpers.py` passed (4 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass prose expansion with Chapters 8–9, then broaden
+  fixture failure cases and repeat the full validation batch.
