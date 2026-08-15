@@ -2,6 +2,7 @@ import torch
 
 from from_tensors_to_agents.day1 import make_regression_data, mean_squared_error
 from from_tensors_to_agents.device import preferred_device
+from from_tensors_to_agents.training import train_tiny_regressor
 
 
 def test_broadcasting_has_expected_values() -> None:
@@ -30,3 +31,10 @@ def test_mse_is_zero_for_equal_values() -> None:
 
 def test_preferred_device_is_usable() -> None:
     assert preferred_device().type in {"cpu", "mps"}
+
+
+def test_tiny_training_is_deterministic_on_cpu() -> None:
+    first = train_tiny_regressor(epochs=25, seed=7, device=torch.device("cpu"))
+    second = train_tiny_regressor(epochs=25, seed=7, device=torch.device("cpu"))
+    assert first == second
+    assert first[-1] < first[0]

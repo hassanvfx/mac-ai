@@ -46,10 +46,10 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 
 ### 🔧 Milestone 1 — Foundations and Chapters 1–3
 
-- [ ] Expand tensors, gradients, and PyTorch chapters into evidence-backed drafts.
-- [ ] Capture actual M4 Pro MPS measurements for the Day 1 workload.
+- [x] Expand tensors, gradients, and PyTorch chapters into evidence-backed drafts.
+- [x] Capture actual M4 Pro MPS measurements for the Day 1 workload.
 - [ ] Add print-quality tensor-shape, gradient-flow, and training-loop diagrams.
-- [ ] Produce and visually inspect the first 6×9 DOCX proof.
+- [x] Produce and visually inspect the first 6×9 DOCX proof.
 
 **Gate:** Day 1 code/tests pass, the benchmark record is complete, and Chapters 1–3 contain real prose, experiments, and takeaways.
 
@@ -121,6 +121,7 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 ### Executable learning baseline
 
 - Day 1 examples cover broadcasting, autograd, and a small PyTorch network with MPS selection and CPU fallback.
+- The Day 1 benchmark runner records an explicit device, warmup, MPS synchronization, timing samples, and deterministic final loss.
 - The initial Book Intelligence baseline supports deterministic fixture retrieval, grounded-answer behavior, and an approval checkpoint example.
 - Versioned evaluation fixtures are in `evals/book_intelligence.jsonl`.
 
@@ -185,6 +186,113 @@ All chapters must ultimately include intuition, problem, minimal implementation,
 5. ClineFlow reference symlinks are optional. Do not run `setup-refs.sh` or create external references unless the user deliberately chooses their sources.
 6. Do not add a GitHub remote, publish a site, create a release, or submit anything to Lulu without explicit destination/approval.
 
+## Execution Plan — Work Remaining
+
+This is the operational order of work. A later milestone may be designed early, but its gate cannot be claimed until the required code, recorded evidence, manuscript prose, and verification are all committed.
+
+### Track A — Shared engineering and editorial infrastructure
+
+- [ ] Add a reusable experiment-record format and apply it to every new experiment.
+- [ ] Add a benchmark-record format with machine, dependency, workload, warmup, timing, and limitations fields.
+- [ ] Add a citation/link validation command for chapters, code paths, BibTeX keys, and site links.
+- [ ] Keep dependency groups intentional: core/test tooling always reproducible; large frameworks and model adapters opt-in where practical.
+- [ ] Maintain fixture data that is small, versioned, non-sensitive, and sufficient for CPU-only CI.
+- [ ] Update README and course landing page as capabilities become real; keep ClineFlow a recommendation only, never a required dependency.
+
+**Completion definition:** A contributor can clone, install documented prerequisites, run the checks, understand source ownership, and distinguish tracked evidence from generated artifacts.
+
+### Track B — Manuscript and visual system
+
+- [ ] Establish a chapter-level editorial checklist and target word/page budget (approximately 10–14 manuscript pages per chapter).
+- [ ] Expand Chapters 1–3 from their current draft state, citing research and linking runnable examples.
+- [ ] Write Chapters 4–7 only after the matched framework, tokenizer, transformer, and local-inference evidence exists.
+- [ ] Write Chapters 8–14 alongside the Book Intelligence implementation, using its own artifacts as the evidence base.
+- [ ] Create diagrams as editable, print-quality originals under `book/`; derive web-friendly copies only when necessary.
+- [ ] Maintain front matter, copyright page, chapter ordering, bibliography treatment, listing style, and cross-references.
+- [ ] Build a DOCX early and repeatedly to expose print-layout issues before the manuscript is large.
+
+**Completion definition:** Every chapter has intuition, problem, minimal and real implementation, experiment, failures, alternatives, guidance, takeaway, citations, and tested links.
+
+### Track C — Learning experiments and Apple Silicon evidence
+
+- [ ] Record the exact Day 1 M4 Pro result: OS/device, Python/Torch versions, seed, workload, MPS/CPU selection, time, output checks, and observed limitations.
+- [ ] Add a reproducible vision dataset fixture, CNN train/validation/test loop, metrics, and error-analysis output.
+- [ ] Add a TensorFlow/Keras equivalent that explicitly matches data preprocessing, split, seed, epoch budget, and metrics.
+- [ ] Add tokenizer vocabulary/segmentation inspection and controlled pretrained-transformer inference.
+- [ ] Add MLX and MLX-LM local experiments only after selecting versions/models that run on the target Mac; document quantization and prompt workload.
+- [ ] Normalize benchmark methods before comparing PyTorch MPS, TensorFlow, MLX, and MLX-LM; do not imply comparisons from incompatible workloads.
+
+**Completion definition:** Claims in Chapters 1–7 link to committed scripts and records that a reader can rerun or accurately interpret as machine-specific.
+
+### Track D — Book Intelligence Assistant
+
+- [ ] Define corpus ingestion contracts for Markdown, code, benchmark records, and BibTeX-backed research notes.
+- [ ] Preserve path, chapter identifier, citation key, source type, and experiment/benchmark metadata in every chunk.
+- [ ] Retain deterministic retrieval tests; add a local learned-embedding implementation behind a stable interface.
+- [ ] Add chunking configuration, retrieval-quality evaluation, citation-key propagation, and source-path validation.
+- [ ] Enforce grounded answers: each answer cites retrieved repository evidence or explicitly reports missing evidence.
+- [ ] Implement structured chapter/experiment plans and a critic that flags unsupported claims, missing evidence, broken links, and missing alternatives.
+- [ ] Implement direct SDK (optional environment configuration) and LangChain structured-output paths over the same retrieved context.
+- [ ] Implement LangGraph persistence, checkpoint/resume, interrupts, approval/rejection, unavailable-model/API fallback, and a strict no-write boundary.
+- [ ] Compare deterministic retrieval, single planner, and researcher/critic/writer graph using the same versioned book-maintenance evaluation tasks.
+
+**Completion definition:** The assistant is useful against this repository, testable on fixtures without secrets, accurately cites evidence, and cannot write until a human explicitly approves a proposed action.
+
+### Track E — Evaluation, reliability, and beta release
+
+- [ ] Add an evaluation runner for retrieval, grounding, plan completeness, citation accuracy, latency, fallback behavior, and unsafe-action refusal.
+- [ ] Store traces/results as concise, versioned records; exclude indexes, secrets, and bulky local model artifacts.
+- [ ] Add failure fixtures: empty corpus, missing source, unavailable local model, invalid API configuration, unsupported request, rejected approval, and interrupted/resumed graph.
+- [ ] Write a reliability policy in Chapter 14 and project documentation that distinguishes demo behavior from production guarantees.
+- [ ] Run clean-environment validation: `uv sync --group dev`, quality checks, tests, site install/build/link check, and DOCX build.
+- [ ] Once a GitHub destination is supplied, configure Pages values, push, publish, attach beta artifacts, and create the beta tag.
+
+**Completion definition:** A clean checkout passes release gates and the published beta accurately communicates its capabilities and limits.
+
+### Track F — Post-beta print production
+
+- [ ] Freeze beta text and run technical and copyediting passes.
+- [ ] Generate DOCX with the committed Lulu template and export the release PDF through Word on macOS.
+- [ ] Render and inspect each page, run preflight, and resolve dimensions, font, page-layout, margin, and image-resolution findings.
+- [ ] After the final interior page count, obtain the exact Lulu cover template, build the color cover, and validate metadata.
+- [ ] Order and inspect a Lulu proof; fix findings; archive final release inputs and outputs.
+
+**Completion definition:** A physically/digitally approved proof exists before the book is submitted for publication.
+
+## Dependency-Safe Work Sequence
+
+The recommended sequence prevents prose and comparison claims from outrunning evidence:
+
+1. **Milestone 1:** instrument and record existing Day 1 work; improve Chapters 1–3; make the first DOCX proof.
+2. **Milestone 2:** build matched PyTorch and TensorFlow vision experiments; then write Chapters 4–5.
+3. **Milestone 3:** build transformer/tokenizer and MLX evidence; then write Chapters 6–7.
+4. **Milestone 4:** evolve retrieval and grounding against the book corpus; then write Chapters 8–9.
+5. **Milestone 5:** add structured planning, graph state, approval, and comparative evaluation; then write Chapters 10–13.
+6. **Milestone 6:** harden tests/evaluations, finish Chapter 14, run release gates, and publish only after a remote is chosen.
+7. **Milestone 7:** perform the deliberately separate print-production pass and Lulu proof cycle.
+
+## Current Progress Snapshot
+
+| Area | Present now | Remaining before beta |
+| --- | --- | --- |
+| Repository | Git `main`, two local setup commits, Python/Node lockfiles, CI workflows | choose remote; configure real Pages destination; publish/tag only with approval |
+| Book | 15 Markdown files: introduction plus Chapters 1–14; Lulu interior template committed | substantive 180–220-page prose, citations, diagrams, cross-link audit, iterative proofs |
+| Site | Docusaurus configuration and lockfile; build previously passed | content/link audit and real deployment configuration |
+| Day 1 | tensor, autograd, tiny PyTorch/MPS examples and tests | measured benchmark record, diagrams, expanded explanatory prose |
+| Later experiments | directory structure and planning only | CNN/TF, tokenizer/transformer, MLX/MLX-LM, standardized benchmarks |
+| Book Intelligence | deterministic search, grounded-answer baseline, approval checkpoint, fixtures/tests | learned embeddings, metadata-rich ingestion, quality evaluation, SDK/LangChain/LangGraph, workflow comparison |
+| Publishing | Pandoc/Word/preflight scripts and Lulu template | successful iterative DOCX proof, Word PDF, preflight/render inspection, final print proof |
+
+## Immediate Next Session Plan — Milestone 1
+
+1. Read this journal and the Day 1 scripts/tests.
+2. Run the Day 1 experiment on the target Mac with a fixed seed; record the full environment and measurement method in `benchmarks/01-day1/`.
+3. Add or strengthen tests only where the recorded behavior requires it; rerun Ruff and pytest.
+4. Add source notes/citations and write the measured narrative for Chapters 1–3.
+5. Create the first three diagrams as print-quality source assets.
+6. Run a DOCX build; record any missing tool/template/layout blockers without treating a PDF as release-ready.
+7. Update this journal with changed paths, results, decisions, failures, and the next smallest task before committing.
+
 ## Completion Checklist
 
 ### Code and evidence
@@ -245,3 +353,70 @@ Git establishes a recoverable, reviewable baseline before workflow changes. Clin
 
 **Status:** Setup complete; Milestone 1 ready to begin.
 
+---
+
+### 2026-08-14 — Completion-plan recap
+
+**What changed:**
+
+- Reviewed the active journal and the tracked project inventory.
+- Added a complete operational work breakdown: shared infrastructure, manuscript/visual system, experiments, Book Intelligence Assistant, beta reliability/release, and post-beta print production.
+- Added the dependency-safe milestone order, a current-progress table, and an immediate Milestone 1 checklist.
+
+**Current reality:**
+
+- The repository and workflow foundation are complete.
+- The book/course exists as an initial structured draft, not yet as a substantive beta manuscript.
+- Day 1 code and deterministic Book Intelligence fixtures are the only implemented evidence base; later learning, model, and agent milestones remain planned work.
+
+**Decision:**
+
+Use this journal as the single project execution record. Work proceeds evidence first, then chapter prose, then milestone verification. Publishing and Lulu actions remain blocked until the user supplies a destination or explicitly authorizes the applicable step.
+
+**Next steps:**
+
+- [ ] Begin the Day 1 benchmark record on this Mac.
+- [ ] Expand Chapters 1–3 from that measured evidence.
+- [ ] Produce the first DOCX proof and record blockers/findings.
+
+**Status:** Milestone 1 in progress; no implementation changes made in this planning update.
+
+---
+
+### 2026-08-14 — Day 1 evidence, drafts, and first DOCX proof
+
+**What changed:**
+
+- Added `benchmarks/01-day1/run.py`, a repeatable CPU/MPS benchmark runner with explicit device selection, one unmeasured warmup, MPS synchronization, fixed seed, and configurable timed runs.
+- Moved the shared synthetic training workload into `src/from_tensors_to_agents/training.py`; the reading example and the benchmark now use the same implementation.
+- Added a CPU deterministic-training regression test.
+- Replaced the Day 1 observation placeholder with a complete, limited benchmark record in `benchmarks/01-day1/README.md`.
+- Expanded Chapters 1–3 into evidence-backed drafts with minimal/real implementations, experiments, failure modes, alternatives, and takeaways.
+- Fixed the DOCX build pipeline: it now strips leading Docusaurus front matter only in temporary print copies, preventing chapter metadata from overriding the book title.
+
+**Recorded benchmark:**
+
+- Target Mac: macOS 26.1 arm64; Python 3.11.9; PyTorch 2.13.0.
+- MPS was available. The fixed seed-7, 250-epoch workload reached final loss `0.000994` in every timed run.
+- Five MPS timings were 120.537, 122.571, 119.637, 121.099, and 119.836 ms; median 120.537 ms.
+- The record explicitly makes no CPU-versus-MPS, general hardware, or memory claim.
+
+**Verification:**
+
+- `uv run ruff check .` — passed.
+- `uv run pytest` — 11 passed.
+- `cd site && npm run build` — passed after one broken benchmark Markdown link was converted to a print-safe repository path.
+- `./scripts/build-book.sh` — produced `book/build/from-tensors-to-agents.docx`.
+- Rendered and inspected all 15 DOCX pages. The title now correctly reads *From Tensors to Agents*; no visible clipping or overlap was found.
+
+**Print-proof finding:**
+
+The initial proof is readable but intentionally not release-ready: it is short because Chapters 4–14 remain skeletons, and the single bibliography entry leaves substantial white space on the final page. These are expected beta-draft conditions, not a preflight pass for publication.
+
+**Next steps:**
+
+- [ ] Create the tensor-shape, gradient-flow, and training-loop diagrams as editable print-quality source assets.
+- [ ] Rebuild/render after adding diagrams; then close Milestone 1.
+- [ ] Start Milestone 2 with a versioned vision-data fixture and a PyTorch CNN before writing the framework-comparison prose.
+
+**Status:** Milestone 1 substantially progressed; diagram assets remain before its gate can close.

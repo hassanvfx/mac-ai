@@ -4,6 +4,12 @@ set -euo pipefail
 root_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 template="$root_dir/book/templates/lulu-us-trade-interior-template.dotx"
 output_dir="$root_dir/book/build"
+prepared_dir="$(mktemp -d)"
+
+cleanup() {
+  rm -rf "$prepared_dir"
+}
+trap cleanup EXIT
 
 if [[ ! -f "$template" ]]; then
   echo "Missing $template. See book/templates/README.md." >&2
@@ -11,7 +17,20 @@ if [[ ! -f "$template" ]]; then
 fi
 
 mkdir -p "$output_dir"
-chapter_files=("$root_dir"/book/chapters/*.md)
+chapter_files=()
+for source_file in "$root_dir"/book/chapters/*.md; do
+  prepared_file="$prepared_dir/$(basename "$source_file")"
+  # Docusaurus needs YAML front matter for sidebar metadata. Pandoc treats the
+  # same blocks as document metadata and lets a chapter title overwrite the
+  # manuscript title, so remove only a leading front-matter block in this
+  # temporary print-only copy.
+  awk '
+    NR == 1 && $0 == "---" { in_front_matter = 1; next }
+    in_front_matter && $0 == "---" { in_front_matter = 0; next }
+    !in_front_matter { print }
+  ' "$source_file" > "$prepared_file"
+  chapter_files+=("$prepared_file")
+done
 pandoc "${chapter_files[@]}" --metadata-file="$root_dir/book/manuscript.yaml" \
   --resource-path="$root_dir/book" --reference-doc="$template" \
   --citeproc --output="$output_dir/from-tensors-to-agents.docx"
