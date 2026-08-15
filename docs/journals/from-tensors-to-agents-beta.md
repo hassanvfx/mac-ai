@@ -2018,3 +2018,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue fourth-pass worked cases with Chapter 07's local-inference
   workload/capacity scenario and Chapter 10's schema-validation scenario, then
   expand early chapters and regenerate the DOCX for visual review.
+
+### 2026-08-15 — Chapter 7 fourth-pass workload case
+
+**What changed:**
+
+- Added a worked reading of the recorded MLX-LM run: model/cache/prompt/warmup
+  configuration, separately scoped load and generation observations, labeled
+  process/allocator memory views, and explicit non-claims.
+- Added a one-variable-at-a-time capacity-experiment protocol that preserves
+  failing configurations instead of turning a successful short completion into
+  a maximum-capacity claim.
+
+**Verification:**
+
+- `make audit-book` passed at 31,934 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_local_models.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue the fourth-pass worked-case expansion with Chapter 10's
+  schema-validation scenario, then expand early chapters and regenerate the
+  DOCX for visual review.

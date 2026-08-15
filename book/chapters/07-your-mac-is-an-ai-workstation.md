@@ -162,6 +162,42 @@ traceable input to that choice. Keep user data, prompts, logs, and generated
 text within the same privacy review: running weights locally does not by itself
 guarantee that every surrounding service or log is local.
 
+### Worked workload: what the recorded run does—and does not—tell us
+
+The recorded run begins after the selected public model is already available
+in the local cache. The script loads
+`mlx-community/Qwen2.5-0.5B-Instruct-4bit`, applies its one-message chat
+template to the fixed seed-record prompt, warms up with four unmeasured tokens,
+resets the MLX peak counter, then streams at most 64 new tokens at temperature
+zero. The rendered prompt contains 43 tokens. This is a precise workload, not
+a generic statement about “running a half-billion-parameter model on a Mac.”
+
+The trace separates a 542.927 ms model-load observation from the 290.701 ms
+measured generation. The final response reaches the configured 64-token length
+limit and reports 342.260 generated tokens/s. The immediate engineering
+interpretation is limited: this package/model/prompt combination completed that
+warmed-up, length-capped stream under the recorded conditions. It says nothing
+about first-token latency, a cold download, a 4,000-token context, concurrent
+requests, answer quality, or another quantization.
+
+Now inspect memory without adding incompatible fields. Before load, the Python
+process RSS was 333,725,696 bytes; after load it was 785,121,280 bytes; before
+measured generation it was 796,934,144 bytes. After warm-up, MLX reported
+281,784,072 active bytes and 345,934,496 peak bytes, while MLX-LM reported
+0.345934496 GiB peak memory. These are labeled allocator and process views,
+not pieces of an arithmetic total. The correct conclusion is that the record
+contains several reproducible observations; it does not establish the maximum
+model or context that will fit a particular Mac.
+
+To turn this smoke test into a capacity experiment, keep the model, cache
+state, temperature, output cap, and background workload declared. Run a small
+series at one prompt length, then increase only prompt length while retaining
+each raw record. Stop when an explicit threshold is reached—for example an
+error, an observed pressure event, or an application-defined latency limit—and
+report the first failing configuration as well as the successful one before it.
+Changing model size, quantization, prompt length, and concurrent apps at once
+would produce an anecdote rather than a diagnosable result.
+
 ## What broke
 
 The first issue was dependency compatibility: MLX-LM 0.31 requires Transformers
