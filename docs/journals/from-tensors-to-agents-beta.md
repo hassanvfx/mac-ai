@@ -869,3 +869,25 @@ and Lulu proof).
 
 - [ ] Add the chapter-by-chapter evidence and diagram checklist, then expand
   Chapter 4 around the matched PyTorch/TensorFlow comparison.
+
+### 2026-08-15 — Editorial completion matrix
+
+**What changed:**
+
+- Added `docs/editorial-completion-matrix.md`, the manuscript-wide acceptance
+  record for all canonical chapters. It distinguishes the automated audit from
+  the human checks still needed for explanatory depth, source/evidence scope,
+  runnable companions, and print-quality diagrams.
+- Verified every path named in the matrix against the tracked experiments,
+  benchmarks, research notes, evaluation runner, and tests before recording it.
+
+**Decision:**
+
+The matrix labels Chapters 1–3 as **Draft expanded** only. No chapter is
+described as final until its complete prose, evidence, visual, technical edit,
+and generated-DOCX inspection have all happened.
+
+**Next task:**
+
+- [ ] Expand Chapter 4 around the matched PyTorch/TensorFlow comparison and
+  turn its measured limitations into reader-facing guidance.
