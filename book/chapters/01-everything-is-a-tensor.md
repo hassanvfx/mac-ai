@@ -221,6 +221,42 @@ different offset to each *example*, not each feature. The expected result is
 useful because it teaches the more dangerous case: successful execution is not
 evidence that the chosen axes match the intended mathematics.
 
+### Worked case: two valid broadcasts, one intended meaning
+
+Start with the companion batch:
+
+```text
+batch = [[1, 2, 3],
+         [4, 5, 6]]          shape (2, 3)
+```
+
+The experiment's feature bias `[0.1, 0.2, 0.3]` has shape `(3,)`. PyTorch
+aligns it with the rightmost axis and returns `[[1.1, 2.2, 3.3], [4.1, 5.2,
+6.3]]`. That matches the declared story: feature zero receives 0.1 in every
+example, feature one receives 0.2, and feature two receives 0.3. The batch
+axis survives unchanged because the bias has no separate value for an example.
+
+Now use a column-shaped tensor `[[10], [20]]` with shape `(2, 1)`. It also
+broadcasts successfully, returning `[[11, 12, 13], [24, 25, 26]]`. The
+rightmost size-one axis expands across the three features; the leading size-two
+axis aligns with the two examples. This is correct arithmetic for a *per-example
+offset*, but wrong if the tensor was meant to be a per-feature bias. No error
+can reveal that mismatch because the operation is mathematically well defined.
+
+Finally try `[10, 20]` with shape `(2,)`. Right alignment compares its size two
+with the batch's trailing feature size three, so PyTorch raises a mismatch. The
+exception is useful documentation: the library has no basis to infer whether
+the two values describe examples, features, or something else. To make a
+per-example quantity explicit, write it as `(2, 1)`; to make a per-feature
+quantity explicit, write `(3,)` or `(1, 3)`. The extra axis is not decoration;
+it is the sharing rule made visible in the source.
+
+This tiny three-way comparison is a debugging template. When a broadcast
+surprises you, create one example per leading axis and distinct constants per
+candidate meaning. Check the resulting values, not only the result shape. A
+shape assertion will accept both intended and unintended broadcasts; a
+recognizable-value assertion tells you which one actually happened.
+
 ## What broke
 
 The most useful early failure is a shape mismatch. Do not immediately reshape

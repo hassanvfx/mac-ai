@@ -2093,3 +2093,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass expansion with Chapters 1–3 worked learning cases,
   then rebuild the DOCX and inspect an updated 6×9 interim proof.
+
+### 2026-08-15 — Chapter 1 fourth-pass broadcasting case
+
+**What changed:**
+
+- Added a concrete three-way broadcasting case to Chapter 1: intended
+  per-feature bias `(3,)`, valid-but-different per-example offsets `(2, 1)`,
+  and invalid `(2,)` alignment. It uses the actual companion batch values and
+  explains why a successful shape is not proof of intended meaning.
+- Added a reusable debugging procedure based on tiny, recognizable values and
+  assertions about both semantic values and shapes.
+
+**Verification:**
+
+- `make audit-book` passed at 33,010 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest tests/test_day1.py`
+  passed (6 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass worked learning cases with Chapters 2–3, then
+  rebuild the DOCX and inspect an updated 6×9 interim proof.
