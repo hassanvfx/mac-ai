@@ -2490,3 +2490,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Add the remaining canonical teaching material needed to reach the beta
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
+
+### 2026-08-15 — Canonical working glossary
+
+**What changed:**
+
+- Added Appendix E, *Working Glossary*, with shared terms for tensors,
+  training, Apple Silicon execution, retrieval/RAG, structured output, state,
+  approval, evaluation, and print production. Definitions are scoped to the
+  book's evidence-first implementation rather than presenting generic claims.
+
+**Verification:**
+
+- `make audit-book` passed at 41,239 words; Appendix E contributes 1,193
+  words. The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  five appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the remaining canonical teaching material needed to reach the beta
+  word target, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
