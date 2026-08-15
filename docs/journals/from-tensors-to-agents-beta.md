@@ -698,3 +698,34 @@ human-approval boundary before any source, Git, or external write.
   approval/rejection, and deterministic unavailable-model fallback.
 - [ ] Write Chapters 11–12 only after those state transitions have tests and a
   recorded no-network experiment.
+
+---
+
+### 2026-08-14 — Milestone 5B LangGraph persistence and approval workflow
+
+**What changed:**
+
+- Added the optional SQLite LangGraph checkpointer and a deterministic,
+  no-write proposal graph: plan → critique → approval interrupt → approved or
+  rejected terminal state.
+- Added durable `thread_id` checkpoints, `Command(resume=...)` approval and
+  rejection, reopened-database resume tests, empty-evidence fallback, and a
+  source-unchanged rejection test.
+- Fixed the observed SQLite worker-thread error by opening the local demo
+  connection with `check_same_thread=False`; the finding is recorded with its
+  limitation rather than hidden.
+- Added the runnable workflow, research/benchmark records, setup instructions,
+  and substantive Chapters 11–12.
+
+**Verification:**
+
+- Full optional-group lint passed; `pytest` passed 39 tests.
+- Both local workflow commands reached an interrupt, then ended respectively at
+  `rejected_no_write` and `approved_no_write`.
+- Docusaurus build passed. The Lulu-template DOCX built and rendered to 35
+  pages; this remains a beta draft, not a release PDF.
+
+**Next task:**
+
+- [ ] Complete Milestone 5 with the deterministic/single-planner/
+  researcher-critic-writer comparison and expand Chapter 13 from its evidence.

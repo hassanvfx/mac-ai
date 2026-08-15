@@ -67,6 +67,7 @@ mode that requires environment-only credentials:
 df -h .
 uv sync --group agents
 uv run --group agents python experiments/10-systems/compare_structured_planning.py
+uv run --group agents python experiments/11-langgraph/approval_workflow.py
 ```
 
 For the course site, use Node 20:

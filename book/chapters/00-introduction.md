@@ -206,6 +206,7 @@ or require a key; its default example is a no-network fixture comparison:
 df -h .
 uv sync --group agents
 uv run --group agents python experiments/10-systems/compare_structured_planning.py
+uv run --group agents python experiments/11-langgraph/approval_workflow.py
 ```
 
 An intentionally separate `--api` mode requires all three process environment
