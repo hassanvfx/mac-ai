@@ -845,3 +845,27 @@ and Lulu proof).
 
 - [ ] Expand Chapter 3 around the existing tiny-network/MPS experiment, then
   add the first chapter-by-chapter diagram and evidence checklist.
+
+### 2026-08-15 — Chapter 3 editorial expansion
+
+**What changed:**
+
+- Expanded Chapter 3 to 1,602 words. It now explains module/parameter roles,
+  shape preservation through the tiny network, explicit device placement,
+  training-loop details, reproducibility layers, safe MPS fallback, benchmark
+  interpretation, timing synchronization, common device-split failures, and
+  framework/trainer alternatives.
+- Kept the recorded M4 Pro observation explicitly scoped to the versioned
+  synthetic workload and benchmark record.
+
+**Verification:**
+
+- `make audit-book` passed with no structural, citation, or local-link findings.
+- `git diff --check` passed.
+- The audit reports 12,602 words. The chapter expansion is meaningful progress,
+  but the manuscript still needs extensive drafts across Chapters 4–14.
+
+**Next task:**
+
+- [ ] Add the chapter-by-chapter evidence and diagram checklist, then expand
+  Chapter 4 around the matched PyTorch/TensorFlow comparison.
