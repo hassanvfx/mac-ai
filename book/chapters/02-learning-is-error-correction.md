@@ -93,7 +93,8 @@ rather than interpreting a single final number.
 
 The repository's tiny regressor makes this cycle concrete. It trains a
 deliberately small network using mean squared error and SGD; its recorded Day
-1 observation is available in the [benchmark record](../../benchmarks/01-day1/README.md).
+1 observation is available in the companion repository's
+`benchmarks/01-day1/README.md` record.
 That record reports a particular workload and machine configuration. It is not
 a promise that every MPS or CPU workload will have the same timing or memory
 behavior.

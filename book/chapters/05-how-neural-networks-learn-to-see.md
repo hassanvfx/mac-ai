@@ -72,6 +72,22 @@ and test accuracy separately; it also prints the confusion matrix with actual
 classes in rows and predicted classes in columns, followed by every held-out
 mistake. This output is intentionally simple enough to test in CPU CI.
 
+Separate modes make evaluation meaningful. During training, `model.train()`
+declares that train-time behavior should be active; before producing test
+predictions, the script uses `model.eval()` and `torch.no_grad()`. The tiny
+network has no dropout or batch normalization, so the numerical effect is small
+here, but preserving the boundary establishes a habit needed for larger models.
+`no_grad()` also says that prediction is not part of a later update, avoiding
+unnecessary graph storage.
+
+The confusion matrix answers a question accuracy hides: *which* cases are
+wrong? Rows are actual classes and columns are predicted classes. If diagonal
+strokes were repeatedly predicted as vertical, the corresponding off-diagonal
+cell would identify a particular failure direction. The mistake list supplies
+individual fixture indexes to inspect. A zero-error matrix is not empty
+evidence; it documents that none of the declared error categories occurred on
+the frozen held-out data.
+
 ## Experiment
 
 The recorded PyTorch MPS run used 32 training examples per class, 16 validation
@@ -90,6 +106,15 @@ experiment should make the boundary less clean—for example by varying stroke
 position, contrast, or noise—and report which classes then confuse one another
 before considering a real image dataset.
 
+Use this result as a baseline, then make one change at a time. Increase noise
+without changing split sizes and inspect whether errors first concentrate in
+diagonal examples. Translate strokes farther from the center and ask whether
+pooling helps enough. Reduce training examples per class and track the gap
+between train and validation accuracy. Each variation tests a concrete
+hypothesis about data, rather than asking a larger model to solve an undefined
+problem. Commit the changed generator settings and result before describing a
+robustness finding in prose.
+
 ## What broke
 
 The easy failure is to report training accuracy alone. A model can memorize a
@@ -103,6 +128,13 @@ Finally, do not call this a general CNN benchmark. Its purpose is to make the
 flow from pixels to logits inspectable and deterministic; it does not measure
 augmentation, robustness, scale, or real-world generalization.
 
+An incomplete error analysis is a failure too. A single accuracy value omits
+whether one class was never recognized, whether errors repeat a visual pattern,
+and whether mistakes came from training, validation, or test data. Keep class
+names and matrix ordering with the recorded result. When a real dataset
+replaces this fixture, examine labels as well as predictions: a model cannot
+learn a distinction that annotators apply inconsistently.
+
 ## Alternatives and when to use them
 
 For image-like grids with local patterns, convolution gives a useful inductive
@@ -111,6 +143,14 @@ classifier is a worthwhile baseline when the relationship may be simple. For
 large-scale vision work, residual CNNs and vision transformers are common
 alternatives, but they add capacity and evaluation requirements that would hide
 this chapter's basic lesson.
+
+Data augmentation is an alternative when the real deployment distribution
+contains harmless rotations, crops, or illumination changes. Apply it only to
+the training partition and state exactly which transformations are permitted;
+augmenting held-out examples invalidates the evaluation boundary. Residual CNNs
+can train deeper feature extractors, and vision transformers use patch tokens
+and attention instead of convolution. Both are useful later, but neither makes
+a tiny, perfectly separable fixture a proxy for real-world vision.
 
 ## Takeaway
 

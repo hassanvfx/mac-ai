@@ -953,3 +953,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Complete Chapter 5's evaluation/error-analysis and augmentation sections,
   then render the next DOCX proof after several additional chapter expansions.
+
+### 2026-08-15 — Chapter 5 evaluation pass and site-link correction
+
+**What changed:**
+
+- Completed the first Chapter 5 editorial pass with train/evaluation mode,
+  confusion-matrix interpretation, controlled-difficulty experiments,
+  incomplete error-analysis failure mode, and augmentation boundaries.
+- Docusaurus identified that a Markdown link from Chapter 2 to a repository
+  benchmark was interpreted as a missing site route. Replaced only that link
+  with its exact code-form path, preserving the manuscript reference without
+  asserting a non-existent page in the course site.
+
+**Verification:**
+
+- `make audit-book` passed at 13,815 words.
+- `cd site && npm run build` passed after the link correction.
+- The Docusaurus update-check permission warning is external configuration
+  noise; it did not affect compilation or static-file generation.
+
+**Next task:**
+
+- [ ] Expand Chapter 6 around the tokenizer and fixed transformer-inference
+  experiment, then add an editable tokenization/attention data-flow visual.
