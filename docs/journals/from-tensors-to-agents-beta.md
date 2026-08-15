@@ -1784,3 +1784,31 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 11 a third-pass expansion: define graph state, transition
   invariants, deterministic routing, checkpoint scope, and failure handling
   before adding more agent roles.
+
+### 2026-08-15 — Chapter 11 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 11 from 1,206 to 1,845 words. It now specifies transition
+  invariants, the distinction between state and a transcript, deterministic
+  state-graph test coverage, and appropriate checkpoint scope.
+- Added thread-ID integrity, stale-resume handling, trace-level acceptance
+  checks, deterministic model-fallback behavior, replay/stale-approval risks,
+  and the limits of the tutorial's local SQLite persistence design.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 28,257 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_approval_workflow.py` passed (3 tests).
+- The approval demonstration ran with `chapter-11-third-pass`, paused at its
+  explicit no-write interrupt, and ended `approved_no_write`.
+- `git diff --check` passed. The generated checkpoint remains under ignored
+  `.book-intelligence/`.
+
+**Next task:**
+
+- [ ] Give Chapter 12 a third-pass expansion: sharpen approval scope, human
+  review ergonomics, persistence and retention choices, rejection/revision
+  loops, and how a future writer remains least-privileged.

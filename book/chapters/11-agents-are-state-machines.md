@@ -37,6 +37,20 @@ they are easy to forget during a refactor. If they are states and edges, a test
 can enter each branch and assert its terminal status without relying on a model
 to behave consistently.
 
+Write an invariant beside each transition. In this graph, evidence paths are
+read-only inputs from retrieval; a planning node may add a proposal but cannot
+add authority; the approval node is the only source of a decision; and both
+terminal nodes are explicitly no-write. An invariant narrows review: instead
+of asking whether an agent “seems safe,” ask whether any edge can reach a
+state-changing node without an approval event scoped to the proposed action.
+
+State is not the same thing as a transcript. Save the smallest information
+needed to resume and audit the workflow: objective, evidence paths, proposal,
+critique, model/fallback status, decision, and terminal status. Avoid placing
+credentials, whole repositories, or unnecessary private prompts in a
+checkpoint. A useful checkpoint should help recover a pending decision without
+creating a new unreviewed data store.
+
 ## Minimal implementation
 
 [approval_workflow.py](../../src/from_tensors_to_agents/approval_workflow.py)
@@ -65,6 +79,13 @@ what data it reads, what it writes, whether it can be retried, and whether it
 has an external effect. A node with an external effect deserves a separate
 approval boundary, not merely an earlier confirmation in an unrelated branch.
 
+The transition table is also a testing plan. For every conditional route, make
+one deterministic fixture that reaches it. For every persisted state, close and
+reopen the storage used by the demonstration. For every purportedly harmless
+node, assert that a tracked source remains unchanged. This is why a state graph
+is useful even before a model is selected: its reliability properties can be
+verified with ordinary data and control flow rather than sampled language.
+
 ## Real implementation
 
 Run the local SQLite-backed graph:
@@ -88,6 +109,22 @@ names one sequence of work. Starting an unrelated proposal with an old ID risks
 mixing its history with a new objective, so use a new ID for a new proposal and
 resume only when the pending decision is genuinely the same one.
 
+Thread IDs are part of the integrity boundary. Generate a new, descriptive ID
+for each independent revision request, and display the resumed objective and
+evidence paths before accepting a decision. If a user cannot recognize the
+pending work, reject it and start a fresh graph. A checkpoint proves that some
+state was saved; it does not prove that it still matches the current checkout.
+For a long-lived workflow, compare an evidence revision or content hash at
+resume time and route stale evidence back to retrieval rather than approving an
+obsolete plan.
+
+The SQLite example is intentionally local and single-user. Its role is to
+demonstrate checkpoint/resume semantics, not to prescribe a shared production
+database. Concurrent users, hosted workers, retention requirements, backup,
+and access control need a separately designed store. Carry the same state
+contract forward, but do not assume that a file created for a tutorial is a
+complete operational design.
+
 ## Experiment
 
 Run the rejection and approval cases with distinct thread IDs. Confirm their
@@ -103,6 +140,22 @@ once with approval under separate IDs. The important observation is not that a
 graph resumes—it is that both paths are visible, deterministic, and end without
 modifying a tracked source. The automated reopen test is stronger evidence than
 leaving one SQLite file on a laptop after a manual run.
+
+Test the state trace, not just the final label. A rejected workflow should
+include the retrieved paths, an empty-or-supported plan according to its input,
+the critique, the interruption payload, and the `rejected_no_write` terminal
+status. An approved workflow in this beta must end at `approved_no_write` too:
+approval confirms review of a proposal, not permission for hidden execution.
+This distinction prevents a misleading future change where the approved branch
+quietly gains a file-writing tool because it already has a boolean named
+`approved`.
+
+For an unavailable planning model, preserve the fallback status in state and
+continue only with the deterministic proposal policy. Do not disguise fallback
+text as a model result, and do not make a later resume choose a provider that
+was not part of the original request. A human can decide to rerun the workflow
+under a declared model configuration; that is a new experiment, not automatic
+recovery.
 
 ## What broke
 
@@ -120,6 +173,13 @@ charging an account is not. If a future system adds a writer, put it after a
 fresh, scoped approval and make its intended diff inspectable. Never hide an
 irreversible effect in a node that may be replayed.
 
+Stale approval is a third hazard. A person may approve a plan, the underlying
+chapter may change, and a delayed process may later resume with evidence that no
+longer supports the proposed edit. The beta prevents writes entirely, which
+keeps this case safe. A future writer must revalidate evidence and display the
+exact intended diff immediately before a scoped approval; a broad “continue”
+button is not enough.
+
 ## Alternatives
 
 For a short, stateless task, a plain function and an explicit confirmation can
@@ -133,6 +193,13 @@ and version control: gather evidence, prepare a diff, review, approve, merge
 or reject. For many editorial tasks it is clearer than an agent runtime. Use a
 programmatic graph when durable routing and interruption reduce real work, not
 because state diagrams make a simple question more impressive.
+
+Event logs or a conventional job queue can also model parts of this workflow.
+They are useful when many independent tasks need scheduling, but they do not
+replace an explicit approval state and evidence contract. A graph library earns
+its complexity when its persisted routing, interrupt semantics, and testable
+state are requirements; otherwise a typed function plus a reviewable pull
+request remains a strong, lower-risk alternative.
 
 ## When to use it—and when not to
 
