@@ -208,7 +208,9 @@ def review_corpus(root: Path) -> list[str]:
             if target.startswith(("http://", "https://", "#", "mailto:")):
                 continue
             target_path = (path.parent / target).resolve()
-            if not target_path.exists():
+            if root not in target_path.parents and target_path != root:
+                findings.append(f"{relative}: link escapes corpus {target}")
+            elif not target_path.exists():
                 findings.append(f"{relative}: unresolved link {target}")
     return findings
 

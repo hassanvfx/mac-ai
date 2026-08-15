@@ -54,6 +54,11 @@ def test_grounded_answer_refuses_missing_evidence(tmp_path: Path) -> None:
     assert grounded_answer(build_index(tmp_path), "unrelated legal compliance").startswith("No grounded answer")
 
 
+def test_empty_corpus_returns_no_index_and_refuses_answer(tmp_path: Path) -> None:
+    assert build_index(tmp_path) == []
+    assert grounded_answer(build_index(tmp_path), "any question").startswith("No grounded answer")
+
+
 def test_plan_requires_approval_and_checkpoint_never_touches_sources(tmp_path: Path) -> None:
     make_corpus(tmp_path)
     proposal = propose_improvement(build_index(tmp_path), "improve embeddings experiment")
@@ -71,6 +76,13 @@ def test_review_finds_unresolved_links(tmp_path: Path) -> None:
     chapter = tmp_path / "book" / "chapters" / "08-embeddings.md"
     chapter.write_text("# Embeddings\n\n[Missing](missing.md)")
     assert any("unresolved link" in finding for finding in review_corpus(tmp_path))
+
+
+def test_review_rejects_links_that_escape_the_corpus(tmp_path: Path) -> None:
+    make_corpus(tmp_path)
+    chapter = tmp_path / "book" / "chapters" / "08-embeddings.md"
+    chapter.write_text("# Embeddings\n\n[Outside](../../../../etc/hosts)")
+    assert any("link escapes corpus" in finding for finding in review_corpus(tmp_path))
 
 
 def test_saved_indexes_are_local_artifacts(tmp_path: Path) -> None:

@@ -1064,3 +1064,24 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Add further failure fixtures for empty corpus and invalid/missing source
   configuration, then continue the Chapter 7 and Chapter 8 editorial passes.
+
+### 2026-08-15 — Empty-corpus and path-boundary failure fixtures
+
+**What changed:**
+
+- Added a deterministic empty-corpus regression: indexing yields no evidence and
+  grounded answering refuses the request.
+- Hardened corpus review so a Markdown link resolving outside the configured
+  corpus is reported as an escaping link, even if that external file exists.
+- Added a regression fixture for that path-boundary failure.
+
+**Verification:**
+
+- Book Intelligence, evaluation, and reliability targeted tests passed: 11
+  tests total.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue Chapter 7's remaining workload/quality boundaries and expand
+  Chapter 8's embedding/retrieval teaching prose and visual.
