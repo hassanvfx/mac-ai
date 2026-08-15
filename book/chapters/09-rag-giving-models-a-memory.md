@@ -79,6 +79,12 @@ the latter two are provenance and generation failures. Generated indexes are
 therefore local, live indexes are rebuilt from tracked files, and tests assert
 missing-evidence behavior and citation/path propagation.
 
+Treat an index as a cache, not as the corpus. When a chapter moves or a
+benchmark is revised, an old index can still return text that looks relevant
+but no longer represents the checked-out project. Rebuild from tracked files,
+verify that every rendered path resolves inside the corpus, and refuse to turn
+an empty or weak retrieval result into a confident conclusion.
+
 ## Alternatives
 
 A traditional search UI can be preferable when the reader wants to browse, and

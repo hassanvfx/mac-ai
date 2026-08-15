@@ -1108,3 +1108,6 @@ and generated-DOCX inspection have all happened.
 - Began the RAG chapter expansion by separating retrieval, grounding, and
   generation. The evidence-only control remains the basis for later fluent
   answers, rather than treating fluent prose as proof.
+- Added stale-index guidance: indexes are caches rebuilt from tracked files;
+  rendered evidence paths must remain inside the corpus and weak retrieval must
+  fail closed.
