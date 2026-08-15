@@ -375,6 +375,13 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
   not broaden default repository workflow permissions unless separately
   approved.
 
+**Resolution:**
+
+- The deploy job contained a GitHub expression inside compact YAML mapping
+  syntax. GitHub rejected the workflow during registration, before any job was
+  created. Replaced it with standard block mapping syntax and will verify the
+  new deployment run.
+
 ---
 
 ### 2026-08-15 — Public reader access, labs, and QR bridge
