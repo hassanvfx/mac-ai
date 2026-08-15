@@ -1993,3 +1993,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue fourth-pass worked cases with Chapter 14's beta release gate,
   then Chapters 07 and 10; afterwards expand the early chapters and regenerate
   the DOCX for visual review.
+
+### 2026-08-15 — Chapter 14 fourth-pass release-gate walkthrough
+
+**What changed:**
+
+- Added a concrete local beta release-gate walkthrough to Chapter 14. It maps
+  clean-install tests, manuscript audit, site build, DOCX conversion, visual
+  review, Word PDF/preflight, and user-gated publishing decisions to the scope
+  each artifact actually proves.
+- Recorded the unresolved API-comparison, final cover, ISBN, proof-order, and
+  GitHub Pages inputs as deliberate exclusions rather than failed local tests.
+
+**Verification:**
+
+- `make audit-book` passed at 31,583 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_reliability.py` passed (1 test).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass worked cases with Chapter 07's local-inference
+  workload/capacity scenario and Chapter 10's schema-validation scenario, then
+  expand early chapters and regenerate the DOCX for visual review.

@@ -227,6 +227,41 @@ where, and for how long? How does the feature roll back without removing source
 work? If these questions cannot be answered, keep the capability read-only.
 This provides a concrete stopping rule for beta enthusiasm.
 
+### Worked release gate: what a local beta can honestly claim
+
+Start at a clean checkout and install the locked Python environment. Run the
+numerical and assistant tests, then run `make audit-book`. A successful result
+establishes only the contracts those commands cover: deterministic experiment
+expectations, retrieved-path and citation-key preservation, missing-evidence
+refusal, no-write planning, workflow state transitions, required chapter
+headings, valid citation keys, and resolvable local manuscript paths. Preserve
+the command output or CI result with the commit identifier; do not summarize it
+as “the book is correct.”
+
+Next build the Docusaurus site from the canonical chapters. That result checks
+the presentation shell and navigation build, not whether a reader understands
+the material. Build the DOCX from the committed Lulu reference template. That
+checks the manuscript conversion and print-asset pipeline, not final print
+approval. Render the DOCX to page images and inspect the pages at the intended
+6×9 scale; a table break, clipped code listing, or unreadable diagram can pass
+every preceding text and Python check.
+
+At this point the project can call itself a *local beta candidate* only if the
+word target, editorial matrix, automated gates, and interim visual proof all
+meet their stated criteria. It cannot yet claim a release-ready Lulu interior:
+the final export must come from Microsoft Word on macOS, its PDF needs
+preflight and page-by-page review, and current Lulu requirements must be
+checked against the actual upload artifact. It also cannot claim a deployed
+course without a chosen GitHub remote and Pages configuration.
+
+Finally, keep the release record honest about exclusions. This repository has
+not run a configured API comparison, so it has no comparative API latency,
+token-cost, or quality result. It has no final cover because page count is not
+frozen. It has no ISBN or proof-order decision. These are not failed tests;
+they are deliberate user-gated production decisions. Naming them prevents a
+green local suite from being mistaken for authorization to publish or spend
+money.
+
 ## Evidence trail
 
 Read `research/07-workflow-graphs/notes.md`, run
