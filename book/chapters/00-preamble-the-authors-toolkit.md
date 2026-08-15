@@ -17,6 +17,21 @@ to read this book, run its experiments, or use the Book Intelligence Assistant.
 It is a development-memory layer for readers who want their preferred coding
 agent to work from a durable project record.
 
+## Optional reader tool: ClineFlow
+
+![ClineFlow and the Open Knowledge Format: persistent context, portable knowledge, and agent-readable project memory.](../assets/tooling/clineflow-open-knowledge-format.png)
+
+**Repository:** [`github.com/hassanvfx/clineflow`](https://github.com/hassanvfx/clineflow)
+
+Read its current README first. If its workflow fits your project, install it
+with the documented command:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/hassanvfx/clineflow/main/install.sh | bash
+```
+
+The printed edition includes a QR code for this same repository link.
+
 ## The problem: useful work disappears between prompts
 
 A code change is only one part of engineering. A useful record also answers:
@@ -63,14 +78,7 @@ record the decision and evidence as work progresses, then commit the code and
 record together. It is useful whether the work is a one-file fix, a research
 prototype, or a larger system with multiple repositories.
 
-## Install it only when it fits your project
-
-Read ClineFlow's current README before installing it. If its workflow fits, use
-the project-provided installation instructions:
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/hassanvfx/clineflow/main/install.sh | bash
-```
+## Review it before adopting it
 
 Review the installed files before accepting them into an established project.
 Do not overwrite project-specific agent instructions, CI files, or repository

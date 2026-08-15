@@ -27,6 +27,14 @@ def main() -> None:
         fail("unexpected deployed lab base URL")
     if data["start_here"]["url"] != "https://hassanvfx.github.io/mac-ai/":
         fail("unexpected course start URL")
+    clineflow = data.get("tooling", {}).get("clineflow", {})
+    if clineflow.get("url") != "https://github.com/hassanvfx/clineflow":
+        fail("unexpected ClineFlow reader-tool URL")
+    if clineflow.get("command") != "curl -fsSL https://raw.githubusercontent.com/hassanvfx/clineflow/main/install.sh | bash":
+        fail("unexpected ClineFlow install command")
+    preamble = (ROOT / "book/chapters/00-preamble-the-authors-toolkit.md").read_text(encoding="utf-8")
+    if clineflow["url"] not in preamble or clineflow["command"] not in preamble:
+        fail("The Author's Toolkit must expose the ClineFlow link and install command")
     for lab in data["chapters"]:
         for key in ("chapter", "experiment", "benchmark"):
             path = ROOT / lab[key]

@@ -5,6 +5,11 @@
     "svg": "book/assets/qrcodes/start-here.svg"
   },
   {
+    "target": "clineflow-install",
+    "url": "https://github.com/hassanvfx/clineflow",
+    "svg": "book/assets/qrcodes/clineflow-install.svg"
+  },
+  {
     "target": "chapter-01-lab",
     "url": "https://hassanvfx.github.io/mac-ai/labs/01",
     "svg": "book/assets/qrcodes/chapter-01-lab.svg"

@@ -5,6 +5,13 @@
     "url": "https://hassanvfx.github.io/mac-ai/",
     "caption": "Scan to start the course, clone the repository, and follow the ten-day roadmap."
   },
+  "tooling": {
+    "clineflow": {
+      "url": "https://github.com/hassanvfx/clineflow",
+      "caption": "Scan to open ClineFlow's README and install its optional journaling workflow.",
+      "command": "curl -fsSL https://raw.githubusercontent.com/hassanvfx/clineflow/main/install.sh | bash"
+    }
+  },
   "chapters": [
     {"id":"01","title":"Everything Is a Tensor","chapter":"book/chapters/01-everything-is-a-tensor.md","experiment":"experiments/01-tensors/broadcasting.py","command":"uv run python experiments/01-tensors/broadcasting.py","expected":"Tensor shapes and broadcasting output.","benchmark":"benchmarks/01-day1/README.md"},
     {"id":"02","title":"Learning Is Error Correction","chapter":"book/chapters/02-learning-is-error-correction.md","experiment":"experiments/02-gradients/autograd.py","command":"uv run python experiments/02-gradients/autograd.py","expected":"Analytical and autograd gradients agree.","benchmark":"benchmarks/01-day1/README.md"},

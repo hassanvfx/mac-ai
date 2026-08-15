@@ -19,6 +19,7 @@ def main() -> None:
     OUTPUT.mkdir(parents=True, exist_ok=True)
     generated: list[dict[str, str]] = []
     targets = [("start-here", data["start_here"]["url"])]
+    targets.append(("clineflow-install", data["tooling"]["clineflow"]["url"]))
     targets.extend((f"chapter-{chapter['id']}-lab", f"{data['base_url']}/{chapter['id']}") for chapter in data["chapters"])
     for name, url in targets:
         widget = qr.QrCodeWidget(url)

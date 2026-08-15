@@ -2972,6 +2972,50 @@ and generated-DOCX inspection have all happened.
 - Release preflight intentionally rejects the current 162 ppi title art; this
   is recorded as a beta-only limitation rather than an upload approval.
 
+### 2026-08-15 — ClineFlow reader QR and installation bridge
+
+**What changed:**
+
+- Added ClineFlow to the versioned QR manifest. Its QR resolves directly to
+  `https://github.com/hassanvfx/clineflow`; the source preamble presents the
+  same official install command and marks the workflow optional.
+- Added a print-only ClineFlow panel after The Author's Toolkit, using the same
+  QR, link, command, AirDrop guidance, and review-before-commit safety boundary
+  as the chapter lab panels.
+- Kept the online reader page prominent through the canonical preamble link;
+  no runtime dependency on ClineFlow was added.
+
+**Verification:**
+
+- Regenerated 17 QR assets, rebuilt the beta master, and rendered the new
+  panel. It begins on its own page and contains no residual page-break text.
+- Publication order/TOC validation, reader-bridge validation, preflight, the
+  full 45-test suite, and the Docusaurus production build passed.
+
+### 2026-08-15 — ClineFlow visual installation card
+
+**What changed:**
+
+- Added the supplied Open Knowledge Format / ClineFlow visual to the canonical
+  Author's Toolkit preamble. The section now presents a prominent repository
+  route in code-style notation and the documented install command in a standard
+  shell code block.
+- Replaced the earlier inline blockquote so the web course and print manuscript
+  share the same visual, link, command, and optional-tool framing. The existing
+  print QR panel remains the quick phone-to-Mac handoff.
+
+**Verification:**
+
+- Rebuilt and rendered the preamble: the image fits the interior safe width,
+  the repository and command are readable, and no layout clipping is present.
+- Publication validation, reader-bridge validation, full tests, site build,
+  and `git diff --check` passed.
+
+**Commit intent:**
+
+- Publish the ClineFlow QR bridge and visual installation card together so the
+  book, course, generated QR assets, and `main` branch remain synchronized.
+
 ### 2026-08-15 — Beta manuscript word target reached
 
 **What changed:**
