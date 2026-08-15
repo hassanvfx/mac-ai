@@ -12,6 +12,12 @@ time. It does not retrain the model or make it truthful. A good RAG system
 therefore begins with a more modest promise: retrieve evidence, show where it
 came from, and say when there is no evidence.
 
+That promise separates three stages that are often collapsed: retrieval finds
+candidate chunks, grounding constrains output to those chunks, and generation
+turns grounded material into prose. A fluent response can fail at any stage.
+This chapter keeps generation out of the control path so a reader can inspect
+the evidence before trusting a summary.
+
 ## Problem
 
 The Book Intelligence Assistant must answer questions about this changing

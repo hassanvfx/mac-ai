@@ -1102,3 +1102,9 @@ and generated-DOCX inspection have all happened.
   a rasterizer or source-derived print PNG is required before a visually
   complete DOCX proof can be accepted.
 - No PDF or print-ready visual claim is made from this build.
+
+### 2026-08-15 — Chapter 9 grounding boundary (start)
+
+- Began the RAG chapter expansion by separating retrieval, grounding, and
+  generation. The evidence-only control remains the basis for later fluent
+  answers, rather than treating fluent prose as proof.
