@@ -1103,6 +1103,16 @@ and generated-DOCX inspection have all happened.
   complete DOCX proof can be accepted.
 - No PDF or print-ready visual claim is made from this build.
 
+### 2026-08-15 — DOCX SVG conversion resolved and proof rendered
+
+- Checked free space (44 GiB) and installed Homebrew `librsvg`; `rsvg-convert`
+  2.62.3 is now available for Pandoc.
+- Rebuilt the DOCX with no SVG conversion warnings. Rendered the proof to PNG
+  pages and visually inspected normal prose and the CNN diagram page: both are
+  clean, readable, and free of clipping in the rendered proof.
+- The current proof is 53 pages. This resolves the diagram-conversion blocker,
+  not the manuscript-length target or final Word-PDF production gate.
+
 ### 2026-08-15 — Chapter 9 grounding boundary (start)
 
 - Began the RAG chapter expansion by separating retrieval, grounding, and
