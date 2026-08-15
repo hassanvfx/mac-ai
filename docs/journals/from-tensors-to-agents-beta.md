@@ -57,11 +57,14 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 
 ### Milestone 2 — Vision and Framework Comparison
 
-- [ ] Build a reproducible CNN with train/validation/test metrics and error analysis.
-- [ ] Implement the equivalent TensorFlow/Keras model with matched data, split, seed, and metrics.
-- [ ] Write Chapters 4–5 around recorded results rather than API walkthroughs.
+- [x] Build a reproducible CNN with train/validation/test metrics and error analysis.
+- [x] Implement the equivalent TensorFlow/Keras model with matched data, split, seed, and metrics.
+- [x] Write Chapters 4–5 around recorded results rather than API walkthroughs.
 
 **Gate:** The PyTorch/TensorFlow comparison table is supported by runnable code and recorded results.
+
+**Status:** Complete. The fixture demonstrates task-level equivalence only; it
+does not make a framework-speed or real-image-performance claim.
 
 ### Milestone 3 — Transformers and Apple Silicon
 
@@ -110,13 +113,18 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 ### Repository foundation
 
 - Python project is managed by `uv`, targets Python 3.11, and has `uv.lock` committed.
+- TensorFlow/Keras is an opt-in `uv` group. Its current recorded run uses
+  TensorFlow 2.21.0 on CPU; it is not required by the core development group.
 - Quality commands are exposed through `Makefile`; the initial Python suite contains deterministic Day 1 and Book Intelligence tests.
 - Code is MIT licensed in `LICENSE`; book text and visual assets are reserved as described in project documentation.
 - A Lulu US Trade interior template is committed at `book/templates/lulu-us-trade-interior-template.dotx` with provenance in `book/templates/README.md`.
 
 ### Editorial, site, and publishing baseline
 
-- `book/chapters/00-introduction.md` through `14-building-an-ai-system-you-can-trust.md` exist as initial chapter drafts/skeletons.
+- The introduction is the living onboarding chapter: prerequisites, base and
+  optional installation, validation, build paths, and ClineFlow journaling are
+  documented there and will grow with the project.
+- `book/chapters/00-introduction.md` through `14-building-an-ai-system-you-can-trust.md` exist; Chapters 1–5 now contain substantive draft material.
 - `site/` is a Docusaurus shell over the book chapters, with CI and GitHub Pages workflow definitions in `.github/workflows/`.
 - `scripts/build-book.sh`, `scripts/export-pdf.applescript`, and `scripts/preflight_pdf.py` define the DOCX/PDF route. A release PDF still requires Word on macOS and visual inspection.
 
@@ -129,8 +137,8 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 
 ### Validated before this journal
 
-- `uv run ruff check .` — passed.
-- `uv run pytest` — 10 tests passed.
+- `uv run --group tensorflow ruff check .` — passed.
+- `uv run --group tensorflow pytest` — 15 tests passed.
 - `npm ci` followed by `npm run build` in `site/` — passed under Node 20.
 
 Re-run these commands after dependency or content changes; the above is a recorded baseline, not a perpetual guarantee.
@@ -149,8 +157,8 @@ Re-run these commands after dependency or content changes; the above is a record
 ## Risks and Open Questions
 
 - The current chapters are foundational drafts, not yet the target 180–220 manuscript pages.
-- Day 1 MPS measurements have not been captured as a benchmark record on the target Mac.
-- TensorFlow, transformer, MLX/MLX-LM, LangChain, and full LangGraph implementations are planned but incomplete.
+- Transformer, MLX/MLX-LM, LangChain, and full LangGraph implementations are planned but incomplete.
+- The Milestone 2 timing observations are deliberately not a framework-speed comparison; a normalized multi-run protocol remains future work.
 - DOCX can be generated when Pandoc/template requirements are met; Word export and page-by-page print inspection remain macOS release tasks.
 - The GitHub Pages workflow contains placeholder repository/organization values until the publishing destination is chosen.
 - Performance and memory statements must remain absent or explicitly provisional until a versioned measurement record exists.
@@ -170,8 +178,8 @@ Performance, memory, framework, and model-behavior statements must cite either `
 
 | Chapters | Topic | Editorial state | Evidence state |
 | --- | --- | --- | --- |
-| 1–3 | tensors, gradients, PyTorch | initial drafts | Day 1 examples/tests exist; benchmark/diagrams pending |
-| 4–5 | TensorFlow comparison, vision | skeletons | CNN and matched comparison pending |
+| 1–3 | tensors, gradients, PyTorch | substantive evidence-backed drafts | Day 1 examples, tests, MPS record, and diagrams committed |
+| 4–5 | TensorFlow comparison, vision | substantive evidence-backed drafts | matched CNN fixture, tests, results, and limitations committed |
 | 6–7 | transformers, Apple Silicon | skeletons | tokenizer, inference, MLX benchmarks pending |
 | 8–9 | embeddings and RAG | initial baseline | deterministic fixture implementation exists; learned embeddings/evaluation pending |
 | 10–13 | systems, graphs, agents | skeletons | direct SDK/LangChain/LangGraph comparison pending |
@@ -217,9 +225,9 @@ This is the operational order of work. A later milestone may be designed early, 
 
 ### Track C — Learning experiments and Apple Silicon evidence
 
-- [ ] Record the exact Day 1 M4 Pro result: OS/device, Python/Torch versions, seed, workload, MPS/CPU selection, time, output checks, and observed limitations.
-- [ ] Add a reproducible vision dataset fixture, CNN train/validation/test loop, metrics, and error-analysis output.
-- [ ] Add a TensorFlow/Keras equivalent that explicitly matches data preprocessing, split, seed, epoch budget, and metrics.
+- [x] Record the exact Day 1 M4 Pro result: OS/device, Python/Torch versions, seed, workload, MPS/CPU selection, time, output checks, and observed limitations.
+- [x] Add a reproducible vision dataset fixture, CNN train/validation/test loop, metrics, and error-analysis output.
+- [x] Add a TensorFlow/Keras equivalent that explicitly matches data preprocessing, split, seed, epoch budget, and metrics.
 - [ ] Add tokenizer vocabulary/segmentation inspection and controlled pretrained-transformer inference.
 - [ ] Add MLX and MLX-LM local experiments only after selecting versions/models that run on the target Mac; document quantization and prompt workload.
 - [ ] Normalize benchmark methods before comparing PyTorch MPS, TensorFlow, MLX, and MLX-LM; do not imply comparisons from incompatible workloads.
@@ -277,23 +285,23 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 
 | Area | Present now | Remaining before beta |
 | --- | --- | --- |
-| Repository | Git `main`, two local setup commits, Python/Node lockfiles, CI workflows | choose remote; configure real Pages destination; publish/tag only with approval |
-| Book | 15 Markdown files: introduction plus Chapters 1–14; Lulu interior template committed | substantive 180–220-page prose, citations, diagrams, cross-link audit, iterative proofs |
+| Repository | Git `main`, local setup and Day 1 commits, Python/Node lockfiles, CI workflows | choose remote; configure real Pages destination; publish/tag only with approval |
+| Book | 15 Markdown files: a living setup introduction, Chapters 1–5 substantive drafts, Lulu interior template committed | 180–220-page prose, later citations/diagrams, cross-link audit, iterative proofs |
 | Site | Docusaurus configuration and lockfile; build previously passed | content/link audit and real deployment configuration |
-| Day 1 | tensor, autograd, tiny PyTorch/MPS examples and tests | measured benchmark record, diagrams, expanded explanatory prose |
-| Later experiments | directory structure and planning only | CNN/TF, tokenizer/transformer, MLX/MLX-LM, standardized benchmarks |
+| Day 1 | tensor, autograd, tiny PyTorch/MPS examples, tests, MPS record, diagrams | retain evidence discipline through later chapters |
+| Vision / TensorFlow | matched synthetic CNN scripts, tests, record, and Chapters 4–5 | controlled-difficulty/real-data work only before broader vision claims |
+| Later experiments | directory structure and planning only | tokenizer/transformer, MLX/MLX-LM, standardized benchmarks |
 | Book Intelligence | deterministic search, grounded-answer baseline, approval checkpoint, fixtures/tests | learned embeddings, metadata-rich ingestion, quality evaluation, SDK/LangChain/LangGraph, workflow comparison |
 | Publishing | Pandoc/Word/preflight scripts and Lulu template | successful iterative DOCX proof, Word PDF, preflight/render inspection, final print proof |
 
-## Immediate Next Session Plan — Milestone 1
+## Immediate Next Session Plan — Milestone 3
 
-1. Read this journal and the Day 1 scripts/tests.
-2. Run the Day 1 experiment on the target Mac with a fixed seed; record the full environment and measurement method in `benchmarks/01-day1/`.
-3. Add or strengthen tests only where the recorded behavior requires it; rerun Ruff and pytest.
-4. Add source notes/citations and write the measured narrative for Chapters 1–3.
-5. Create the first three diagrams as print-quality source assets.
-6. Run a DOCX build; record any missing tool/template/layout blockers without treating a PDF as release-ready.
-7. Update this journal with changed paths, results, decisions, failures, and the next smallest task before committing.
+1. Read this journal and the current Chapter 6–7 skeletons.
+2. Check disk space before adding a transformer or local-model dependency; install the smallest supported optional group when there is adequate headroom.
+3. Create tokenizer vocabulary/segmentation inspection and a controlled pretrained-transformer inference experiment, with a frozen fixture and CPU fallback tests.
+4. Select MLX/MLX-LM versions and a model that run on this Mac; record model, quantization, prompt, device, timing method, and memory-observation method.
+5. Only after evidence exists, expand Chapters 6–7 and update the living setup introduction with the new installation commands.
+6. Run Python, site, DOCX, and visual-layout checks; update this journal before committing.
 
 ## Completion Checklist
 
@@ -455,3 +463,63 @@ Milestone 1 is complete. The proof is still a draft artifact—not a release PDF
 - [ ] Expand Chapters 4–5 from recorded comparison evidence.
 
 **Status:** Milestone 1 complete; Milestone 2 ready to begin.
+
+---
+
+### 2026-08-14 — Vision comparison, optional TensorFlow, and living setup chapter
+
+**What changed:**
+
+- Added the deterministic 16×16 geometric-image fixture, reusable PyTorch CNN,
+  and confusion-matrix utility in `src/from_tensors_to_agents/vision.py`.
+- Added matched PyTorch and TensorFlow/Keras training programs under
+  `experiments/05-vision/` and `experiments/04-tensorflow/`.
+- Added fixture/model regression tests and the complete observation record at
+  `benchmarks/02-vision/README.md`.
+- Added a TensorFlow 2.21 opt-in `uv` group and its lockfile resolution after
+  checking that this Mac had 14 GiB free. TensorFlow imported successfully and
+  reported CPU as its only visible device.
+- Added the framework/vision research note and TensorFlow installation citation.
+- Expanded Chapters 4–5 from the observed contract and results, without a
+  speed or real-image-performance claim.
+- Rewrote Chapter 0 as a living installation and onboarding chapter. It now
+  documents prerequisites, base validation, optional TensorFlow installation,
+  site/DOCX builds, disk-space policy, and optional ClineFlow journaling.
+
+**Recorded results:**
+
+- PyTorch 2.13.0 reached 1.000 train/validation/test accuracy on the fixture
+  with MPS selected and with CPU explicitly selected.
+- TensorFlow/Keras 2.21.0 reached the same metrics on CPU.
+- Every held-out confusion matrix was the identity matrix with zero mistakes.
+- The TensorFlow run emitted a non-fatal `use_unbounded_threadpool` NodeDef
+  compatibility warning. Training and evaluation completed; the warning is
+  preserved as an environment observation.
+- The elapsed values are intentionally not compared: they are one-run
+  observations with different device paths and no shared warmup protocol.
+
+**Verification:**
+
+- `uv run --group tensorflow ruff check .` — passed.
+- `uv run --group tensorflow pytest` — 15 passed.
+- `cd site && npm run build` — passed.
+- `./scripts/build-book.sh` — produced the draft DOCX.
+- Rendered the 22-page DOCX proof and inspected representative opening,
+  Chapter 4, Chapter 5, and later-draft pages. The new content is readable;
+  no clipping or overlap was found. The document remains a draft because most
+  later chapters are still short skeletons.
+
+**Decision:**
+
+Milestone 2 is complete. A zero-error toy fixture is evidence that both
+declared implementations learned that controlled task, not evidence of general
+vision capability or framework speed. The introduction will be maintained as
+the single reader-facing installation guide as each optional milestone becomes
+real.
+
+**Next task:**
+
+- [ ] Start Milestone 3 with tokenizer inspection and a controlled
+  pretrained-transformer inference fixture.
+- [ ] Check storage before installing transformer/MLX dependencies and document
+  the resulting installation path in Chapter 0.

@@ -30,6 +30,18 @@ uv run python experiments/02-gradients/autograd.py
 uv run python experiments/03-pytorch/train_tiny_network.py
 ```
 
+The TensorFlow/Keras comparison is optional so a base install stays small. It
+uses the supported Python 3.11 dependency group:
+
+```bash
+uv sync --group tensorflow
+uv run --group tensorflow python experiments/04-tensorflow/train_keras_cnn.py
+```
+
+If a later optional dependency is missing, first check available disk space;
+install it when there is adequate headroom, and report the space constraint
+rather than silently abandoning that part of the curriculum.
+
 For the course site, use Node 20:
 
 ```bash
