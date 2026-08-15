@@ -1894,3 +1894,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Run a cross-manuscript editorial audit: assess the remaining 14,696-word
   gap to the beta target, prioritize the shortest chapters for fourth-pass
   expansion, and then re-run full Python, site, and DOCX validation.
+
+### 2026-08-15 — Fourth-pass readiness audit
+
+**What changed:**
+
+- Updated `docs/editorial-completion-matrix.md` to reflect the completed third
+  editorial pass across Chapters 1–14, replace stale “outline” and “initial
+  draft” labels, and correct Chapter 12's evidence anchor to the actual
+  `experiments/11-langgraph/approval_workflow.py` script.
+- Recorded fourth-pass priorities for every chapter: a focused case study or
+  worked application, final copyedit, and a full generated-DOCX review. The
+  first targets are the shortest later chapters (13, 11, 12, 14, 07, and 10).
+
+**Verification:**
+
+- `make audit-book` passed at 30,304 words. The manuscript remains 14,696
+  words below the 45,000-word beta minimum, so no page-count or readiness claim
+  is made.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin fourth-pass expansion with Chapter 13: add a complete worked
+  book-maintenance comparison case, then continue with Chapters 11, 12, 14,
+  07, and 10 before the next full build/print-proof pass.

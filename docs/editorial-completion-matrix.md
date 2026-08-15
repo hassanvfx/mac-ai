@@ -14,21 +14,21 @@ limitation.
 
 | Chapter | Current state | Runnable/evidence anchor | Needed before beta manuscript gate | Visual needed |
 | --- | --- | --- | --- | --- |
-| 00 Introduction | Outline | `README.md`, setup commands | Living installation guide; scope, prerequisites, and reproducibility walkthrough | Repository source-of-truth map |
-| 01 Tensors | Draft expanded | `experiments/01-tensors/broadcasting.py` | Copyedit, worked image/text shape examples, source-note cross-link | Complete: broadcasting diagram |
-| 02 Gradients | Draft expanded | `experiments/02-gradients/autograd.py`, Day 1 record | Copyedit, hand-calculated update table, source-note cross-link | Complete: gradient-flow diagram |
-| 03 PyTorch | Draft expanded | `experiments/03-pytorch/train_tiny_network.py`, `benchmarks/01-day1/` | Copyedit, validation-transition bridge, source-note cross-link | Complete: training-loop diagram |
-| 04 Framework comparison | Initial draft | `experiments/04-tensorflow/train_keras_cnn.py`, `benchmarks/02-vision/` | Matched-data explanation, measured comparison, failure analysis, citations | Matched pipeline comparison |
-| 05 Vision | Initial draft | `experiments/05-vision/train_pytorch_cnn.py`, `benchmarks/02-vision/` | CNN derivation, data split, metrics, error examples, evidence-backed prose | CNN feature-map flow |
-| 06 Transformers | Initial draft | `experiments/06-transformers/inspect_sentiment.py`, `research/03-transformers/` | Tokenizer-to-logit walk-through, inference failure analysis, source-note links | Tokenization and attention flow |
-| 07 Apple Silicon | Initial draft | `experiments/07-mlx/run_local_model.py`, `benchmarks/04-mlx/` | MLX/MLX-LM observations, workload parity, scoped hardware discussion | Unified-memory and inference path |
-| 08 Embeddings | Initial draft | `experiments/08-embeddings/book_search.py`, `research/05-embeddings-and-rag/` | Chunking rationale, retrieval failures, learned-versus-fixture baseline | Embedding-space/query flow |
-| 09 RAG | Initial draft | `experiments/09-rag/grounded_answer.py`, `benchmarks/05-book-intelligence/` | Grounding examples, refusal cases, citation propagation, evaluation findings | Retrieval-to-cited-answer flow |
-| 10 AI systems | Initial draft | `experiments/10-systems/compare_structured_planning.py`, `benchmarks/06-structured-systems/` | Direct SDK/LangChain comparison, configuration failures, schema explanation | Evidence → plan → critic flow |
-| 11 State machines | Initial draft | `experiments/11-langgraph/approval_workflow.py`, `benchmarks/07-workflow-graphs/` | State schema, routing cases, persistence evidence, alternatives | Graph state-transition diagram |
-| 12 Human control | Initial draft | `experiments/11-langgraph/approval_checkpoint.py`, `benchmarks/07-workflow-graphs/` | Approval/rejection trace, threat boundaries, resume behavior | Approval interrupt sequence |
-| 13 Agent shapes | Initial draft | `experiments/13-workflows/compare_workflows.py`, `benchmarks/08-workflow-comparison/` | Fair comparison framing, quality limits, task-specific guidance | Deterministic vs planner vs role graph |
-| 14 Reliability | Initial draft | `evals/run_reliability.py`, `tests/test_reliability.py` | Evaluation dataset expansion, trace interpretation, policy and production limits | Reliability/evaluation feedback loop |
+| 00 Introduction | Draft expanded | `README.md`, setup commands | Fourth-pass installation walkthrough, final copyedit, source-of-truth visual | Repository source-of-truth map |
+| 01 Tensors | Third-pass draft | `experiments/01-tensors/broadcasting.py` | Fourth-pass case studies, copyedit, full DOCX review | Complete: broadcasting diagram |
+| 02 Gradients | Third-pass draft | `experiments/02-gradients/autograd.py`, Day 1 record | Fourth-pass worked update case, copyedit, full DOCX review | Complete: gradient-flow diagram |
+| 03 PyTorch | Third-pass draft | `experiments/03-pytorch/train_tiny_network.py`, `benchmarks/01-day1/` | Fourth-pass validation-transition case, copyedit, full DOCX review | Complete: training-loop diagram |
+| 04 Framework comparison | Third-pass draft | `experiments/04-tensorflow/train_keras_cnn.py`, `benchmarks/02-vision/` | Fourth-pass measured comparison case, copyedit, full DOCX review | Complete: matched pipeline comparison |
+| 05 Vision | Third-pass draft | `experiments/05-vision/train_pytorch_cnn.py`, `benchmarks/02-vision/` | Fourth-pass error-analysis case, copyedit, full DOCX review | Complete: CNN feature-map flow |
+| 06 Transformers | Third-pass draft | `experiments/06-transformers/inspect_sentiment.py`, `research/03-transformers/` | Fourth-pass inference case, copyedit, full DOCX review | Complete: tokenization and attention flow |
+| 07 Apple Silicon | Third-pass draft | `experiments/07-mlx/run_local_model.py`, `benchmarks/04-mlx/` | Fourth-pass workload/capacity case, copyedit, full DOCX review | Unified-memory and inference path |
+| 08 Embeddings | Third-pass draft | `experiments/08-embeddings/book_search.py`, `research/05-embeddings-and-rag/` | Fourth-pass retrieval evaluation case, copyedit, full DOCX review | Embedding-space/query flow |
+| 09 RAG | Third-pass draft | `experiments/09-rag/grounded_answer.py`, `benchmarks/05-book-intelligence/` | Fourth-pass grounded-answer case, copyedit, full DOCX review | Retrieval-to-cited-answer flow |
+| 10 AI systems | Third-pass draft | `experiments/10-systems/compare_structured_planning.py`, `benchmarks/06-structured-systems/` | Fourth-pass adapter comparison case, copyedit, full DOCX review | Evidence → plan → critic flow |
+| 11 State machines | Third-pass draft | `experiments/11-langgraph/approval_workflow.py`, `benchmarks/07-workflow-graphs/` | Fourth-pass state trace case, copyedit, full DOCX review | Graph state-transition diagram |
+| 12 Human control | Third-pass draft | `experiments/11-langgraph/approval_workflow.py`, `benchmarks/07-workflow-graphs/` | Fourth-pass approval/rejection case, copyedit, full DOCX review | Approval interrupt sequence |
+| 13 Agent shapes | Third-pass draft | `experiments/13-workflows/compare_workflows.py`, `benchmarks/08-workflow-comparison/` | Fourth-pass comparison case, copyedit, full DOCX review | Complete: workflow-shape diagram |
+| 14 Reliability | Third-pass draft | `evals/run_reliability.py`, `tests/test_reliability.py` | Fourth-pass release-gate case, copyedit, full DOCX review | Reliability/evaluation feedback loop |
 
 ## Per-chapter beta exit criteria
 
