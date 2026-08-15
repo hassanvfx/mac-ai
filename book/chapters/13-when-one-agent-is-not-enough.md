@@ -148,6 +148,44 @@ disagreement. Do not average failures out of an appealing summary. The small
 fixture is not enough to estimate general performance, but it establishes how
 to retain comparable traces before an optional model experiment is authorized.
 
+### Worked case: an incomplete embeddings chapter
+
+The frozen fixture asks: “Explain cosine similarity and review the draft
+chapter.” Its small research file,
+`evals/fixture_corpus/research/embeddings.md`, contains the
+expected cosine-similarity evidence and citation key; its deliberately
+incomplete `evals/fixture_corpus/book/chapters/08-draft.md` lacks an
+`Alternatives` heading. That
+gives the comparison two independent checks: retrieval must preserve the
+research path, and review must flag the editorial omission. It does not ask any
+workflow to judge whether a large real chapter is well written.
+
+Run the three shapes and read the resulting table as follows. The deterministic
+control returns four generic, evidence-bound proposal steps and the mechanical
+missing-section finding. The single planner returns three compact steps after
+the same retrieval. The researcher/critic/writer path returns four named steps:
+verify paths and citation keys; identify unsupported claims or omissions;
+prepare a proposal only; then wait for a person. In the recorded no-network
+run, every row passes path attribution, review coverage, approval boundary, and
+no-write checks. The difference is workflow structure, not a demonstrated
+difference in model quality.
+
+Suppose the role pipeline lost the fixture path
+`evals/fixture_corpus/research/embeddings.md` at its writer handoff
+while the researcher retained it. The `path_attribution` cell would fail even
+if the writer's prose sounded convincing. Suppose all roles found the path but
+the critic failed to inspect the draft heading. The `review_coverage` cell
+would fail. Suppose a future refactor added file output to the writer. The
+`no_write` cell would fail. This is why the table contains separate cells:
+one green result cannot conceal a different broken property.
+
+The appropriate conclusion is modest. For this fixture, the specialist shape
+adds an explicit critique and writer brief while preserving the same contract.
+It has not shown a quality benefit large enough to justify model calls on a
+larger corpus. The control remains the default until a pre-registered,
+model-backed evaluation demonstrates a task-specific advantage under the
+latency, cost, and safety criteria already stated.
+
 ## What broke
 
 Role separation can duplicate retrieval, lose context at a handoff, or make

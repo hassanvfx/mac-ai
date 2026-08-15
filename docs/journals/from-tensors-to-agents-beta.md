@@ -1919,3 +1919,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Begin fourth-pass expansion with Chapter 13: add a complete worked
   book-maintenance comparison case, then continue with Chapters 11, 12, 14,
   07, and 10 before the next full build/print-proof pass.
+
+### 2026-08-15 — Chapter 13 fourth-pass worked case
+
+**What changed:**
+
+- Added a complete deterministic fixture case to Chapter 13. It walks through
+  the cosine-similarity evidence and deliberately incomplete draft, explains
+  the outputs of deterministic, single-planner, and specialist workflows, and
+  shows how each comparison cell catches a different contract regression.
+- Corrected the narrative to use the real fixture paths under
+  `evals/fixture_corpus/`; the first audit caught the mistaken root-relative
+  path, then the chapter was corrected and re-audited.
+
+**Verification:**
+
+- `make audit-book` passed at 30,630 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_workflow_comparison.py` passed (1 test).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue the fourth-pass worked-case expansion with Chapter 11's
+  persisted approval trace, then Chapters 12, 14, 07, and 10.
