@@ -977,3 +977,24 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Expand Chapter 6 around the tokenizer and fixed transformer-inference
   experiment, then add an editable tokenization/attention data-flow visual.
+
+### 2026-08-15 — Chapter 6 transformer editorial expansion (first pass)
+
+**What changed:**
+
+- Expanded Chapter 6 with tokenizer-vocabulary contracts, the computational
+  role and explanatory limits of self-attention, and a careful account of
+  logits, softmax, label mappings, and the direct inspection baseline.
+- The prose remains scoped to the fixed model revision and two-input experiment;
+  it does not convert model score or one-off timing into a quality claim.
+
+**Verification:**
+
+- `make audit-book` and `git diff --check` passed.
+- Manuscript count is 14,116 words.
+
+**Next task:**
+
+- [ ] Complete Chapter 6 with padding/truncation experiments, offline/cache
+  failures, and alternatives; then add the tokenization/attention data-flow
+  vector visual.

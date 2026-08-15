@@ -18,6 +18,21 @@ pretrained Transformer does not receive words directly. It receives token IDs,
 special boundary markers, and an attention mask; it returns scores whose
 meaning comes from the model's trained label mapping.
 
+Tokenization is a learned system boundary, not a cosmetic preprocessing step.
+The tokenizer chooses a vocabulary and a rule for decomposing text into entries
+that model was trained to recognize. WordPiece may retain a common word as one
+token while splitting an unfamiliar word into smaller pieces. The resulting
+integer IDs have no inherent numeric order: ID 200 is not more positive or more
+important than ID 20. They are lookup keys for learned embedding vectors.
+
+Self-attention then lets a token representation depend on other positions in
+the same input. Each layer forms query, key, and value projections; similarity
+between a query and keys becomes a set of weights, and the weights mix values.
+Multiple attention heads can specialize in different relationships. This is not
+a built-in explanation of why a model chose a label: attention weights are part
+of the computation, while a trustworthy explanation requires a separate,
+validated evaluation question.
+
 ## Problem
 
 Move from tokenization to a pretrained model inference path we can inspect. We
@@ -65,6 +80,21 @@ and the model to MPS when available (otherwise CPU), runs under
 device, inputs, and maximum length. Transformers provides both styles because
 one optimizes inspection and the other reduces application boilerplate
 [@wolf2020transformers; @huggingface2026transformers].
+
+Logits are the model's raw, unnormalized class scores. Softmax converts two or
+more logits into non-negative values that sum to one; for a fixed label set,
+the largest softmax value selects the predicted label. A high score is not a
+probability that the sentence is objectively positive, nor a measure of how
+well the model will work on another domain. It is confidence within this model,
+revision, label mapping, and input representation. Preserve all four when
+recording an inference observation.
+
+The direct path is the right debugging baseline because it makes every
+transformation visible. Print the decoded tokens, IDs, mask, logits, sorted
+labels, and selected device before trusting an application wrapper. Once that
+path is known to be equivalent on fixed inputs, a pipeline is useful for small
+applications and demonstrations. If it later disagrees, reduce back to the
+direct path first rather than guessing which convenience default changed.
 
 ## Experiment
 
