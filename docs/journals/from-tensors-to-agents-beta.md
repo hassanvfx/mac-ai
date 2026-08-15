@@ -68,11 +68,14 @@ does not make a framework-speed or real-image-performance claim.
 
 ### Milestone 3 — Transformers and Apple Silicon
 
-- [ ] Add tokenizer inspection, pretrained transformer inference, and manual output analysis.
-- [ ] Add MLX/MLX-LM local-inference experiments with model, quantization, prompts, timing, and memory methodology declared.
-- [ ] Write Chapters 6–7 using PyTorch MPS and MLX/MLX-LM evidence.
+- [x] Add tokenizer inspection, pretrained transformer inference, and manual output analysis.
+- [x] Add MLX/MLX-LM local-inference experiments with model, quantization, prompts, timing, and memory methodology declared.
+- [x] Write Chapters 6–7 using PyTorch MPS and MLX/MLX-LM evidence.
 
 **Gate:** Every performance or memory claim has a benchmark record; unsupported hardware claims are removed.
+
+**Status:** Complete. The new timings and memory fields are narrow recorded
+observations, not cross-runtime performance or total-memory claims.
 
 ### Milestone 4 — Embeddings, RAG, and Book Intelligence
 
@@ -115,6 +118,8 @@ does not make a framework-speed or real-image-performance claim.
 - Python project is managed by `uv`, targets Python 3.11, and has `uv.lock` committed.
 - TensorFlow/Keras is an opt-in `uv` group. Its current recorded run uses
   TensorFlow 2.21.0 on CPU; it is not required by the core development group.
+- Transformers 5.15.0 and MLX/MLX-LM 0.31 are opt-in `uv` groups. Public model
+  weights are cached locally outside Git; they are not base dependencies.
 - Quality commands are exposed through `Makefile`; the initial Python suite contains deterministic Day 1 and Book Intelligence tests.
 - Code is MIT licensed in `LICENSE`; book text and visual assets are reserved as described in project documentation.
 - A Lulu US Trade interior template is committed at `book/templates/lulu-us-trade-interior-template.dotx` with provenance in `book/templates/README.md`.
@@ -124,7 +129,7 @@ does not make a framework-speed or real-image-performance claim.
 - The introduction is the living onboarding chapter: prerequisites, base and
   optional installation, validation, build paths, and ClineFlow journaling are
   documented there and will grow with the project.
-- `book/chapters/00-introduction.md` through `14-building-an-ai-system-you-can-trust.md` exist; Chapters 1–5 now contain substantive draft material.
+- `book/chapters/00-introduction.md` through `14-building-an-ai-system-you-can-trust.md` exist; Chapters 1–7 now contain substantive draft material.
 - `site/` is a Docusaurus shell over the book chapters, with CI and GitHub Pages workflow definitions in `.github/workflows/`.
 - `scripts/build-book.sh`, `scripts/export-pdf.applescript`, and `scripts/preflight_pdf.py` define the DOCX/PDF route. A release PDF still requires Word on macOS and visual inspection.
 
@@ -137,8 +142,8 @@ does not make a framework-speed or real-image-performance claim.
 
 ### Validated before this journal
 
-- `uv run --group tensorflow ruff check .` — passed.
-- `uv run --group tensorflow pytest` — 15 tests passed.
+- `uv run --group tensorflow --group transformers --group mlx ruff check .` — passed.
+- `uv run --group tensorflow --group transformers --group mlx pytest` — 22 tests passed.
 - `npm ci` followed by `npm run build` in `site/` — passed under Node 20.
 
 Re-run these commands after dependency or content changes; the above is a recorded baseline, not a perpetual guarantee.
@@ -157,7 +162,7 @@ Re-run these commands after dependency or content changes; the above is a record
 ## Risks and Open Questions
 
 - The current chapters are foundational drafts, not yet the target 180–220 manuscript pages.
-- Transformer, MLX/MLX-LM, LangChain, and full LangGraph implementations are planned but incomplete.
+- LangChain and full LangGraph implementations are planned but incomplete.
 - The Milestone 2 timing observations are deliberately not a framework-speed comparison; a normalized multi-run protocol remains future work.
 - DOCX can be generated when Pandoc/template requirements are met; Word export and page-by-page print inspection remain macOS release tasks.
 - The GitHub Pages workflow contains placeholder repository/organization values until the publishing destination is chosen.
@@ -180,7 +185,7 @@ Performance, memory, framework, and model-behavior statements must cite either `
 | --- | --- | --- | --- |
 | 1–3 | tensors, gradients, PyTorch | substantive evidence-backed drafts | Day 1 examples, tests, MPS record, and diagrams committed |
 | 4–5 | TensorFlow comparison, vision | substantive evidence-backed drafts | matched CNN fixture, tests, results, and limitations committed |
-| 6–7 | transformers, Apple Silicon | skeletons | tokenizer, inference, MLX benchmarks pending |
+| 6–7 | transformers, Apple Silicon | substantive evidence-backed drafts | tokenizer/pipeline inspection, MPS/CPU result, MLX-LM observation, and records committed |
 | 8–9 | embeddings and RAG | initial baseline | deterministic fixture implementation exists; learned embeddings/evaluation pending |
 | 10–13 | systems, graphs, agents | skeletons | direct SDK/LangChain/LangGraph comparison pending |
 | 14 | reliability | skeleton | full evaluation and policy audit pending |
@@ -286,21 +291,22 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 | Area | Present now | Remaining before beta |
 | --- | --- | --- |
 | Repository | Git `main`, local setup and Day 1 commits, Python/Node lockfiles, CI workflows | choose remote; configure real Pages destination; publish/tag only with approval |
-| Book | 15 Markdown files: a living setup introduction, Chapters 1–5 substantive drafts, Lulu interior template committed | 180–220-page prose, later citations/diagrams, cross-link audit, iterative proofs |
+| Book | 15 Markdown files: a living setup introduction, Chapters 1–7 substantive drafts, Lulu interior template committed | 180–220-page prose, later citations/diagrams, cross-link audit, iterative proofs |
 | Site | Docusaurus configuration and lockfile; build previously passed | content/link audit and real deployment configuration |
 | Day 1 | tensor, autograd, tiny PyTorch/MPS examples, tests, MPS record, diagrams | retain evidence discipline through later chapters |
 | Vision / TensorFlow | matched synthetic CNN scripts, tests, record, and Chapters 4–5 | controlled-difficulty/real-data work only before broader vision claims |
-| Later experiments | directory structure and planning only | tokenizer/transformer, MLX/MLX-LM, standardized benchmarks |
+| Transformers / MLX | inspected pretrained classifier, MLX-LM local model, tests, records, and Chapters 6–7 | normalized cross-runtime generative benchmark only before speed claims |
+| Later experiments | directory structure and planning only | learned embeddings, RAG evaluation, LangChain, LangGraph, and reliability work |
 | Book Intelligence | deterministic search, grounded-answer baseline, approval checkpoint, fixtures/tests | learned embeddings, metadata-rich ingestion, quality evaluation, SDK/LangChain/LangGraph, workflow comparison |
 | Publishing | Pandoc/Word/preflight scripts and Lulu template | successful iterative DOCX proof, Word PDF, preflight/render inspection, final print proof |
 
-## Immediate Next Session Plan — Milestone 3
+## Immediate Next Session Plan — Milestone 4
 
-1. Read this journal and the current Chapter 6–7 skeletons.
-2. Check disk space before adding a transformer or local-model dependency; install the smallest supported optional group when there is adequate headroom.
-3. Create tokenizer vocabulary/segmentation inspection and a controlled pretrained-transformer inference experiment, with a frozen fixture and CPU fallback tests.
-4. Select MLX/MLX-LM versions and a model that run on this Mac; record model, quantization, prompt, device, timing method, and memory-observation method.
-5. Only after evidence exists, expand Chapters 6–7 and update the living setup introduction with the new installation commands.
+1. Read this journal and the current Book Intelligence baseline.
+2. Check space before adding a local embedding dependency; use a small frozen fixture corpus for CPU-only tests.
+3. Replace the deterministic-only retrieval path behind a stable interface while preserving its existing fixture behavior.
+4. Add corpus metadata, chunking, citation-key propagation, retrieval evaluation, and grounded-answer tests.
+5. Only after evidence exists, expand Chapters 8–9 and update Chapter 0 with the new optional installation commands.
 6. Run Python, site, DOCX, and visual-layout checks; update this journal before committing.
 
 ## Completion Checklist
@@ -523,3 +529,59 @@ real.
   pretrained-transformer inference fixture.
 - [ ] Check storage before installing transformer/MLX dependencies and document
   the resulting installation path in Chapter 0.
+
+---
+
+### 2026-08-14 — Transformer inspection and local MLX-LM evidence
+
+**What changed:**
+
+- Added opt-in `transformers` and `mlx` dependency groups. MLX-LM 0.31 required
+  Transformers 5, so the existing optional Transformers group was upgraded and
+  the Chapter 6 CPU/MPS inference checks were rerun under Transformers 5.15.0.
+- Added an inspectable pretrained-classifier experiment at
+  `experiments/06-transformers/inspect_sentiment.py`, pure helpers/tests, a
+  research note, and `benchmarks/03-transformers/README.md`.
+- Added a local MLX-LM experiment at `experiments/07-mlx/run_local_model.py`,
+  pure helpers/tests, a research note, and `benchmarks/04-mlx/README.md`.
+- Expanded Chapters 6–7 after the evidence existed and updated the living
+  setup chapter with the two optional installation paths.
+
+**Recorded results and boundaries:**
+
+- The DistilBERT sentiment experiment used model revision
+  `714eb0fa89d2f80546fda750413ed43d93601a13`. Direct logits/softmax and the
+  high-level pipeline agreed on both fixed inputs under MPS and CPU.
+- Its 380.206 ms MPS and 120.787 ms CPU observations are deliberately **not** a
+  speed comparison: they are one tiny, one-off workload without a normalized
+  warmup or overhead boundary.
+- The MLX-LM run used `mlx-community/Qwen2.5-0.5B-Instruct-4bit`, temperature
+  zero, a four-token warm-up, and a 64-token cap. It recorded 342.260 generated
+  tokens/s, Metal active/peak memory in bytes, MLX-LM peak memory in GiB, and
+  process RSS as separate partial observations.
+- The public Transformer and MLX model caches were about 256 MiB and 276 MiB
+  respectively. They are local-only and untracked. The model completion was not
+  quality-scored.
+
+**Verification:**
+
+- `uv run --group tensorflow --group transformers --group mlx ruff check .` — passed.
+- `uv run --group tensorflow --group transformers --group mlx pytest` — 22 passed.
+- `cd site && npm run build` — passed.
+- `./scripts/build-book.sh` — produced the draft DOCX.
+- Rendered the 27-page DOCX proof and inspected representative Chapter 6–7 and
+  later-draft pages. No visible clipping or overlap was found; it remains a
+  draft, not a release PDF.
+
+**Decision:**
+
+Milestone 3 is complete. Do not compare Chapter 6 classifier timing with
+Chapter 7 generation timing, or either with another framework, until a common
+generative workload and benchmark method exists.
+
+**Next task:**
+
+- [ ] Start Milestone 4 by adding local learned embeddings and metadata-rich
+  ingestion over a frozen book-corpus fixture.
+- [ ] Preserve deterministic retrieval tests while adding learned retrieval and
+  grounded-answer evaluation.

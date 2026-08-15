@@ -131,6 +131,42 @@ list in `benchmarks/02-vision/README.md`. Do not compare the two elapsed values
 as framework speed: their current device and timing conditions are not a fair
 benchmark.
 
+## Optional Transformer installation
+
+Chapter 6 uses Hugging Face Transformers with the existing PyTorch install.
+The library is an opt-in group; the first run also downloads a compact
+pretrained classifier into the local Hugging Face cache, outside this
+repository. Check space first and then install it:
+
+```bash
+df -h .
+uv sync --group transformers
+uv run --group transformers python experiments/06-transformers/inspect_sentiment.py --device auto
+```
+
+The experiment selects MPS when available and falls back to CPU. It prints the
+tokens, IDs, attention mask, manual logits-to-probabilities result, and the
+equivalent pipeline result. The current model cache observed on the project Mac
+is about 256 MiB, but model sizes vary widely; read
+`benchmarks/03-transformers/README.md` before treating it as a storage estimate.
+
+## Optional MLX and MLX-LM installation
+
+Chapter 7 adds a local 4-bit instruction model through MLX and MLX-LM. These
+packages are Apple Silicon-specific and are kept out of the base environment:
+
+```bash
+df -h .
+uv sync --group mlx
+uv run --group mlx python experiments/07-mlx/run_local_model.py
+```
+
+The initial model download is approximately 276 MiB in the local Hugging Face
+cache. The script prints the exact model, declared 4-bit quantization, prompt,
+token counts, a warm-up, timing boundary, generation rate, and partial memory
+observations. It does not compare runtimes or rate answer quality; see
+`benchmarks/04-mlx/README.md` for the interpretation rules.
+
 ## Site and manuscript builds
 
 Build the course site with its own Node lockfile:
