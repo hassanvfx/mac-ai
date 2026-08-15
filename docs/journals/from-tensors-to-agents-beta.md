@@ -1194,3 +1194,34 @@ and generated-DOCX inspection have all happened.
   trace boundaries, and release-gate interpretation; then revisit Chapters
   8–11, whose prose remains materially shorter than the intended manuscript
   budget.
+
+### 2026-08-15 — Chapter 14 reliability-policy expansion
+
+**What changed:**
+
+- Expanded Chapter 14 to a 1,176-word first editorial pass. It now defines
+  trust as six narrow, testable repository contracts rather than an unprovable
+  claim about general model correctness.
+- Documented the fixture corpus, generated local trace, provenance chain,
+  deterministic-versus-model-dependent boundary, evaluation-record protocol,
+  observed failure modes, and the distinct roles of audit, tests, site build,
+  and DOCX build.
+- Added operational guidance for interpreting a trace, investigating a failed
+  case, and designing a controlled API-backed evaluation without inventing
+  latency, cost, or quality results.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 16,902 words, still below the
+  45,000–55,000 beta target.
+- `uv run --group agents python evals/run_reliability.py` passed all 6 cases
+  and wrote only ignored local trace files.
+- Targeted Book Intelligence evaluation/reliability tests passed: 11 tests.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 8 with chunk boundaries, deterministic-versus-learned
+  embedding trade-offs, retrieval-quality checks, and an editable visual; then
+  continue Chapters 9–11 to bring the agent half of the manuscript toward its
+  page budget.
