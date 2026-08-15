@@ -2412,3 +2412,28 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Add further canonical lab appendices for setup/debugging and evaluation,
   then repeat the full interim validation and DOCX render sampling.
+
+### 2026-08-15 — Canonical debugging appendix
+
+**What changed:**
+
+- Added Appendix B, *Debugging AI Experiments Without Losing the Evidence*.
+  It supplies a practical classification and triage loop for environment,
+  data-contract, numerical, provenance, and policy failures; it explains how
+  optional-installation and API-configuration failures preserve deterministic
+  fallback paths.
+
+**Verification:**
+
+- `make audit-book` passed at 38,096 words; Appendix B contributes 1,210
+  words. The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including both
+  canonical appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add a canonical evaluation-and-release appendix, then run the full
+  Python/site/reliability batch and render a fresh interim DOCX proof.
