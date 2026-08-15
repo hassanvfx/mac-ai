@@ -1675,3 +1675,30 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 7 a third-pass expansion: local-inference workload design,
   prompt/cache/context interactions, memory-pressure diagnostics, and the
   boundaries between a local observation and a deployment decision.
+
+### 2026-08-15 — Chapter 7 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 7 from 1,369 to 1,951 words. It now defines a local-model
+  experiment envelope, explains repeat-run and context-escalation protocols,
+  distinguishes local runtime observation from product choice, and records a
+  safer memory-pressure diagnostic procedure.
+- Added guidance on preserving versioned workload records, interpreting the
+  existing MLX memory measurements without adding incomparable values, and
+  selecting local versus hosted paths from stated requirements rather than a
+  throughput slogan.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 25,477 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_local_models.py` passed (3 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 8 a third-pass expansion: explain chunk boundaries,
+  deterministic versus learned embeddings, retrieval metrics, fixture-corpus
+  limits, and the evidence-preserving handoff into grounded answering.

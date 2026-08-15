@@ -35,6 +35,22 @@ Run one local MLX-LM inference workload whose inputs and measurement boundary
 are visible. A fair PyTorch-MPS-versus-MLX comparison comes later, after the
 same generative model and protocol are available in both runtimes.
 
+Before running it, turn the vague request "try a local model" into an
+experiment envelope. Name the model artifact, the exact prompt, the maximum
+new tokens, decoding settings, whether the weights are already cached, the
+warm-up policy, and the clock boundary. Those choices determine what a result
+can mean. A 64-token, temperature-zero completion is useful for a reproducible
+smoke test; it cannot establish the latency of a conversational application
+with varied prompts, streaming UI work, and longer contexts.
+
+The envelope also gives a safe escalation path. Start with a small public
+model and a short prompt. Verify that the artifact downloads into a cache, the
+chat template renders, the response has the expected termination reason, and
+the process remains healthy. Only then change one variable at a time: output
+limit, prompt length, model artifact, or concurrent workload. A result that
+fails after a change is evidence about that changed workload, not proof that
+local inference is generally impossible.
+
 That restraint prevents an invalid comparison. Chapter 3 measures a tiny
 PyTorch training loop; Chapter 6 runs a classifier; this chapter streams a
 quantized instruction model. Their elapsed times represent different tasks,
@@ -91,6 +107,22 @@ interactive response, record first-token latency separately; if it cares about
 batch throughput, declare batch size and queueing. Do not reuse this one token
 rate for either question.
 
+`temperature=0` is a useful control here because the script asks for a stable
+decoding policy, not because it makes every layer of a model stack timeless.
+Tokenizers, model revisions, package versions, prompt templates, and stop
+conditions can still change a generated sequence. The record therefore stores
+versions and the rendered prompt-token count. When repeating a benchmark after
+an upgrade, compare the full record first; a changed output length or prompt
+rendering means the two runs are no longer the same workload.
+
+For a decision rather than a demonstration, collect a small series of runs.
+Separate a first cached load from repeated warmed-up generations; keep the
+prompt and output cap fixed; retain each raw record; and report the range or
+distribution instead of selecting the most favorable result. If the goal is
+capacity planning, repeat the series while increasing context length and note
+the first pressure, error, or unacceptable latency observation. Do not convert
+one successful short completion into a claimed maximum context length.
+
 The memory fields are observations with different owners. Process RSS includes
 what the operating system attributes to Python; Metal active and peak fields
 describe MLX allocator views; MLX-LM returns its own peak figure. They may move
@@ -121,6 +153,15 @@ length is a workload parameter rather than a quality signal. A future quality
 evaluation needs a versioned prompt set, scoring rubric, and human or task-based
 judgments.
 
+This distinction changes product choices. A private, offline note-search tool
+may value predictable local availability even if its first response is slower
+than a hosted alternative. A customer-facing assistant may need a model quality
+evaluation, request queueing, observability, and a fallback policy before its
+runtime is selected. The benchmark does not choose for us; it supplies one
+traceable input to that choice. Keep user data, prompts, logs, and generated
+text within the same privacy review: running weights locally does not by itself
+guarantee that every surrounding service or log is local.
+
 ## What broke
 
 The first issue was dependency compatibility: MLX-LM 0.31 requires Transformers
@@ -146,6 +187,14 @@ a workload/capacity problem; and an unhelpful completion is an evaluation
 problem. Each needs a different record and remedy. Collapsing them into “the
 model does not work on my Mac” makes the project impossible to reproduce.
 
+When memory pressure appears, preserve the failing configuration before trying
+a smaller model. Record the prompt and output limits, the model identifier,
+whether other demanding applications were running, the final error or observed
+symptom, and the three labeled memory values when available. Then reduce one
+variable, rerun, and keep both records. This avoids a misleading story in which
+an apparently magical configuration change fixed a failure whose real cause was
+an unrelated browser tab, a cold cache, or a longer prompt.
+
 ## Alternatives and when to use them
 
 Use MLX-LM when you want a native local inference path and can make model,
@@ -162,6 +211,15 @@ GGUF-style toolchains are another alternative with their own formats and
 measurement rules. A remote service can simplify distribution but changes
 privacy, cost, latency, and outage behavior. State which trade-off matters
 before choosing a runtime.
+
+A practical selection checklist is short: identify the task and quality bar;
+declare whether data must remain local; measure cold and warmed behavior at the
+expected prompt and output sizes; observe storage and memory headroom; and
+define what the application does when the model is unavailable or its answer is
+not supported by evidence. The Book Intelligence Assistant later applies the
+last rule directly: retrieval can fail honestly, and a planner must stop before
+writing. Local inference is a component of that policy, not a replacement for
+it.
 
 ## Evidence trail
 
