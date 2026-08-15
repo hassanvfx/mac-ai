@@ -358,6 +358,23 @@ The recommended sequence prevents prose and comparison claims from outrunning ev
 - [ ] Trigger and verify the first Pages deployment, then check the live
   onboarding, course, labs, and QR destinations.
 
+### 2026-08-15 — Pages workflow registration refresh
+
+**Observation:**
+
+- GitHub accepted the deployment workflow but ended two push-triggered runs
+  before creating jobs. Its API exposed the file path rather than the declared
+  workflow name and did not recognize the manual-dispatch trigger, although
+  the committed YAML was valid.
+
+**Action and next check:**
+
+- Restated `workflow_dispatch` as an explicit empty mapping and will push the
+  narrow metadata-only change to prompt GitHub to register the workflow again.
+- [ ] Confirm that the replacement run creates `build` and `deploy` jobs; do
+  not broaden default repository workflow permissions unless separately
+  approved.
+
 ---
 
 ### 2026-08-15 — Public reader access, labs, and QR bridge
