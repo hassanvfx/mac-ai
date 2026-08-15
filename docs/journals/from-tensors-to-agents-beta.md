@@ -2164,3 +2164,36 @@ and generated-DOCX inspection have all happened.
 - [ ] Rebuild the DOCX after the fourth-pass opening-chapter batch and render
   it for an updated 6×9 interim-proof inspection before continuing manuscript
   expansion.
+
+### 2026-08-15 — Fourth-pass interim DOCX proof and source map
+
+**What changed:**
+
+- Built the manuscript DOCX after the fourth-pass opening-chapter batch and
+  rendered an interim proof to 114 page images. This is a substantial increase
+  from the prior 75-page proof, but remains below the intended 180–220-page
+  final target and is not a release-ready PDF.
+- The first proof exposed a fragile text source-of-truth diagram on the opening
+  page. Replaced it with the editable print-quality SVG
+  `book/assets/architecture/source-of-truth.svg`; rebuilt and re-rendered the
+  DOCX, then visually confirmed the corrected opening page.
+- Sampled representative pages across the opening material, early learning
+  chapters, vision, Transformers, local inference, retrieval, structured
+  systems, workflow chapters, and bibliography. No clipping or missing-glyph
+  issue was observed in that sampling. A full all-page Word-PDF inspection is
+  still a final production gate and has not been claimed.
+
+**Verification:**
+
+- `make audit-book` passed at 33,642 words, still below the 45,000-word beta
+  minimum.
+- `./scripts/build-book.sh` produced `book/build/from-tensors-to-agents.docx`.
+- The bundled document renderer produced 114 PNG pages under
+  `/private/tmp/ai-on-mac-docx-render-20260815-fourth-fixed`.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Continue fourth-pass prose expansion with Chapters 4–6 and 8–9, then
+  broaden fixture failure cases and repeat the full Python/site/DOCX validation
+  batch.

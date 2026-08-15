@@ -20,11 +20,7 @@ until it appears here or in the chapter that introduces it.
 
 The end product has one canonical editorial source and two reading formats:
 
-```text
-research notes + citations ─┐
-                           ├──> book/chapters/ ──> Docusaurus course site
-experiments + benchmarks ──┘                   └──> DOCX ─> Word PDF ─> Lulu proof
-```
+![Research notes and experiments inform canonical chapters, which produce the course site and print manuscript.](../assets/architecture/source-of-truth.svg)
 
 - `book/chapters/` is the only source of published prose. The course does not
   copy it.
