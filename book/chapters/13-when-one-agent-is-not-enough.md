@@ -84,7 +84,7 @@ declared quality, cost, and latency protocol.
 
 Run the comparison, then inspect its compact table rather than treating a
 passing exit code as the whole result. Every row should attribute
-`research/embeddings.md`, report the fixture's missing-alternatives finding,
+the fixture's expected research-note path, report the missing-alternatives finding,
 require approval, and report no write. A failed cell identifies the broken
 contract directly. The accompanying test repeats the same assertions in
 `tests/test_workflow_comparison.py`, so a refactor cannot silently widen a

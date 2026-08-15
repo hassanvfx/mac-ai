@@ -1444,3 +1444,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Complete a cross-chapter technical-editing pass for Chapters 1–7 and
   Chapters 8–14, then strengthen the audit to enforce runnable code/research
   evidence links before another full site and DOCX proof build.
+
+### 2026-08-15 — Repository-path editorial audit hardening
+
+**What changed:**
+
+- Extended `scripts/audit_book.py` so inline-code references to repository
+  files below `experiments/`, `src/`, `benchmarks/`, and `research/` must
+  resolve to a tracked file, in addition to existing heading, BibTeX, and
+  Markdown-link checks.
+- The new check exposed a misleading fixture-only research path in Chapter 13;
+  the prose now describes it as a fixture expectation rather than presenting it
+  as a root-repository research file.
+
+**Verification:**
+
+- `make audit-book` passed all chapters with the stricter path check; current
+  manuscript count is 20,932 words, still below the 45,000–55,000 beta target.
+- `uv run pytest tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add explicit per-chapter research/evidence references where a chapter
+  currently relies only on a citation, then run a full technical consistency
+  audit and build a fresh site/DOCX proof.

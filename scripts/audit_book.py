@@ -12,6 +12,7 @@ REQUIRED = ("Intuition", "Problem", "Minimal implementation", "Experiment", "Wha
 CITATION = re.compile(r"@([A-Za-z0-9_-]+)")
 BIB_KEY = re.compile(r"@\w+\s*\{\s*([^,\s]+)")
 LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
+CODE_PATH = re.compile(r"`((?:experiments|src|benchmarks|research)/[^`\s]+\.(?:py|md|bib|txt))`")
 
 
 def main() -> None:
@@ -35,6 +36,9 @@ def main() -> None:
                 continue
             if not (chapter.parent / target).resolve().exists():
                 findings.append(f"{chapter.relative_to(ROOT)}: unresolved link: {target}")
+        for path_reference in CODE_PATH.findall(text):
+            if not (ROOT / path_reference).is_file():
+                findings.append(f"{chapter.relative_to(ROOT)}: unresolved repository path: {path_reference}")
         print(f"{chapter.name}: {words} words")
     print(f"TOTAL: {total_words} words (beta target: 45,000–55,000)")
     if findings:
