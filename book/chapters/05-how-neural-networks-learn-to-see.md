@@ -13,6 +13,15 @@ many image positions, so a convolution shares the same learned weights across
 the image. Pooling and later layers combine local responses into a decision
 about the whole image [@goodfellow2016deep].
 
+The important idea is *inductive bias*: a convolution assumes that nearby
+pixels matter together and that a useful local pattern may appear in more than
+one position. A fully connected layer can in principle learn such patterns,
+but it assigns a separate weight to every input connection. A convolution uses
+one small kernel repeatedly, which reduces parameters and expresses the useful
+prior that a vertical edge is still a vertical edge when it shifts a few pixels.
+
+![The tiny CNN changes channels and spatial resolution while preserving the batch.](../assets/vision/cnn-feature-flow.svg)
+
 ## Problem
 
 Train and inspect a small image classifier rather than treating a CNN as a black
@@ -40,6 +49,20 @@ image → Conv(8) → ReLU → max pool → Conv(16) → ReLU → global average
 
 Logits are unnormalized class scores. Cross-entropy compares them to the known
 class index, and Adam changes the filters to reduce that loss.
+
+The actual tensor path is worth writing down. The fixture produces a
+channels-first batch `(N, 1, 16, 16)`. The first padded 3×3 convolution keeps
+the 16×16 spatial grid while changing one input channel into eight learned
+feature maps. Max pooling halves height and width to `(N, 8, 8, 8)`. The next
+convolution creates 16 feature maps, and adaptive global-average pooling turns
+each entire map into one number. Flattening produces `(N, 16)`, then the final
+linear layer emits `(N, 3)` logits—one score for each named class.
+
+Pooling does not discover an object; it discards some exact location detail in
+exchange for a compact local summary. On this fixture, that is a reasonable
+choice because a stroke may be offset slightly. On a task where exact position
+is the answer, aggressive pooling can remove the signal we need. Architecture
+is therefore a hypothesis about the task, not a collection of default layers.
 
 ## Real implementation: an inspection-friendly evaluation
 

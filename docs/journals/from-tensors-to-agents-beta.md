@@ -931,3 +931,25 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 5 with the CNN's spatial-shape flow, split/metric
   discipline, and error-analysis method; add its print-quality architecture
   diagram after the prose identifies the exact concept the image must clarify.
+
+### 2026-08-15 — Chapter 5 CNN visual and editorial expansion (first pass)
+
+**What changed:**
+
+- Added `book/assets/vision/cnn-feature-flow.svg`, an editable vector diagram
+  for the exact `TinyConvNet` shape path: `(N, 1, 16, 16)` through feature maps,
+  pooling, global average pooling, and three logits.
+- Expanded Chapter 5's convolutional inductive-bias explanation, documented
+  its real tensor transformations, and scoped pooling as a task-dependent
+  architectural trade-off.
+
+**Verification:**
+
+- `make audit-book` passed, including the new local SVG link; `git diff --check`
+  passed.
+- Manuscript count is 13,445 words.
+
+**Next task:**
+
+- [ ] Complete Chapter 5's evaluation/error-analysis and augmentation sections,
+  then render the next DOCX proof after several additional chapter expansions.
