@@ -14,6 +14,14 @@ memory infinite or a model automatically fast. Model size, quantization, prompt
 length, generated tokens, allocator behavior, and other applications all still
 matter.
 
+Unified memory changes a systems boundary, not the laws of capacity. A local
+model, its tokenizer, generated-token cache, application process, browser, and
+the operating system all compete for one finite pool. Quantization stores some
+model weights with fewer bits, but it does not remove every runtime allocation
+or make a model's context free. The practical question is therefore not whether
+an advertised parameter count sounds small, but whether this exact model and
+workload leave enough headroom for the rest of the machine.
+
 ## Problem
 
 Run one local MLX-LM inference workload whose inputs and measurement boundary
@@ -37,6 +45,14 @@ one deterministic (`temperature=0`) streamed generation capped at 64 tokens.
 The MLX-LM package provides model loading and generation on Apple Silicon
 [@mlx_lm2026].
 
+Read the model identifier as experiment configuration. `Qwen2.5-0.5B` names a
+particular model family and approximate parameter scale; `Instruct` signals a
+chat-oriented variant; `4bit` describes the published quantized artifact. None
+of those words guarantees factual output, a particular memory footprint, or
+compatibility with another runtime. Record the complete identifier rather than
+shortening it to a family name, because a later revision or quantization can
+materially change the workload.
+
 ## Real implementation: state the measurement boundary
 
 `experiments/07-mlx/run_local_model.py` records model/package versions, model
@@ -45,6 +61,14 @@ warm-up, load time, generation time, and token rates. It also records process
 RSS and two MLX memory views: Metal active/peak memory in bytes and MLX-LM's
 reported peak memory in GiB. The output labels the units rather than adding
 them together, because they are different partial observations.
+
+The measurement boundary matters as much as the number. Download and model
+load are user-visible costs for an application, but they answer a different
+question from warmed-up generation throughput. The script records them
+separately. It also resets MLX peak memory after the warm-up so the reported
+generation peak does not accidentally include first-use initialization. That is
+not a universal memory accounting method; it is a declared observation method
+that a reader can reproduce and improve.
 
 ## Experiment
 

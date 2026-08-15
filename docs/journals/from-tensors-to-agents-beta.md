@@ -1018,3 +1018,25 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Finish Chapter 6's controlled truncation/cache-failure/alternative
   guidance, then begin Chapter 7's measured MLX and local-model discussion.
+
+### 2026-08-15 — Chapter 7 MLX editorial expansion (first pass)
+
+**What changed:**
+
+- Began Chapter 7's substantive local-inference discussion: unified memory is
+  distinguished from a capacity guarantee; the full model identifier and
+  quantization are treated as experiment configuration; and model load,
+  warm-up, and generation timing are separated into declared measurement
+  boundaries.
+
+**Verification:**
+
+- `make audit-book` and `git diff --check` passed.
+- Manuscript count is 14,431 words. No new performance or memory claim was
+  introduced beyond the existing, scoped MLX benchmark record.
+
+**Next task:**
+
+- [ ] Complete Chapter 7 with controlled workload variations, output-quality
+  boundaries, and local-versus-hosted alternatives; then expand Chapter 8's
+  learned embedding and retrieval material.
