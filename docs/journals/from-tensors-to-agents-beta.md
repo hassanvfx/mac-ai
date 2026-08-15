@@ -1756,3 +1756,31 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 10 a third-pass expansion: make direct versus structured
   output contracts, model/provider configuration, validation failures, and
   evidence-bound plans concrete while preserving the no-write approval gate.
+
+### 2026-08-15 — Chapter 10 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 10 from 1,225 to 1,935 words. It now frames direct-SDK and
+  LangChain comparison as a controlled adapter experiment; separates content,
+  secrets, and benchmark configuration; and explains the validation order for
+  structured plans.
+- Added malformed-output and retry boundaries, no-network versus provider
+  timing limits, schema-evolution guidance, and a clearer selection rule for
+  direct, framework, template, and native-JSON alternatives.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 27,618 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_structured_planning.py` passed (7 tests).
+- The no-network comparison command ran successfully: both adapters preserved
+  `book/chapters/00-introduction.md` and required approval.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 11 a third-pass expansion: define graph state, transition
+  invariants, deterministic routing, checkpoint scope, and failure handling
+  before adding more agent roles.

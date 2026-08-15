@@ -39,6 +39,22 @@ accepts different paths, a difference in its final plan cannot be attributed to
 the SDK/framework choice. Keep provider/model comparisons separate until a
 provider is selected and a controlled benchmark records its conditions.
 
+This is an experimental control rather than a contest between two brand names.
+Fix the task, retrieved evidence, schema version, decoding settings, retry
+policy, and clock boundary before comparing a configured provider run. If the
+answers differ, inspect the context and validation traces before calling either
+route more reliable. A framework can introduce defaults, while a direct client
+can expose details a framework normally manages; neither fact predicts answer
+quality on its own.
+
+Separate configuration from content. The objective and evidence arrive from
+the caller. Endpoint, model identifier, and credentials arrive from the
+environment only when an optional API experiment is explicitly requested.
+Package versions, model names, retry behavior, redaction decisions, and timing
+method belong in the resulting benchmark record. That separation prevents a
+chapter draft or test fixture from becoming an accidental vehicle for a secret
+or a provider-specific production decision.
+
 ## Minimal implementation
 
 [structured_planning.py](../../src/from_tensors_to_agents/structured_planning.py)
@@ -63,6 +79,20 @@ unsupported proposal. It forces approval to `true` even if a model emits
 This normalization makes authority explicit. A model can propose text; it
 cannot widen the files it may cite, redefine the request it received, or waive
 human review through a field in its own output.
+
+The validation order matters. First parse the shape; then compare every path
+with the retrieval allow-list; then overwrite caller-controlled fields such as
+the objective and approval flag; finally decide whether the object has enough
+evidence to be useful. A response that is valid JSON but includes
+`outside.md` is an authorization failure, not a successful plan with one small
+warning. This project retains the permitted portion for inspection and records
+the rejected path, but it never treats the discarded citation as support.
+
+No evidence has a stronger consequence. The plan schema may still parse, but
+the implementation clears its steps and appends a missing-evidence warning.
+That prevents a fluent model from converting an empty retrieval result into an
+apparently actionable edit list. A human may use the objective to search again
+or add research, but the system has not earned a grounded recommendation.
 
 ## Real implementation
 
@@ -94,6 +124,21 @@ benchmark record before its output can support a comparison claim. Loading a
 key is not authorization to make an uncontrolled experiment or a repository
 change.
 
+Use a narrow environment file or shell session for a controlled run and keep
+it outside version control. Do not print the key while diagnosing a failure;
+log only the non-secret configuration fields needed to reproduce the experiment.
+If the base URL, model, or credential is absent, the adapter raises a
+configuration error before a network request. That explicit failure is better
+than a silent fallback to an unknown default model, whose output could later be
+mistaken for a recorded comparison.
+
+The optional local path follows the same discipline. A local endpoint or model
+is still a configured provider with a model revision, context policy, and
+failure modes. “Local” describes a deployment location, not an exemption from
+schemas, provenance, evaluation, or approval. The deterministic fixture run is
+the baseline that remains available when neither a local model nor an API is
+configured.
+
 ## Experiment
 
 The recorded fixture run proves a narrow invariant: both adapters receive the
@@ -113,6 +158,21 @@ absent API variables. A future model experiment must hold task set, model,
 settings, and retrieved context fixed before interpreting a difference between
 adapters as overhead or reliability.
 
+Treat malformed output as a first-class test case. It can be invalid JSON,
+missing fields, a response object with a parsing error, an unexpected scalar,
+or a formally valid schema that contains an unapproved evidence path. The
+direct and LangChain adapters must expose the failure rather than retry until
+they get a convenient result. Retrying may be appropriate in a measured
+production policy, but it changes cost, latency, and the probability of a
+different answer, so it must be declared and evaluated.
+
+The fixture comparison does not measure network latency or token use. It proves
+that a composed adapter does not weaken the evidence allow-list or human
+approval requirement. Once a provider is chosen, record separate timing
+observations for request construction, remote response, parsing, and validation
+where those boundaries matter. Do not use a no-network unit test to support a
+claim about an API's speed, reliability, or model quality.
+
 ## What broke
 
 A valid schema can still contain an unsupported citation, a plan can sound
@@ -129,6 +189,13 @@ failure over a guessed plan whenever structured output is absent or malformed.
 A reader can then fix configuration, adjust a declared schema, or use the
 deterministic path without pretending the model supplied grounded output.
 
+Schema evolution is another quiet failure mode. Adding a required field,
+renaming a review finding, or changing the meaning of a status value can make
+old fixtures appear to pass while downstream users interpret them differently.
+Version the contract in the experiment record, keep compatibility decisions
+explicit, and add a regression case for each newly enforced safety rule. A
+schema migration is an interface change, not merely a prompt edit.
+
 ## Alternatives
 
 A direct SDK has the smallest abstraction surface and makes HTTP/API behavior
@@ -142,6 +209,13 @@ one task. Use an orchestration framework when common adapters, message handling,
 retrievers, or tracing reduce repeated, tested code. Avoid an abstraction merely
 to make a prototype look agentic: every layer adds defaults, version constraints,
 and a new failure vocabulary that tests and benchmarks must cover.
+
+Template engines, tool-call APIs, and model-specific JSON modes are additional
+alternatives. Choose them when they solve a demonstrated integration problem,
+such as a provider's reliable native structured output, rather than because a
+schema looks more official. The invariant survives the implementation choice:
+only retrieved evidence may be cited, malformed or unsupported output is
+visible, and the resulting object is a proposal awaiting human approval.
 
 ## When to use it—and when not to
 
