@@ -910,3 +910,24 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue Chapter 4 with evidence-table interpretation, timing limits,
   leakage failure analysis, and framework-selection guidance before starting
   Chapter 5.
+
+### 2026-08-15 — Chapter 4 editorial expansion (complete first draft)
+
+**What changed:**
+
+- Completed the Chapter 4 first-draft pass: evaluation-contract reading,
+  explicitly documented non-identical implementation choices, microbenchmark
+  limits, CPU/MPS interpretation, data-leakage prevention, and framework
+  selection guidance are now tied to the committed vision record.
+
+**Verification:**
+
+- `make audit-book` and `git diff --check` passed.
+- Manuscript count is 13,199 words. Chapter 4 remains an expanded beta draft,
+  pending later technical editing and DOCX inspection.
+
+**Next task:**
+
+- [ ] Expand Chapter 5 with the CNN's spatial-shape flow, split/metric
+  discipline, and error-analysis method; add its print-quality architecture
+  diagram after the prose identifies the exact concept the image must clarify.

@@ -79,6 +79,21 @@ requires held-out accuracy, a three-by-three confusion matrix, and a list of
 mistakes. Those checks matter more than matching a particular layer spelling:
 they tell us whether each program has learned the same stated task.
 
+Read the comparison table as a contract, not a leaderboard. The partitions are
+fixed before either model is trained. Accuracy is evaluated separately, the
+confusion matrix keeps per-class results visible, and the error list preserves
+the examples behind a metric. For this separable fixture, zero test errors are
+expected and still recorded explicitly. In a realistic vision problem, inspect
+representative errors, class imbalance, ambiguous labels, and changes across
+seeds before drawing conclusions from one score.
+
+Fairness has limits even in this matched exercise. The PyTorch loop uses the
+full training fixture as one batch while Keras uses batches of 32, and the
+frameworks choose their own initial parameter values. These choices can affect
+loss trajectories and elapsed time, so they are documented rather than hidden.
+The educational question is whether both programs solve the declared held-out
+task, not whether their internal states are bit-for-bit identical.
+
 ## Experiment
 
 On the recorded Mac, PyTorch 2.13.0 completed the fixture with MPS selected and
@@ -95,6 +110,14 @@ faster. The final losses also differ because initializers and implementation
 details differ. A proper speed comparison needs repeated runs, shared warmup,
 equivalent device selection, and a declared timing boundary.
 
+The MPS PyTorch run is slower than the recorded CPU run for this tiny workload.
+That is not a contradiction of the idea that accelerators can help: setup,
+dispatch, and synchronization can outweigh parallel computation when the work
+is small. It is also not proof that CPU is generally faster. The only supported
+statement is the one in the record: these wall-clock values were observed under
+the declared, one-run conditions. Treat any broader conclusion as a hypothesis
+requiring a larger, repeated, device-matched experiment.
+
 ## What broke
 
 Framework setup was the first practical difference. The core project does not
@@ -109,6 +132,13 @@ A more subtle failure is false equivalence. Matching names such as `Conv2d` and
 change. The shared fixture converts PyTorch's channels-first tensor to Keras's
 channels-last input explicitly, then verifies the same held-out labels.
 
+Data leakage is another comparison failure. If generated images from the same
+random pattern, augmentation lineage, or preprocessing cache cross the split
+boundary, both frameworks may report excellent held-out accuracy while the
+evaluation question has been compromised. The fixture uses distinct declared
+seeds for its splits. When replacing it with a real dataset, preserve the split
+manifest and fit normalization statistics only on the training partition.
+
 ## Alternatives and when to use them
 
 Use PyTorch when an explicit training loop and immediate tensor inspection help
@@ -116,6 +146,13 @@ you learn or debug. Use Keras when a compact model-and-training declaration is
 a better fit for the team and deployment path. JAX, higher-level PyTorch
 trainers, and other ecosystems are valid alternatives, but should enter only
 after the evaluation contract is stable.
+
+Use a custom Keras `GradientTape` loop when the experiment requires the same
+step-level control demonstrated in PyTorch; use PyTorch's module and optimizer
+interfaces when an explicit loop remains clearest. Avoid choosing from
+benchmark headlines when hardware, model size, precision, data pipeline, or
+deployment target differs from the work at hand. A repeatable question and a
+maintained test fixture are more durable assets than a short-lived ranking.
 
 ## Takeaway
 
