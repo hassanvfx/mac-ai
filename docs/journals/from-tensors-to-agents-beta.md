@@ -2140,3 +2140,27 @@ and generated-DOCX inspection have all happened.
 
 - [ ] Continue fourth-pass worked learning cases with Chapter 3, then rebuild
   the DOCX and inspect an updated 6×9 interim proof.
+
+### 2026-08-15 — Chapter 3 fourth-pass training case
+
+**What changed:**
+
+- Added a worked reading of the Day 1 training record to Chapter 3. It
+  separates the converged training loss, repeated final-loss determinism, and
+  synchronized timed-run median into three distinct questions and claims.
+- Added an ordered failure-diagnosis procedure for shape, device, update-order,
+  seed, and learning-rate boundaries.
+
+**Verification:**
+
+- `make audit-book` passed at 33,639 words, still below the 45,000-word beta
+  minimum.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest tests/test_day1.py`
+  passed (6 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Rebuild the DOCX after the fourth-pass opening-chapter batch and render
+  it for an updated 6×9 interim-proof inspection before continuing manuscript
+  expansion.

@@ -210,6 +210,39 @@ reports Python dispatch time rather than complete model work. Synchronizing
 before and after the timed section answers a clearer wall-clock question for
 this runner. Other asynchronous pipelines need their own declared boundaries.
 
+### Worked case: one tiny run, three different questions
+
+Run the teaching script with its fixed seed, 250 epochs, SGD learning rate
+0.08, and automatic device selection. On the recorded M4 Pro observation,
+the first loss was 1.892602 and the last was 0.000994. That answers the first
+question: under this declared synthetic dataset and model, the explicit loop
+reduced its training mean-squared error. It does not answer whether the model
+would generalize, because the exercise deliberately has no held-out dataset.
+
+The second question is reproducibility. The benchmark repeats the same
+workload five times after an unmeasured warmup. Each recorded MPS run reaches
+the same final loss, 0.000994. That provides evidence for deterministic
+behavior of this narrow seed/environment/workload combination. It does not
+mean every PyTorch program is deterministic on every accelerator, nor that an
+edited model with dropout, shuffled data, or different versions will reproduce
+the number automatically.
+
+The third question is timing. The five recorded wall-clock values range from
+119.637 to 122.571 ms, with a median of 120.537 ms after MPS synchronization.
+The timer includes the declared training workload and excludes the unmeasured
+warmup; it is not a CPU comparison, first-use latency result, memory measure,
+or proxy for a larger network. The three questions need three sentences in a
+benchmark record because “the model trained in 120 ms” would collapse
+convergence, repeatability, and timing into one misleading claim.
+
+To debug a run that does not follow this pattern, inspect contracts in order.
+Confirm that inputs and targets retain shape `(64, 1)`, that the model and both
+tensors share the selected device, that `zero_grad` precedes `backward`, and
+that the seed is set before model construction. Then lower the learning rate
+or shrink the program to one batch. Do not first add layers or rerun until a
+favorable final loss appears; a reproducible failure is the evidence needed to
+locate the broken training boundary.
+
 ## What broke
 
 Accelerator availability is conditional. The example must run on CPU-only
