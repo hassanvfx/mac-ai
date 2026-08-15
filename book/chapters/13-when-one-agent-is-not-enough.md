@@ -35,6 +35,20 @@ the comparison fail if a role loses provenance, skips the review, or acquires
 write behavior, even when no remote model, API key, or nondeterministic output
 is available.
 
+Choose the task before choosing the roles. The task should have a known
+evidence path, a reviewable editorial condition, and an observable safe
+outcome. A role count is not a treatment variable by itself: a three-role graph
+that changes retrieval, prompts, and evaluation at the same time cannot tell us
+why a result changed. The frozen fixture holds those variables still so the
+first question is narrow: do all shapes preserve the same basic contract?
+
+There are at least three costs to count. Every handoff can add latency and
+model calls; every copied context can lose a source path or qualification; and
+every role-specific tool can broaden authority. A specialist is justified only
+when its distinct input and output prevent or expose a failure the smaller
+workflow misses. “Researcher,” “critic,” and “writer” are responsibilities to
+test, not personality prompts that automatically create independent judgment.
+
 ## Minimal implementation
 
 [workflow_comparison.py](../../src/from_tensors_to_agents/workflow_comparison.py)
@@ -48,6 +62,21 @@ more elaborate graph must demonstrate what it adds. The single-planner path
 uses one retrieved context to make a short plan. The specialist path turns the
 same work into explicit handoffs, making each role's responsibility visible in
 the report rather than hiding it inside a long prompt.
+
+The reports are a comparison interface. `evidence_paths` answers what each
+shape may cite; `plan_steps` reveals the proposed work; `findings` records the
+mechanical review; `writer_brief` shows whether a drafting role stayed within
+its remit; and the two booleans state the approval and no-write invariants.
+This is deliberately less dramatic than a chat transcript. It lets a test and
+a human compare the same fields across shapes without inferring safety from the
+tone of a generated explanation.
+
+The writer role is a particularly useful naming test. In the current code it
+has no filesystem, Git, shell, or network capability and emits only a brief.
+If an implementation cannot state this boundary in its report and tests, it is
+not a safe writer role for the beta. Future prose-editing assistance belongs
+behind the separate, diff-scoped approval design from Chapter 12—not behind an
+ambiguous role name.
 
 ```bash
 uv run --group agents python experiments/13-workflows/compare_workflows.py
@@ -75,6 +104,14 @@ proposal, and malformed structured output must fail closed. Until the project
 records a controlled evaluation with a selected model, latency, cost, answer
 quality, and failure recovery are unknown—not evidence for choosing one shape.
 
+An API-backed extension should preserve a per-role trace: task ID, corpus
+revision, retrieved paths, prompt/schema version, model configuration,
+start/end times, parse result, and final contract checks. It should not persist
+credentials or raw private context in that trace. This makes a slow or failed
+run interpretable: was the extra delay retrieval, a critic request, parsing,
+or human interruption? Without a trace, total elapsed time encourages teams to
+blame or credit the role arrangement for unrelated provider behavior.
+
 ## Experiment
 
 The recorded output shows all four contract checks as true. This does not show
@@ -97,6 +134,20 @@ unsafe-action refusal. Record failures as well as successful traces. Only then
 ask whether an extra critic catches omissions that a single planner misses
 often enough to justify its additional requests and coordination.
 
+Define success before looking at the outputs. Citation accuracy can require
+every displayed path to come from the retrieved set; plan completeness can be
+scored against named required sections; review usefulness can ask whether a
+known omission was surfaced without inventing one; unsafe-action refusal must
+remain perfect for this beta. Measure latency and request count separately from
+quality. A workflow that finds one more issue but takes ten times as long may
+still be the wrong default for a routine editorial check.
+
+Use paired cases where possible: run every shape on the same maintenance
+question and preserve every refusal, timeout, malformed response, and reviewer
+disagreement. Do not average failures out of an appealing summary. The small
+fixture is not enough to estimate general performance, but it establishes how
+to retain comparable traces before an optional model experiment is authorized.
+
 ## What broke
 
 Role separation can duplicate retrieval, lose context at a handoff, or make
@@ -112,6 +163,14 @@ the workflow records. If a handoff has no distinct input or decision, remove
 it. It adds latency and a new place for evidence to disappear without adding a
 testable safeguard.
 
+Specialization can also create correlated errors. If all roles receive the same
+bad retrieval result, a researcher, critic, and writer may repeat the same
+unsupported premise with three different voices. Independence requires a
+different check, such as a deterministic path audit, an alternate retrieval
+query, or a reviewer who can reject the premise—not merely separate prompt
+labels. Keep the evidence packet visible at every handoff so agreement can be
+examined rather than mistaken for corroboration.
+
 ## Alternatives
 
 Use one deterministic workflow for routine, inspectable checks. Use a single
@@ -125,6 +184,12 @@ Use a language model only for the residual work that needs interpretation, such
 as suggesting an experiment or identifying a confusing explanation. This
 division keeps objective checks reproducible and makes the model's uncertain
 judgment explicit.
+
+Another alternative is a two-stage workflow: deterministic retrieval and audit
+first, then one optional model-assisted explanation only when the first stage
+found supported evidence. This can capture much of the useful editorial help
+without paying the coordination cost of a full graph. Escalate to specialist
+roles only after a versioned failure set shows which distinct check is missing.
 
 ## When to use it—and when not to
 

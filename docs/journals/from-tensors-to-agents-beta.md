@@ -1838,3 +1838,31 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 13 a third-pass expansion: compare deterministic retrieval,
   a single planner, and a researcher/critic/writer graph by controlled task,
   cost, latency, safety, and evidence quality rather than agent-count rhetoric.
+
+### 2026-08-15 — Chapter 13 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 13 from 1,124 to 1,763 words. It now requires a controlled
+  task before role selection, counts handoff/authority costs, and uses the
+  `WorkflowReport` fields as an inspectable comparison interface.
+- Added per-role tracing requirements for future API runs, pre-registered
+  success dimensions, paired failure-case guidance, correlated-error limits,
+  and a lower-complexity two-stage alternative.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 29,574 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_workflow_comparison.py` passed (1 test).
+- The comparison experiment ran: deterministic, single-planner, and
+  researcher/critic/writer reports all passed path, review, approval, and
+  no-write checks.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Give Chapter 14 a third-pass expansion: turn evaluation, tracing,
+  reliability policy, release gates, and operational boundaries into a concrete
+  beta readiness checklist with explicit unknowns.
