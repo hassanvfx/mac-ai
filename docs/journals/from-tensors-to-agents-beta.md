@@ -91,12 +91,15 @@ performance benchmark.
 
 ### Milestone 5 — LangChain, LangGraph, and Agent Comparisons
 
-- [ ] Add direct-SDK and LangChain structured-output implementations over identical evidence.
-- [ ] Implement LangGraph state, checkpoint/resume, interrupt, approval, and rejection paths.
-- [ ] Compare deterministic retrieval, a single planner, and a researcher/critic/writer graph on book-maintenance tasks.
-- [ ] Write Chapters 10–13 from observed trade-offs.
+- [x] Add direct-SDK and LangChain structured-output implementations over identical evidence.
+- [x] Implement LangGraph state, checkpoint/resume, interrupt, approval, and rejection paths.
+- [x] Compare deterministic retrieval, a single planner, and a researcher/critic/writer graph on book-maintenance tasks.
+- [x] Write Chapters 10–13 from observed trade-offs.
 
 **Gate:** No workflow can modify book/code/Git state before explicit human approval; state transitions and fallback paths are tested.
+
+**Status:** Complete. The comparison is a no-network contract baseline, not a
+model-quality or performance claim.
 
 ### Milestone 6 — Reliability and Public Beta
 
@@ -729,3 +732,38 @@ human-approval boundary before any source, Git, or external write.
 
 - [ ] Complete Milestone 5 with the deterministic/single-planner/
   researcher-critic-writer comparison and expand Chapter 13 from its evidence.
+
+---
+
+### 2026-08-15 — Milestone 5C workflow-shape comparison and closure
+
+**What changed:**
+
+- Added a frozen-fixture comparison of deterministic, single-planner, and
+  researcher/critic/writer book-maintenance workflows.
+- All workflows are intentionally deterministic control implementations: they
+  share the same evidence contract, preserve source attribution, review the
+  same editorial finding, require approval, and perform no writes.
+- Added a runnable comparison, regression test, observation record, and
+  substantive Chapter 13. The role pipeline emits a writer brief only; it does
+  not gain file, Git, or service tools.
+
+**Verification:**
+
+- Full optional-group lint passed; `pytest` passed 40 tests.
+- The comparison reported `True` for path attribution, review coverage,
+  approval boundary, and no-write behavior for all three shapes.
+- Docusaurus build passed; the Lulu-template DOCX built successfully. It is
+  still a beta draft, pending the later Chapter 14/reliability and full-print
+  production gates.
+
+**Decision:**
+
+Milestone 5 is complete. This does not establish that multiple agents improve
+quality or latency: no remote model was run. It establishes the safe,
+versioned control that any future model-backed comparison must match.
+
+**Next task:**
+
+- [ ] Start Milestone 6: evaluation traces, reliability policy, failure
+  fixtures, Chapter 14, and beta release-gate audit.
