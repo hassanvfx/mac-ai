@@ -1574,3 +1574,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 3 a third-pass expansion: trace the tiny regressor's data,
   parameter, loss, optimizer, and device contracts; then connect observed loss
   curves to held-out evaluation boundaries without making speed claims.
+
+### 2026-08-15 — Chapter 3 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 3 from 1,627 to 2,251 words. It now makes the tiny
+  regressor's dataset/module/loss/optimizer/device contracts explicit, explains
+  module-owned parameters and optimizer state, and treats loss traces as
+  debugging evidence rather than release criteria.
+- Added benchmark-timing interpretation, MPS synchronization boundaries,
+  training-loss versus held-out-evaluation limits, and the extra contracts
+  introduced by mixed precision, accumulation, checkpoints, and loaders.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 23,326 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_day1.py` passed (6 tests).
+- The tiny PyTorch training example ran on CPU and reached initial loss
+  `1.892602` and final loss `0.000994`. `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin the third pass on the vision chapters with Chapter 4: expand the
+  matched-framework methodology into a reusable comparison protocol, then add
+  a print-quality data-layout or evaluation visual where it improves reading.

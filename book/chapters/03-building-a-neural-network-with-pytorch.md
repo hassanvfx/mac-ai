@@ -61,6 +61,20 @@ notice an implausible result quickly. If this model cannot reduce mean squared
 error, the first suspects are the data shape, seed, update order, learning
 rate, or device—not the difficulty of the task.
 
+The task gives us a useful sanity check. Because the target is known,
+`2 × input + 0.5`, a model prediction can be compared with both the training
+loss and the underlying relationship. The hidden layer is intentionally
+overcomplete for this job: it can represent the mapping, but also makes the
+parameter path less obvious than a single slope and intercept. That makes it a
+good bridge from Chapter 2's scalar gradient to a module with many weights.
+
+Count the contracts before running code. The dataset fixes input/target shapes
+and deterministic construction. The module fixes input width, hidden width,
+activation, and output width. Mean squared error fixes the objective. SGD fixes
+how gradients become updates. Device choice fixes where compatible tensors
+execute. If loss fails to fall, change and record one contract at a time rather
+than changing model width, learning rate, seed, and device together.
+
 ## Minimal implementation
 
 Run the complete training example:
@@ -98,6 +112,31 @@ The loop contains a few details that are easy to overlook:
 Those choices generalize. The later CNN and transformer examples add data
 loaders, validation metrics, and more complex modules, but the core feedback
 cycle remains explicit.
+
+### Parameters are data owned by the module
+
+`nn.Module` is more than a convenient container. When a layer is assigned as an
+attribute, PyTorch registers its learnable tensors so `model.parameters()` can
+hand them to the optimizer. A plain tensor created inside `forward` is not a
+durable parameter merely because it participates in arithmetic. Create intended
+parameters in `__init__`, use them in `forward`, and verify their shapes before
+training.
+
+The optimizer stores state about the parameters it received. In this SGD
+example, that state is minimal; an optimizer such as Adam also keeps moving
+averages. Replacing a model parameter after constructing an optimizer can leave
+the optimizer updating the old tensor. Keep model construction, optimizer
+construction, and the training loop in visible order.
+
+### Loss curves are debugging traces, not release criteria
+
+The loss list is a trace of one optimization run. A falling curve tells us that
+this model is reducing this objective on these examples. It does not certify
+generalization, calibration, or stability outside the observed interval. A flat
+initial curve can suggest an update-order mistake, zero/invalid gradients,
+unsuitable learning rate, or a device/data mismatch. A falling curve followed
+by a rise can suggest overshooting. Print a few checkpoints before relying only
+on the last number.
 
 ## Real implementation: make the observation reproducible
 
@@ -157,6 +196,20 @@ right outcome is a clear error that tells the reader what was requested and how
 to use the safe fallback. A benchmark that quietly changes the requested
 condition produces a polished but misleading number.
 
+The benchmark's five timed values deserve the same care as a loss trace. The
+median summarizes five repeats after one unmeasured warm-up; it does not reveal
+cold-start experience, distribution tails, energy use, or memory use. If a
+future question concerns first-use latency, measure model creation and the
+first training call separately. If it concerns steady state, retain the warm-up
+and show variation. Do not edit the existing record to make a later measurement
+look comparable—create a new record with its own workload and date.
+
+MPS synchronization is a measurement boundary rather than a performance trick.
+Device work can be queued; a host timer that stops before the queue completes
+reports Python dispatch time rather than complete model work. Synchronizing
+before and after the timed section answers a clearer wall-clock question for
+this runner. Other asynchronous pipelines need their own declared boundaries.
+
 ## What broke
 
 Accelerator availability is conditional. The example must run on CPU-only
@@ -178,6 +231,12 @@ purpose is to test the feedback loop, not generalization. In a real task, keep
 validation and test examples separate from parameter updates. Later vision
 chapters will use that separation for metrics and error inspection.
 
+Overfitting is deliberately invisible here because no unseen-distribution claim
+is being made. The vision experiment adds validation and test partitions because
+its question changes from “does the loop reduce a known loss?” to “does this
+classifier solve a held-out fixture?” Reusing training loss as a quality score
+across those questions would blur the distinction this regressor teaches.
+
 ## Alternatives and when to use them
 
 For a first prototype, an explicit loop is the best choice because every step
@@ -194,6 +253,14 @@ benchmark. Within PyTorch, a high-level trainer can manage checkpoints, mixed
 precision, and distributed execution after an explicit baseline has established
 the data, loss, metric, and failure behavior. Abstraction should remove
 repetition, not conceal the evidence needed to trust an experiment.
+
+Mixed precision, gradient accumulation, schedulers, checkpoints, and data
+loaders are valuable later additions, but each adds a contract. Mixed precision
+changes numeric formats and loss scaling; accumulation changes the effective
+batch/update schedule; checkpoints add versioning and restoration questions.
+Introduce them only when the baseline's data, model, loss, metric, and device
+boundaries already have tests. A small explicit loop remains the reference
+implementation against which automated training can be checked.
 
 ## Evidence trail
 
