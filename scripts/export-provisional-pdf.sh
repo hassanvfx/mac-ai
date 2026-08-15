@@ -14,7 +14,12 @@ if [[ ! -f "$input" ]]; then
 fi
 
 mkdir -p "$output_dir"
-"$soffice_bin" --headless --convert-to pdf --outdir "$output_dir" "$input"
+profile_dir="$(mktemp -d "${TMPDIR:-/tmp}/mac-ai-libreoffice-profile.XXXXXX")"
+cleanup_profile() {
+  rm -rf "$profile_dir"
+}
+trap cleanup_profile EXIT
+"$soffice_bin" -env:UserInstallation="file://$profile_dir" --headless --convert-to pdf --outdir "$output_dir" "$input"
 generated="$output_dir/ai-from-tensors-to-agents-on-mac-silicon.pdf"
 if [[ ! -f "$generated" ]]; then
   echo "LibreOffice did not create $generated" >&2

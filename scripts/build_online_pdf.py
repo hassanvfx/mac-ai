@@ -55,7 +55,7 @@ def main() -> None:
             "/Title": "AI From Tensors to Agents on Mac Silicon",
             "/Author": "Hassan Uriostegui",
             "/Subject": "Online beta reading edition — not a Lulu print-upload file",
-            "/Creator": "ai-on-mac deterministic online PDF build",
+            "/Creator": "mac-ai deterministic online PDF build",
         }
     )
     with OUTPUT.open("wb") as destination:

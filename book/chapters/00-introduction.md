@@ -80,13 +80,10 @@ less reproducible, not more.
 Use a Mac with Apple Silicon when you want to reproduce MPS observations, but
 the early Python tests and examples are designed to fall back to CPU. Install:
 
-- Python 3.11;
-- [uv](https://docs.astral.sh/uv/) for Python environments and lockfile-based
-  dependency installs;
-- Node.js 20 and npm for the Docusaurus course;
-- Pandoc for DOCX generation;
-- Microsoft Word on macOS for the **release** PDF export. LibreOffice is only a
-  non-release fallback.
+Python 3.11; [uv](https://docs.astral.sh/uv/) for Python environments and
+lockfile-based dependency installs; Node.js 20 and npm for the Docusaurus
+course; Pandoc for DOCX generation; and Microsoft Word on macOS for the
+**release** PDF export. LibreOffice is only a non-release fallback.
 
 Before installing a large optional framework or model package, check available
 space with:
@@ -104,13 +101,14 @@ completed.
 Clone the repository, enter it, and create the locked development environment:
 
 ```bash
-git clone <your-repository-url> ai-on-mac
-cd ai-on-mac
+git clone https://github.com/hassanvfx/mac-ai.git
+cd mac-ai
 uv sync --group dev
 ```
 
-The first command intentionally leaves the remote URL to the reader or project
-owner. The repository can be used locally without a GitHub remote.
+The exact public repository keeps every book command aligned with the course,
+the QR lab pages, and the live `main` branch. Clone it once, then run each
+chapter's commands from the `mac-ai` directory.
 
 Validate the base environment:
 

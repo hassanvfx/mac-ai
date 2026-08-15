@@ -1,6 +1,6 @@
 # From Tensors to Agents — Beta Implementation Journal
 
-**Last updated:** 2026-08-14  
+**Last updated:** 2026-08-15
 **Project:** *From Tensors to Agents: Learning Modern AI by Building It on Apple Silicon*  
 **Scope:** Book, Docusaurus course, reproducible experiments, Book Intelligence Assistant, and print-ready beta preparation.
 
@@ -32,6 +32,23 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 - ClineFlow is an optional, unchanged journaling/context workflow. It is not a runtime dependency of the Book Intelligence Assistant.
 
 ## Status Overview
+
+### 2026-08-15 — Canonical public repository route audit
+
+- Replaced the remaining reader-facing placeholder clone command in the
+  introduction with `https://github.com/hassanvfx/mac-ai.git` and the matching
+  `mac-ai` directory name.
+- Audited public clone commands, GitHub URLs, GitHub Pages routes, QR manifests,
+  generated lab links, and manuscript source. They consistently use
+  `hassanvfx/mac-ai`, its `/mac-ai/` Pages base path, and `main` where a live
+  source branch is referenced.
+- Preserved historical `ai-on-mac` names only where they identify past local
+  temporary/cache paths in this journal; they are not reader-facing routes.
+- Replaced a LibreOffice-sensitive prerequisites list with equivalent prose
+  after rendered review exposed a stray list-marker glyph in the review PDFs.
+- Regenerated and visually checked the provisional and online review PDFs; the
+  publication validator confirmed their contents, interior, and TOC manifest
+  are synchronized. The site build and 14-lab reader-bridge validation passed.
 
 ### ✅ Setup — Git baseline and ClineFlow journaling
 
