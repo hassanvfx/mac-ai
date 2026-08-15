@@ -2491,6 +2491,33 @@ and generated-DOCX inspection have all happened.
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
 
+### 2026-08-15 — Book Intelligence capstone walkthrough
+
+**What changed:**
+
+- Added Appendix F, *Book Intelligence Capstone Walkthrough*. It connects
+  Chapters 8–14 through one bounded book-maintenance task: corpus selection,
+  provenance-preserving retrieval, evidence packets, validated planning,
+  critique, persisted approval, no-write termination, and versioned evaluation.
+
+**Verification:**
+
+- `make audit-book` passed at 42,008 words; Appendix F contributes 769 words.
+  The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  six appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py tests/test_book_intelligence.py
+  tests/test_book_intelligence_evaluation.py tests/test_approval_workflow.py
+  tests/test_workflow_comparison.py` passed (15 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the remaining canonical teaching material needed to reach the beta
+  word target, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
+
 ### 2026-08-15 — Canonical working glossary
 
 **What changed:**
