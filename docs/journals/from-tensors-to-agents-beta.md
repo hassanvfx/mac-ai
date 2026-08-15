@@ -1161,3 +1161,36 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 13 with a controlled comparison design for deterministic,
   single-planner, and researcher/critic/writer workflows; link its claims to
   the versioned evaluation fixtures before making capability claims.
+
+### 2026-08-15 — Chapter 13 workflow-comparison expansion
+
+**What changed:**
+
+- Expanded Chapter 13 to a 1,100-word first editorial pass and added an
+  editable vector diagram, `book/assets/agents/workflow-shapes.svg`. It shows
+  deterministic, single-planner, and researcher/critic/writer routes converging
+  on one evidence, no-write, and human-approval contract.
+- Defined the frozen cosine-similarity maintenance fixture as a contract
+  comparison rather than a model-quality claim. The prose documents what a
+  future API-backed evaluation must hold constant and score before claiming an
+  extra role is worthwhile.
+- Added explicit guidance on role theatre, handoff inputs/outputs, rules-based
+  editorial checks, and why a writer remains a read-only proposal producer.
+
+**Verification:**
+
+- `make audit-book` passed; the manuscript is now 16,131 words, still below
+  the 45,000–55,000 beta target.
+- `uv run pytest tests/test_workflow_comparison.py` passed.
+- The runnable comparison reported `True` for path attribution, review
+  coverage, approval boundary, and no-write for all three workflow shapes.
+- Docusaurus production build and the Pandoc DOCX build both passed; the latter
+  embedded the new SVG without an SVG conversion warning. `git diff --check`
+  passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 14 with the reliability policy, evaluation taxonomy,
+  trace boundaries, and release-gate interpretation; then revisit Chapters
+  8–11, whose prose remains materially shorter than the intended manuscript
+  budget.
