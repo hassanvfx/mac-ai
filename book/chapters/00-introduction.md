@@ -241,6 +241,13 @@ inspect the generated pages. Keep the SVG source under `book/assets/`; any PNG
 fallback should be generated from that source at print resolution, not edited
 independently.
 
+On macOS with Homebrew, install and verify that dependency with:
+
+```bash
+brew install librsvg
+rsvg-convert --version
+```
+
 This writes `book/build/from-tensors-to-agents.docx`. It is a review artifact,
 not an upload-ready PDF. At print-production time, export it through Word on
 macOS, run the preflight script, and inspect every rendered page before calling

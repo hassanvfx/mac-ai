@@ -1132,3 +1132,32 @@ and generated-DOCX inspection have all happened.
 
 - Clarified that persisted workflow state records considered evidence, proposed
   plan, pause reason, and human decision—not merely enough data to resume code.
+
+### 2026-08-15 — Chapter 12 approval-scope expansion
+
+**What changed:**
+
+- Expanded the human-control chapter from a short outline to a 1,164-word
+  first editorial pass. It now distinguishes a durable checkpoint from
+  canonical repository evidence and makes approval specific to one reviewable
+  proposal rather than standing permission.
+- Documented rejection, stale evidence, checkpoint retention, idempotent
+  pre-interrupt work, and the division between workflow history and Git
+  history. The chapter points readers to the executable approval workflow and
+  its reopen/resume/no-write tests.
+- Made the DOCX SVG dependency directly reproducible in the living setup
+  chapter with the macOS Homebrew `librsvg` install and verification commands.
+
+**Verification:**
+
+- `make audit-book` passed; the manuscript is now 15,420 words, still below
+  the 45,000–55,000 beta target.
+- `uv run pytest tests/test_approval_workflow.py` passed (3 tests), including
+  reject/no-write, persisted resume, and empty-evidence fallback.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Expand Chapter 13 with a controlled comparison design for deterministic,
+  single-planner, and researcher/critic/writer workflows; link its claims to
+  the versioned evaluation fixtures before making capability claims.
