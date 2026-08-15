@@ -1311,3 +1311,33 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 11's state-machine material: explicit state data,
   transition design, deterministic fallback, trace interpretation, and why
   state graphs do not by themselves create safe agents.
+
+### 2026-08-15 — Chapter 11 state-machine expansion
+
+**What changed:**
+
+- Expanded Chapter 11 to a 1,180-word first editorial pass. It now explains
+  the graph's typed state, transition-table design, deterministic fallback,
+  checkpoint scope, thread-ID lifecycle, and the distinct approval/rejection
+  terminal states.
+- Added operational guidance on inspecting an interrupt payload, idempotent
+  pre-interrupt work, replay hazards, and why a future write needs its own
+  scoped approval and reviewable diff.
+- Positioned pull requests as a valid human-operated graph and clarified when
+  a persisted graph reduces real work versus merely adding abstraction.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 19,283 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_approval_workflow.py` passed (3 tests).
+- The runnable workflow paused with the explicit no-action message and resumed
+  to `rejected_no_write`; its SQLite checkpoint remained under ignored local
+  state.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin a second editorial pass on the shortest chapters (7, 4, 5, 6),
+  adding missing worked examples, evidence interpretation, and diagrams while
+  keeping performance claims tied to benchmark records.
