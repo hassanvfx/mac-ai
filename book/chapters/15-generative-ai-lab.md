@@ -11,18 +11,22 @@ retrieval, structured outputs, state, evaluation, and human control. This final
 lab asks a more practical question: what do those pieces look like when the
 output is creative work that a person may publish?
 
-The answer is not a universal "generate" button. It is a workflow with a clear
+The answer is not a universal "generate" button. It is a creative system that
+turns a person’s raw material into more useful options without taking away the
+person’s voice, accounts, or final judgment. The useful pattern is a clear
 source boundary, narrow model responsibilities, inspectable intermediate work,
 deterministic checks where they are possible, and a human decision before a
 result leaves the project.
 
 ## Intuition
 
-Generative systems are most useful when they help a person move through a real
-production process without taking ownership of the person’s voice, accounts, or
-final judgment. A lyric arrangement needs to preserve the writer’s words. A
-news-inspired video needs to distinguish reporting context from new creative
-output, retain credentials locally, and stop before publication.
+Generative systems become valuable when they compress the repetitive parts of a
+real production process while keeping authorship visible. A lyric arrangement
+can move from a raw draft to performance-ready directions without losing the
+writer’s words. A news-inspired video can move from fresh reporting context to
+an original media package without confusing source material with permission to
+reuse it. In both cases, the creator remains the owner of the voice, accounts,
+and final judgment.
 
 This chapter studies two open-source projects maintained outside this book.
 They are case studies, not dependencies of `mac-ai`: [Lyrics Refiner](https://github.com/hassanvfx/lyrics-refiner)
@@ -66,19 +70,23 @@ that must be true before a credential or publish action is considered.
 
 ## Real implementation: two different production boundaries
 
-### Case study 1: Lyrics Refiner preserves a writer's source
+### Case study 1: Lyrics Refiner gives a writer a controllable studio
 
-Lyrics Refiner is a local React application for arranging Spanish lyrics,
-including Regional Mexican styles. It does not frame the original lyric as
-disposable prompt material. Its documented flow separates structure, optional
-reference-structure matching, semantic repair, performance annotations, and
-ad-libs. It retains intermediate stages so the writer can inspect where a
-change appeared [@lyricsrefiner2026; @lyricsrefinerarticle2026].
+Lyrics Refiner is a local React creative studio for Spanish lyrics, including
+Regional Mexican styles. A writer starts with the actual lyric—not a generic
+prompt—and receives a structured path toward a performance-ready arrangement:
+style and phonetic analysis, structure, optional reference-shape matching,
+semantic repair, performance annotations, and ad-libs. The payoff is leverage
+without a black box: the writer can tune the arrangement controls, open every
+intermediate stage, and export only the version that still sounds like the
+writer [@lyricsrefiner2026; @lyricsrefinerarticle2026].
 
-The key deterministic boundary is word preservation. After a stage, the system
-cleans tags and annotations, compares the candidate with the original source,
-and reports missing words. This check cannot prove artistic quality or cultural
-authenticity. It can catch a specific failure: an AI pass dropped source words.
+Its most important deterministic boundary is word preservation. After a stage,
+the system cleans tags and annotations, compares the candidate with the
+original source, and reports missing words. The check cannot decide whether a
+performance choice has taste or cultural authenticity. It does protect the
+writer from a specific and common failure: a model pass quietly dropped source
+words while making the output look polished.
 
 The security boundary matters as much as the prompt design. The project is
 local-only because its Vite client reads a user-owned OpenAI key. A browser build
@@ -98,18 +106,23 @@ Read the project README before adding a key. Use only lyrics you are authorized
 to share, keep `.env` local, and inspect every stage before exporting an
 arrangement.
 
-### Case study 2: Newsmusic separates creation from delivery
+### Case study 2: Newsmusic turns a daily format into a controlled production line
 
-Newsmusic begins with configured news-channel metadata and transcripts, forms a
-brief, produces an original song corpus and creative direction, generates media,
-assembles a video, and prepares YouTube metadata. Its active orchestrator keeps
-third-party news-footage downloading disabled. Its documented default upload
-profile is private and review-gated [@newsmusic2026; @newsmusicarticle2026].
+Newsmusic is a creator-production system for turning news context into original,
+YouTube-ready music-video packages. It begins with configured channel metadata
+and transcripts, forms an editorial brief, develops an original song corpus and
+creative direction, generates music and imagery, assembles a video, and
+prepares delivery metadata. It is designed around a repeatable daily format:
+find the story, make an original interpretation, assemble the video, and make
+the package ready for the creator’s channel. Its active orchestrator keeps
+third-party news-footage downloading disabled, while the default upload profile
+is private and review-gated [@newsmusic2026; @newsmusicarticle2026].
 
-That separation keeps the workflow stoppable. A creator can inspect the brief,
-lyrics, media, and package before any upload. The project’s own Google OAuth and
-generation credentials are local, ignored by Git, and owned by the creator—not
-by the repository or this book.
+That separation makes a powerful workflow stoppable. A creator can inspect the
+brief, lyrics, media, and final package before any upload. Google OAuth and
+generation credentials remain local, ignored by Git, and owned by the creator—
+not by the repository or this book. The workflow automates a chain of work; it
+does not automate editorial accountability.
 
 Safe-first path:
 
@@ -142,14 +155,13 @@ live generation:
 4. Record the repository revision and documentation URL you read. Do not treat
    a changing external repository as a permanent benchmark result.
 
-| Concern | Lyrics Refiner | Newsmusic | Earlier chapters applied |
-| --- | --- | --- | --- |
-| Context and retrieval | writer’s lyric plus optional structural reference | configured sources, metadata, transcripts, and brief | 8–9 |
-| Structured pipeline | five narrow arrangement stages | staged ingest, creation, assembly, and delivery | 10 |
-| Deterministic check | source-word preservation report | dry-run and configuration/test boundaries | 10, 14 |
-| State and credentials | local browser state and user-owned key | local OAuth, local API configuration, ignored runtime state | 11–12 |
-| Human control | writer inspects and exports | private, review-gated delivery before public action | 12–13 |
-| Evaluation boundary | dropped-word detection, not artistic truth | factual, rights, and suitability review remain human work | 14 |
+\newpage
+
+![](../assets/generative-ai/generative-ai-lab-comparison-1.png)
+
+\newpage
+
+![](../assets/generative-ai/generative-ai-lab-comparison-2.png)
 
 ## What broke
 

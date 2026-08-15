@@ -27,7 +27,8 @@ if [[ ! -f "$generated" ]]; then
 fi
 mv "$generated" "$unpolished"
 uv run python "$root_dir/scripts/polish_pdf.py" "$unpolished" "$output"
+uv run python "$root_dir/scripts/prepare_lulu_pdf.py" "$output"
 rm -f "$unpolished"
 echo "Wrote $output"
-echo "BETA MASTER: Exported with LibreOffice for online reading and layout review only."
-echo "NON-RELEASE: Microsoft Word remains required for the final Lulu upload PDF."
+echo "LULU CANDIDATE: audited for embedded used fonts, 300 ppi title art, and flattened transparency."
+echo "REVIEW REQUIRED: inspect the physical proof before approving publication."

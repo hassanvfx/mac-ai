@@ -28,6 +28,26 @@ area. Lulu.com is the ISBN imprint; Waken AI Labs is the editorial brand.
 
 \newpage
 
+::: {.dedication}
+
+*To my friend Arturo Castelan—a maestro in the wisdom and philosophy of life,
+whose guidance has guided others for more than two decades—and to my wife, Fernanda Beltran, who
+lights my days with her unstoppable strength and never gives up on me.*
+
+*With special thanks to Brett O’Brien for his continued support and for opening
+the door to Silicon Valley. I’m grateful for the years we spent reimagining
+mobile social video at Viddy through short-form video and visual effects on
+mobile devices.*
+
+*And to Zeus—Pakito, as we lovingly called him—the faithful companion behind so
+many long nights spent creating my projects. You were the essence of friendship
+in this world, my best friend. Your spirit is immortalized on this cover. Until
+we meet again in the infinite.*
+
+:::
+
+\newpage
+
 ::: {.about-author}
 
 # About the Author
@@ -47,9 +67,9 @@ learning path for Apple Silicon developers.
 
 # Acknowledgements
 
-This beta edition is a working manuscript. Technical review, copyediting,
-print-proof acknowledgements, and final cover production will be completed
-before commercial distribution.
+The companion repository is published as open-source software under the MIT
+License. The book text, diagrams, illustrations, and cover artwork remain
+all-rights-reserved as stated on the copyright page.
 
 :::
 

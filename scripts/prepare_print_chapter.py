@@ -7,7 +7,6 @@ import re
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = json.loads((ROOT / "book/qrcode-manifest.json").read_text(encoding="utf-8"))
 
@@ -91,6 +90,14 @@ def main() -> None:
     chapter_id = source.name[:2]
     text = without_front_matter(source.read_text(encoding="utf-8"))
     text = text.replace("](../assets/", "](assets/")
+    # MDX must keep canonical image syntax free of Pandoc attributes. Add the
+    # fixed print width only in the temporary manuscript copy so the Chapter 15
+    # comparison plates remain legible inside the 6×9 text area.
+    for asset in (
+        "assets/generative-ai/generative-ai-lab-comparison-1.png",
+        "assets/generative-ai/generative-ai-lab-comparison-2.png",
+    ):
+        text = text.replace(f"]({asset})", f"]({asset}){{width=4.25in}}")
     if source.name == "00-preamble-the-authors-toolkit.md":
         panel = clineflow_panel()
     else:

@@ -2805,6 +2805,45 @@ and generated-DOCX inspection have all happened.
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
 
+### 2026-08-15 — Lulu master-PDF remediation
+
+**Goal:** Correct the exact `make master-pdf` artifact for a new Lulu upload,
+without introducing a parallel Word or cover workflow.
+
+**Decision record:**
+
+- Lulu reported non-embedded fonts on page 4, a sub-200-ppi first-page image,
+  high ink coverage on the ClineFlow visual on page 8, and transparency on
+  pages 8, 155, and 156.
+- Generated TOC and folio overlays now use versioned DejaVu Serif TrueType
+  files so their visible glyphs carry embedded font programs.
+- The approved title plate is mechanically upscaled to 1800×2700 px at 300 ppi
+  after its white-background normalization. This preserves the approved art
+  exactly but remains subject to physical-proof review.
+- The approved dark ClineFlow visual remains in the print manuscript after
+  visual review. Lulu's Color Standard ink-coverage notice is therefore a
+  proof-review warning rather than a reason to replace an approved visual.
+- The pipeline rasterizes only the visual title page and detected transparent
+  pages at 300 ppi RGB, then audits the assembled PDF for used, unembedded
+  fonts and residual transparency. The resulting `pdf-online.pdf` is the
+  artifact for Lulu re-upload.
+
+**Required verification:**
+
+- [x] Built the master and confirmed the PDF audit passes: no used,
+  unembedded fonts and no detectable transparency resources.
+- [x] Rendered and inspected the title page and the approved original
+  ClineFlow page after export. The ClineFlow page intentionally retains its
+  dark visual direction; its Lulu ink-coverage warning is a proof-review item.
+- [x] Ran 6×9/300-ppi preflight, Lulu/ISBN validation, reader-bridge
+  validation, and manuscript audit (48,721 words).
+
+**Commit boundary:**
+
+- Commit the completed print-layout, Chapter 15, front-matter, QR/publishing,
+  Lulu-remediation, and supplied cover-template design assets together. Push
+  `main` to `hassanvfx/mac-ai`.
+
 ### 2026-08-15 — Lulu ISBN and Global Distribution integration
 
 **What changed:**
@@ -3015,6 +3054,65 @@ and generated-DOCX inspection have all happened.
 
 - Publish the ClineFlow QR bridge and visual installation card together so the
   book, course, generated QR assets, and `main` branch remain synchronized.
+
+### 2026-08-15 — Dedicated front-matter page
+
+**What changed:**
+
+- Replaced the former blank courtesy page with the author-approved dedication
+  to Arturo Castelan, Fernanda Beltran, Brett O’Brien, and Zeus (“Pakito”).
+  It is canonical front matter, so the DOCX, beta master PDF, and future Word
+  release export share the same text.
+- Added a centered, italic dedication treatment with deliberate whitespace and
+  no visible folio. The fixed master sequence is now visual title page,
+  copyright/ISBN, dedication, generated contents, then manuscript.
+- Updated PDF composition, publication validation, and the publishing protocol
+  so contents pagination is derived from this revised physical-page sequence.
+
+**Verification:**
+
+- Rebuilt the 198-page `pdf-online.pdf` master and visually inspected page 3:
+  the dedication is centered, legible, and isolated from the footer.
+- DOCX/ISBN validation, TOC and publication validation, 6×9 beta preflight,
+  reader-bridge validation, the full 45-test suite, and the production site
+  build passed. The current 162 ppi visual title art remains beta-only and is
+  still blocked from a final Lulu upload.
+
+### 2026-08-15 — Generative AI Lab production layout and interior title normalization
+
+**What changed:**
+
+- Reframed Chapter 15 as the applied capstone: Lyrics Refiner is presented as a
+  writer-controlled local arrangement studio, and Newsmusic as a review-gated
+  news-to-original-music-video production system. Both descriptions retain
+  repository-backed claims and explicit human, rights, credential, spend, and
+  publication boundaries.
+- Replaced the broken four-column DOCX table with two print-native comparison
+  plates. Their visual foundation was generated with ChatGPT Image 2; every
+  product name, workflow label, and control statement is rendered
+  deterministically in `scripts/build_print_art.py` for exact print text.
+- Created a separate interior title-page asset by converting only the neutral
+  cream paper field of the shared cover to pure white. The original dog,
+  title, author, and imprint are unchanged; the surrounding master page and
+  image now share the same white field.
+- Corrected the dedication’s Arturo Castelan wording and replaced the former
+  beta-only acknowledgement with the companion repository’s MIT open-source
+  notice, while preserving all-rights-reserved book and artwork language.
+
+**Source and verification:**
+
+- Image 2 prompt: a portrait editorial systems map of a lyric-arrangement
+  workflow and a news-to-video workflow, with no generated wording or logos.
+  The raw asset is versioned as
+  `book/assets/generative-ai/generative-ai-lab-flow-imagegen2.png`; generated
+  comparison plates are 1800 pixels wide with 300 ppi metadata.
+- Rebuilt the master and inspected the visual title page plus Chapter 15 pages
+  151–157. The title page has no visible cream/white letterbox boundary; the
+  comparison is readable across two consecutive pages; no residual table,
+  clipped heading, orphaned caption, or split image remains.
+- Added source validation for the pure-white title corners and both Chapter 15
+  comparison plates. The 6×9 beta preflight still records the legacy cover art
+  at 162 ppi as a final-Lulu blocker.
 
 ### 2026-08-15 — Beta manuscript word target reached
 

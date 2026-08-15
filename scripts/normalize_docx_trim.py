@@ -161,6 +161,30 @@ def polish_layout(root: ET.Element, temporary: Path) -> None:
             extent.set("cy", str(round(height * scale)))
 
 
+def style_dedication(paragraph: ET.Element, *, opening: bool) -> None:
+    """Center the authored dedication without affecting normal body prose."""
+    properties = paragraph.find("w:pPr", NS)
+    if properties is None:
+        properties = ET.Element(f"{{{W}}}pPr")
+        paragraph.insert(0, properties)
+    alignment = properties.find("w:jc", NS)
+    if alignment is None:
+        alignment = ET.SubElement(properties, f"{{{W}}}jc")
+    alignment.set(f"{{{W}}}val", "center")
+    indent = properties.find("w:ind", NS)
+    if indent is None:
+        indent = ET.SubElement(properties, f"{{{W}}}ind")
+    indent.set(f"{{{W}}}left", "360")
+    indent.set(f"{{{W}}}right", "360")
+    spacing = properties.find("w:spacing", NS)
+    if spacing is None:
+        spacing = ET.SubElement(properties, f"{{{W}}}spacing")
+    spacing.set(f"{{{W}}}before", "1440" if opening else "180")
+    spacing.set(f"{{{W}}}after", "260")
+    spacing.set(f"{{{W}}}line", "276")
+    spacing.set(f"{{{W}}}lineRule", "auto")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("docx", type=Path)
@@ -188,6 +212,8 @@ def main() -> None:
         # have intentional starts in both Word and LibreOffice review renders.
         for paragraph in root.findall(".//w:body/w:p", NS):
             text = "".join(run.text or "" for run in paragraph.findall(".//w:t", NS))
+            if text.startswith(("To my friend Arturo Castelan", "With special thanks to Brett O’Brien", "And to Zeus—Pakito")):
+                style_dedication(paragraph, opening=text.startswith("To my friend Arturo Castelan"))
             style = paragraph.find("w:pPr/w:pStyle", NS)
             style_name = style.get(f"{{{W}}}val") if style is not None else ""
             begins_section = text in {

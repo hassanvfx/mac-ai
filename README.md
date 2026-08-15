@@ -154,12 +154,13 @@ available under the MIT License.
 ## Publishing workflow
 
 The Markdown manuscript builds into a 6×9 Lulu-oriented DOCX using the
-versioned Word template. `book/build/pdf-online.pdf` is the single beta master:
-it is both the online reading PDF and the interior-layout review artifact. Its
+versioned Word template. `book/build/pdf-online.pdf` is the single master:
+it is both the online reading PDF and the Lulu interior submission candidate. Its
 first page reuses the shared visual title plate, followed by copyright with the
-assigned ISBN, a courtesy blank page, and a generated contents page. A final
-upload PDF must still be exported through Microsoft Word on macOS and visually
-inspected page by page. Cover production remains a separate workflow.
+assigned ISBN, a dedication page, and a generated contents page. The same
+pipeline embeds the fonts it uses and flattens detected transparency; it still
+requires page-by-page inspection and a physical proof. Cover production remains
+a separate workflow.
 
 ```bash
 make book

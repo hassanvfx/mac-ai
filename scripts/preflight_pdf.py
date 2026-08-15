@@ -13,7 +13,7 @@ POINTS_PER_INCH = 72
 SIZE_TOLERANCE_POINTS = 2.0  # LibreOffice review export may round Word twips.
 INTERIOR = (6 * POINTS_PER_INCH, 9 * POINTS_PER_INCH)
 FRONT_COVER = (6.25 * POINTS_PER_INCH, 9.25 * POINTS_PER_INCH)
-TITLE_ART = Path(__file__).resolve().parents[1] / "book/assets/cover/pdf-online-cover.png"
+TITLE_ART = Path(__file__).resolve().parents[1] / "book/assets/cover/pdf-online-cover-interior-production.png"
 
 
 def page_size(page: object) -> tuple[float, float]:
@@ -53,7 +53,7 @@ def main() -> int:
             effective_ppi = min(image.width / 6, image.height / 9)
         message = f"Title artwork effective resolution is {effective_ppi:.0f} ppi at 6 x 9 in."
         if effective_ppi < 300:
-            print(f"WARNING: {message} The beta master is not a final Lulu upload artifact.")
+            print(f"WARNING: {message} The master cannot be uploaded to Lulu yet.")
             if args.release:
                 print("ERROR: Release preflight requires title artwork at 300 ppi or higher.")
                 failures += 1
@@ -62,7 +62,7 @@ def main() -> int:
     if failures:
         return 1
     print(f"PASS: {len(reader.pages)} single page(s) at {expected_label} in.")
-    print("Manual gate: inspect embedded fonts, raster source resolution, safety margins, and every rendered page.")
+    print("Manual gate: inspect safety margins, ink coverage, and every rendered page.")
     return 0
 
 

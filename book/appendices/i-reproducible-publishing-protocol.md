@@ -52,12 +52,15 @@ make validate-publication
 make release-manifest
 ```
 
-The LibreOffice route produces one beta master at `book/build/pdf-online.pdf`.
-It is both the online reading edition and the interior-layout review artifact:
-visual title page, copyright/ISBN page, courtesy blank, generated contents, and
-manuscript. The release candidate is produced by opening the same DOCX in
-Microsoft Word on macOS and exporting to PDF with the final printer settings.
-Never label the beta master as a release artifact.
+The reproducible route produces one submission candidate at
+`book/build/pdf-online.pdf`. It is both the online reading edition and the
+interior artifact:
+visual title page, copyright/ISBN page, dedication, generated contents, and
+manuscript. The final stage embeds the fonts used in generated pages, uses the
+versioned 300 ppi title asset, flattens only pages with transparency at 300 ppi,
+and rejects a PDF with residual transparency or unembedded used fonts. The
+approved ClineFlow visual remains intentionally dark; Lulu may retain its
+Color Standard ink-coverage warning, which is reviewed on the physical proof.
 
 The reader bridge is one synchronized publishing unit. Its manifest maps every
 numbered chapter to the live `main`-branch lab URL, code command, expected
@@ -67,12 +70,12 @@ source. Update prose, command, benchmark, manifest, QR, Pages output, and PDF
 in the same publication change.
 
 After LibreOffice renders the body, the publishing step creates the one master
-sequence: shared visual title page, copyright/ISBN page, one blank courtesy
-page, contents, then the remaining manuscript. It locates chapter starts in
+sequence: shared visual title page, copyright/ISBN page, dedication, contents,
+then the remaining manuscript. It locates chapter starts in
 that same result, generates the contents from measured pagination, applies
 folios only after the front matter, and records hashes and page counts in the
-publication manifest. The future Microsoft Word/Lulu export must repeat this
-render → derive contents → validate sequence; page numbers are never maintained
+publication manifest. It then performs the font, transparency, and title-art
+audit on exactly the PDF submitted to Lulu; page numbers are never maintained
 by hand.
 
 The build script handles a subtle but important source-sharing detail. Chapter
@@ -85,7 +88,7 @@ The web and print readers still receive the same prose.
 ## Inspecting the interior
 
 Review pages in a sequence rather than scrolling randomly. Begin with the
-shared visual title page, copyright, courtesy blank page, and contents page.
+shared visual title page, copyright, dedication page, and contents page.
 Confirm that the assigned ISBN matches the centralized Lulu distribution
 metadata and that there is no accidental barcode in the interior. The barcode
 belongs only in Lulu's final cover-template area. Then inspect every chapter

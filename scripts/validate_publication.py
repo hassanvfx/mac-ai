@@ -46,8 +46,8 @@ def main() -> None:
     copyright_text = page_texts[1]
     if "copyright © 2026 hassan uriostegui" not in copyright_text or "isbn" not in copyright_text:
         raise SystemExit("Master page 2 must be the copyright page with the assigned ISBN.")
-    if page_texts[2].strip():
-        raise SystemExit("Master page 3 must be the courtesy blank page.")
+    if "to my friend arturo castelan" not in page_texts[2] or "and to zeus" not in page_texts[2]:
+        raise SystemExit("Master page 3 must be the authored dedication page.")
     if "contents" not in page_texts[3]:
         raise SystemExit("Master page 4 must be the generated contents page.")
     for entry in data["toc_entries"]:

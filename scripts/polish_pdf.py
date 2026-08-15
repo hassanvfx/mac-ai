@@ -14,12 +14,29 @@ from pypdf import PdfReader, PdfWriter
 from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
 from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 
 ROOT = Path(__file__).resolve().parents[1]
-COVER = ROOT / "book/assets/cover/pdf-online-cover.png"
+COVER = ROOT / "book/assets/cover/pdf-online-cover-interior-production.png"
+FONT_DIR = ROOT / "book" / "fonts"
+SERIF = "MacAiDejaVuSerif"
+SERIF_BOLD = "MacAiDejaVuSerifBold"
+SERIF_ITALIC = "MacAiDejaVuSerifItalic"
 BLUE = HexColor("#173F73")
 INK = HexColor("#44515E")
+
+
+def register_fonts() -> None:
+    """Use versioned TrueType fonts so ReportLab embeds every visible glyph."""
+    for name, filename in (
+        (SERIF, "DejaVuSerif.ttf"),
+        (SERIF_BOLD, "DejaVuSerif-Bold.ttf"),
+        (SERIF_ITALIC, "DejaVuSerif-Italic.ttf"),
+    ):
+        if name not in pdfmetrics.getRegisteredFontNames():
+            pdfmetrics.registerFont(TTFont(name, str(FONT_DIR / filename)))
 
 
 def digest(path: Path) -> str:
@@ -86,7 +103,7 @@ def contents_page(width: float, height: float, entries: list[tuple[str, int | No
     canvas = Canvas(stream, pagesize=(width, height))
     canvas.setFillColor(BLUE)
     canvas.rect(54, height - 72, width - 108, 3, stroke=0, fill=1)
-    canvas.setFont("Times-Bold", 22)
+    canvas.setFont(SERIF_BOLD, 22)
     canvas.drawString(54, height - 112, "Contents")
     y = height - 146
     chapter_number = 0
@@ -95,12 +112,12 @@ def contents_page(width: float, height: float, entries: list[tuple[str, int | No
     for title, page, is_appendix in entries:
         if is_appendix and not in_appendices:
             y -= 8
-            canvas.setFont("Times-Bold", 10)
+            canvas.setFont(SERIF_BOLD, 10)
             canvas.setFillColor(BLUE)
             canvas.drawString(54, y, "APPENDICES")
             y -= 18
             in_appendices = True
-        canvas.setFont("Times-Roman", 9.5)
+        canvas.setFont(SERIF, 9.5)
         canvas.setFillColor(HexColor("#202020"))
         if is_appendix:
             appendix_number += 1
@@ -116,13 +133,13 @@ def contents_page(width: float, height: float, entries: list[tuple[str, int | No
         canvas.drawString(54, y, label[:76])
         if page is not None:
             number = str(page)
-            canvas.setFont("Times-Bold", 9.5)
+            canvas.setFont(SERIF_BOLD, 9.5)
             canvas.drawRightString(width - 54, y, number)
-            start = 54 + stringWidth(label, "Times-Roman", 9.5) + 8
-            canvas.line(start, y - 2, width - 54 - stringWidth(number, "Times-Bold", 9.5) - 8, y - 2)
+            start = 54 + stringWidth(label, SERIF, 9.5) + 8
+            canvas.line(start, y - 2, width - 54 - stringWidth(number, SERIF_BOLD, 9.5) - 8, y - 2)
         y -= 17
     canvas.setFillColor(INK)
-    canvas.setFont("Times-Italic", 8)
+    canvas.setFont(SERIF_ITALIC, 8)
     canvas.drawString(54, 42, "Beta master edition · generated from the rendered manuscript")
     canvas.save()
     return PdfReader(io.BytesIO(stream.getvalue()))
@@ -134,7 +151,7 @@ def footer(width: float, height: float, page_number: int) -> PdfReader:
     canvas.setStrokeColor(HexColor("#CCD4DC"))
     canvas.line(54, 35, width - 54, 35)
     canvas.setFillColor(INK)
-    canvas.setFont("Times-Roman", 7.5)
+    canvas.setFont(SERIF, 7.5)
     canvas.drawString(54, 21, "AI From Tensors to Agents on Mac Silicon")
     canvas.drawRightString(width - 54, 21, str(page_number))
     canvas.save()
@@ -147,14 +164,15 @@ def main() -> None:
     source, output = map(Path, sys.argv[1:])
     if not COVER.is_file():
         raise SystemExit(f"Missing shared title art: {COVER}")
+    register_fonts()
     reader = PdfReader(str(source))
-    if not reader.pages:
-        raise SystemExit("Rendered interior contains no pages")
+    if len(reader.pages) < 2:
+        raise SystemExit("Rendered interior must contain copyright and dedication pages")
     width = float(reader.pages[0].mediabox.width)
     height = float(reader.pages[0].mediabox.height)
     source_entries = [(display, search, locate(reader, search), is_appendix) for display, search, is_appendix in titles()]
     toc_entries = [
-        (title, page + 3 if page is not None else None, is_appendix)
+        (title, page + 2 if page is not None else None, is_appendix)
         for title, _, page, is_appendix in source_entries
     ]
     first_content = locate(reader, "The Author's Toolkit") or 2
@@ -162,10 +180,10 @@ def main() -> None:
     writer = PdfWriter()
     writer.add_page(visual_title_page(width, height).pages[0])
     writer.add_page(reader.pages[0])  # copyright page
-    writer.add_blank_page(width, height)  # courtesy page
+    writer.add_page(reader.pages[1])  # dedication page
     writer.add_page(contents_page(width, height, toc_entries).pages[0])
-    for source_page, page in enumerate(reader.pages[1:], start=2):
-        physical_page = source_page + 3
+    for source_page, page in enumerate(reader.pages[2:], start=3):
+        physical_page = source_page + 2
         if source_page >= first_content:
             overlay = footer(float(page.mediabox.width), float(page.mediabox.height), physical_page)
             page.merge_page(overlay.pages[0])

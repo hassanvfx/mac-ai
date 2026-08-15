@@ -1,4 +1,4 @@
-.PHONY: test lint audit-book site book master-pdf provisional-pdf pdf-online preflight cover qrcodes release-manifest validate-reader-bridge validate-publication validate-lulu validate-lulu-interior publish-review
+.PHONY: test lint audit-book site book print-art master-pdf provisional-pdf pdf-online preflight cover qrcodes release-manifest validate-reader-bridge validate-publication validate-lulu validate-lulu-interior publish-review
 
 test:
 	uv run pytest
@@ -15,10 +15,14 @@ site:
 book:
 	./scripts/build-book.sh
 
+print-art:
+	uv run python scripts/build_print_art.py
+
 preflight:
 	uv run python scripts/preflight_pdf.py book/build/pdf-online.pdf --kind interior
+	uv run python scripts/prepare_lulu_pdf.py book/build/pdf-online.pdf --audit-only
 
-master-pdf: book validate-lulu-interior
+master-pdf: print-art book validate-lulu-interior
 	./scripts/export-provisional-pdf.sh
 
 provisional-pdf: master-pdf

@@ -17,6 +17,11 @@ METADATA = ROOT / "book/lulu-distribution.yaml"
 FRONT_MATTER = ROOT / "book/front-matter.md"
 ISBN_DIR = ROOT / "isbn"
 COVER = ROOT / "book/assets/cover/pdf-online-cover.png"
+INTERIOR_TITLE = ROOT / "book/assets/cover/pdf-online-cover-interior-production.png"
+INFOGRAPHICS = (
+    ROOT / "book/assets/generative-ai/generative-ai-lab-comparison-1.png",
+    ROOT / "book/assets/generative-ai/generative-ai-lab-comparison-2.png",
+)
 REQUIRED = (
     "title", "subtitle", "author", "copyright_holder", "copyright_year", "isbn13",
     "imprint", "editorial_brand", "language", "description", "bisac_categories", "keywords",
@@ -71,6 +76,25 @@ def source_checks(metadata: dict[str, str]) -> list[str]:
         errors.append("Interior must describe, but not embed, the barcode.")
     if not COVER.is_file():
         errors.append("Missing shared visual title page: book/assets/cover/pdf-online-cover.png")
+    if not INTERIOR_TITLE.is_file():
+        errors.append("Missing normalized interior visual title page.")
+    elif INTERIOR_TITLE.is_file():
+        with Image.open(INTERIOR_TITLE).convert("RGB") as image:
+            corners = ((0, 0), (image.width - 1, 0), (0, image.height - 1), (image.width - 1, image.height - 1))
+            if any(image.getpixel(point) != (255, 255, 255) for point in corners):
+                errors.append("Interior visual title page must have pure-white outer corners.")
+            if image.width < 1000 or image.height < 1400:
+                errors.append("Interior visual title page is too small for review output.")
+    for infographic in INFOGRAPHICS:
+        if not infographic.is_file():
+            errors.append(f"Missing Chapter 15 comparison plate: {infographic.name}")
+            continue
+        with Image.open(infographic) as image:
+            if image.width < 1800 or image.height < 1300:
+                errors.append(f"Chapter 15 comparison plate is undersized: {infographic.name}")
+            dpi = image.info.get("dpi", (0, 0))
+            if min(dpi) < 299:
+                errors.append(f"Chapter 15 comparison plate lacks 300 ppi metadata: {infographic.name}")
 
     assets = {path.name for path in ISBN_DIR.glob(f"{isbn}.*")}
     expected = {f"{isbn}.svg", f"{isbn}.png", f"{isbn}.pdf"}
