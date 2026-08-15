@@ -34,6 +34,22 @@ project therefore treats a versioned fixture corpus and deterministic evaluator
 as a safety net, while keeping the much larger live book corpus local for
 interactive work.
 
+Start a reliability policy with an inventory of promises. For each promise,
+name the input boundary, the code path that enforces it, a deterministic test
+case, the trace field that makes the result inspectable, and the condition that
+would make a release fail. “The assistant is safe” is not an inventory entry.
+“A plan cannot retain an evidence path outside its retrieved allow-list” is.
+The narrower wording tells a contributor where to look when a regression
+appears and tells a reader exactly what has—not—been demonstrated.
+
+Reliability also requires separation of concerns. Correct mathematical
+experiments, accurate editorial prose, grounded retrieval, valid navigation,
+and print-ready layout are related release properties but have different
+authoritative checks. A green Python test suite cannot prove a diagram prints
+legibly; a successful DOCX conversion cannot prove a generated plan cites the
+right source. The beta release gate must assemble evidence from each layer
+without letting one convenient green command stand in for all of them.
+
 ## Minimal implementation
 
 The frozen fixture corpus and [reliability runner](../../evals/run_reliability.py)
@@ -56,6 +72,14 @@ test output. Its safe location makes it useful for inspecting a run without
 asking contributors to commit potentially noisy details. A release record can
 summarize its result, but should link to the versioned fixture and evaluator
 that made the trace meaningful.
+
+The fixture cases are specification examples, not merely regression data. A
+new capability should arrive with at least one positive case, one missing or
+malformed-input case, one provenance or authority-boundary case, and a clear
+expected outcome. Keep cases small enough that a failing result points to a
+specific contract. If a case needs a real provider, split its deterministic
+structural checks from its explicitly configured, non-secret benchmark instead
+of making ordinary contributors depend on a credential.
 
 ```bash
 uv run --group agents python evals/run_reliability.py
@@ -86,6 +110,22 @@ approval requirements. Missing API configuration, unavailable local weights,
 or malformed structured output are failures to surface, not invitations to
 fall back to an uncited free-form answer.
 
+Define graceful degradation before an outage occurs. If learned embeddings are
+unavailable, label and use the deterministic retrieval baseline for contract
+tests; do not claim semantic search occurred. If a model adapter is unavailable,
+return its configuration error or continue only through an explicitly
+deterministic no-model route. If no evidence is retrieved, refuse rather than
+write a generic plan. A reliable fallback preserves the important boundary; it
+does not merely keep a user interface talking.
+
+Traces should be actionable but proportionate. Include the case ID, corpus or
+fixture revision, declared policy, pass/fail result, and details needed to
+reproduce a failure. Redact secrets and avoid storing unnecessary private text.
+For a controlled model experiment, add provider/model identity and timing
+fields only after choosing a configuration. Trace retention then becomes an
+operational decision with ownership and deletion rules, not an accidental pile
+of prompts and outputs.
+
 ## Experiment
 
 Run the reliability suite from a clean environment and inspect the generated
@@ -106,6 +146,22 @@ redaction rules in a committed benchmark record. Include failed or refused
 requests. A median latency without request count, warm-up policy, or model
 identity is not a useful reliability result; it is merely a number.
 
+Turn these observations into release gates. For a local beta candidate: install
+from the locked environment; run format/lint and deterministic tests; execute
+the fixture reliability suite; audit manuscript links, citations, and required
+sections; build the site; and build the DOCX. Each failure blocks the candidate
+until its cause and retest are recorded. The final Word-exported PDF, full
+page-by-page visual inspection, and Lulu-specific preflight remain separate
+print gates because they depend on an externally produced artifact and current
+publication settings.
+
+An explicit unknown is a valid release result. This project has no selected
+API provider/model benchmark, no measured API latency or quality comparison,
+and no final Word PDF in this repository. Those absences must appear in the
+beta record rather than becoming blank cells in a performance table. The
+deterministic suite shows its limited contracts; it does not fill the missing
+external evidence.
+
 ## What broke
 
 The project has already observed weak retrieval neighbors, absent API
@@ -122,6 +178,14 @@ different code path writes a file; the planning case snapshots fixture files
 before and after the proposal. These are not proofs of universal safety, but
 they turn known failure modes into regressions that a contributor can reproduce.
 
+Beware of metric theater as well as silent failures. Counting many test cases
+does not help if they all exercise the same happy path. A high retrieval score
+does not demonstrate citation entailment. A low average latency does not show
+that refusals are safe, that every trace was retained, or that a tail latency
+is acceptable. Pair quantitative observations with the contract they are meant
+to support, preserve failure samples, and revise the evaluation set when a
+real incident reveals a missing category.
+
 ## Alternatives
 
 Manual editorial review, pull requests, and conventional search remain strong
@@ -136,6 +200,12 @@ states. The Docusaurus build catches broken course navigation, while the DOCX
 build exposes print-asset conversion problems. These tools do different jobs;
 none makes the others redundant.
 
+Release checklists and human review are another alternative to automated
+evaluation, not an afterthought. They are especially important for claims that
+need subject-matter judgment, for print layout, and for changes to the safety
+policy itself. Automation makes repeatable facts cheap to recheck; it does not
+transfer editorial, legal, or publication responsibility to a script.
+
 ## When to use it—and when not to
 
 Use the assistant to locate evidence and prepare proposals. Do not use it as an
@@ -149,6 +219,13 @@ larger epistemic question: is the whole manuscript correct? A human editor,
 subject-matter review, and reproducible experiments remain necessary. When a
 new capability is proposed, define its failure cases and the evidence required
 for release before wiring it into a workflow with more authority.
+
+Before increasing authority, use a capability review: What new action becomes
+possible? What exact evidence and approval scope are required? Which test
+proves rejection, unavailability, and retry behavior? What state is retained,
+where, and for how long? How does the feature roll back without removing source
+work? If these questions cannot be answered, keep the capability read-only.
+This provides a concrete stopping rule for beta enthusiasm.
 
 ## Evidence trail
 

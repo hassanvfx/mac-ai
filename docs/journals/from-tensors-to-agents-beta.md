@@ -1866,3 +1866,31 @@ and generated-DOCX inspection have all happened.
 - [ ] Give Chapter 14 a third-pass expansion: turn evaluation, tracing,
   reliability policy, release gates, and operational boundaries into a concrete
   beta readiness checklist with explicit unknowns.
+
+### 2026-08-15 — Chapter 14 third editorial pass
+
+**What changed:**
+
+- Expanded Chapter 14 from 1,202 to 1,932 words. It now defines an inventory
+  of reliability promises, separates manuscript/site/experiment/print evidence,
+  and treats frozen cases as executable specifications.
+- Added graceful-degradation rules, trace minimization and retention guidance,
+  concrete local beta gates, an explicit record of unmeasured API/PDF unknowns,
+  metric-theater cautions, and a capability-review stopping rule.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 30,304 words, still below the
+  45,000–55,000 beta target.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents pytest
+  tests/test_reliability.py tests/test_book_intelligence_evaluation.py` passed
+  (2 tests).
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run --group agents python
+  evals/run_reliability.py` passed all 6 versioned no-secret cases.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Run a cross-manuscript editorial audit: assess the remaining 14,696-word
+  gap to the beta target, prioritize the shortest chapters for fourth-pass
+  expansion, and then re-run full Python, site, and DOCX validation.
