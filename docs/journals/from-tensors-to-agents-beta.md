@@ -1111,3 +1111,9 @@ and generated-DOCX inspection have all happened.
 - Added stale-index guidance: indexes are caches rebuilt from tracked files;
   rendered evidence paths must remain inside the corpus and weak retrieval must
   fail closed.
+
+### 2026-08-15 — Chapter 10 adapter contract (start)
+
+- Began the structured-systems editorial pass: direct and framework adapters
+  must share retrieved evidence and either return validated, source-scoped
+  output or expose their failure; typed output is never permission to act.

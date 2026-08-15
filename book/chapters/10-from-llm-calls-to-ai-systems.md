@@ -12,6 +12,12 @@ permissions are explicit. An orchestration library can make integration easier,
 but it cannot turn ungrounded context into evidence or a parsed JSON object
 into permission to act.
 
+The useful unit of comparison is an adapter contract. Given the same retrieved
+evidence and requested schema, each adapter should either return a validated,
+source-scoped object or expose why it cannot. Provider choice, prompt wording,
+and parsing convenience are secondary to that invariant when the result may
+influence a chapter or experiment plan.
+
 ## Problem
 
 The Book Intelligence Assistant needs to turn retrieved source material into a
