@@ -28,6 +28,8 @@ The negative value means that a small increase in this particular weight
 reduces the loss locally. The goal is to verify that PyTorch’s autograd system
 constructs the same derivative from ordinary tensor operations.
 
+![The forward pass computes a loss; the backward pass propagates its gradient to the parameter.](../assets/day1/gradient-flow.png)
+
 ## Minimal implementation
 
 ```bash

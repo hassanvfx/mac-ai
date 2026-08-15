@@ -13,6 +13,8 @@ update the parameters. PyTorch exposes that cycle directly. That visibility is
 valuable at the start because it lets us connect the tensor shapes from Chapter
 1 and gradients from Chapter 2 to an actual learning system.
 
+![The explicit six-step PyTorch training loop.](../assets/day1/training-loop.png)
+
 ## Problem
 
 Build the smallest network that can learn a known relationship without hiding

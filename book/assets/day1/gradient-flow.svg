@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="820" viewBox="0 0 1500 820" role="img" aria-labelledby="title desc">
+  <title id="title">Forward computation and backward gradient flow</title><desc id="desc">Weight produces a prediction, then a loss. The backward pass propagates a gradient from loss to weight.</desc>
+  <style>.h{font:600 30px Arial,sans-serif;fill:#172033}.f{font:27px Menlo,monospace;fill:#172033}.s{font:22px Arial,sans-serif;fill:#4b5563}.n{fill:#f7f9fc;stroke:#172033;stroke-width:3}.l{fill:#fff5f1;stroke:#b54708;stroke-width:3}.fw{fill:none;stroke:#245ca6;stroke-width:5;marker-end:url(#a)}.bw{fill:none;stroke:#b54708;stroke-width:5;stroke-dasharray:13 10;marker-end:url(#b)}</style>
+  <defs><marker id="a" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0L12 6 0 12Z" fill="#245ca6"/></marker><marker id="b" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto"><path d="M0 0L12 6 0 12Z" fill="#b54708"/></marker></defs>
+  <rect width="1500" height="820" fill="#ffffff"/>
+  <text class="h" x="95" y="90">Forward pass: compute a prediction and loss</text>
+  <rect class="n" x="100" y="180" width="240" height="180" rx="18"/><text class="h" x="165" y="240">Parameter</text><text class="f" x="160" y="292">weight = 3</text><text class="s" x="142" y="330">requires_grad=True</text>
+  <rect class="n" x="600" y="180" width="300" height="180" rx="18"/><text class="h" x="675" y="240">Prediction</text><text class="f" x="642" y="292">2 × weight = 6</text><text class="s" x="688" y="330">target = 10</text>
+  <rect class="l" x="1160" y="180" width="240" height="180" rx="18"/><text class="h" x="1230" y="240">Loss</text><text class="f" x="1190" y="292">(6 − 10)²</text><text class="f" x="1240" y="330">= 16</text>
+  <path class="fw" d="M345 270H590"/><text class="s" x="420" y="245">multiply by 2</text><path class="fw" d="M905 270H1150"/><text class="s" x="955" y="245">compare to target</text>
+  <text class="h" x="95" y="535">Backward pass: loss.backward() applies the chain rule</text><path class="bw" d="M1275 405C1275 620 770 620 750 405"/><path class="bw" d="M750 405C750 690 220 690 220 405"/><text class="f" x="805" y="650">d(loss)/d(prediction) = −8</text><text class="f" x="255" y="720">d(loss)/d(weight) = −16</text><text class="s" x="100" y="775">The gradient is a local sensitivity. An optimizer uses it to choose a parameter update; it is not the update itself.</text>
+</svg>

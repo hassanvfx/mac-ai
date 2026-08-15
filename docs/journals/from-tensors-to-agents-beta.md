@@ -48,10 +48,12 @@ book/chapters + research + experiments + benchmarks → Book Intelligence Assist
 
 - [x] Expand tensors, gradients, and PyTorch chapters into evidence-backed drafts.
 - [x] Capture actual M4 Pro MPS measurements for the Day 1 workload.
-- [ ] Add print-quality tensor-shape, gradient-flow, and training-loop diagrams.
+- [x] Add print-quality tensor-shape, gradient-flow, and training-loop diagrams.
 - [x] Produce and visually inspect the first 6×9 DOCX proof.
 
 **Gate:** Day 1 code/tests pass, the benchmark record is complete, and Chapters 1–3 contain real prose, experiments, and takeaways.
+
+**Status:** Complete. The next active work is Milestone 2.
 
 ### Milestone 2 — Vision and Framework Comparison
 
@@ -420,3 +422,36 @@ The initial proof is readable but intentionally not release-ready: it is short b
 - [ ] Start Milestone 2 with a versioned vision-data fixture and a PyTorch CNN before writing the framework-comparison prose.
 
 **Status:** Milestone 1 substantially progressed; diagram assets remain before its gate can close.
+
+---
+
+### 2026-08-14 — Day 1 diagrams and Milestone 1 closure
+
+**What changed:**
+
+- Added editable SVG masters and matching PNG derivatives under `book/assets/day1/` for tensor broadcasting, autograd gradient flow, and the six-step PyTorch training loop.
+- Embedded the PNG derivatives in canonical Chapters 1–3 so the same Markdown renders the diagrams on the course site and in the DOCX.
+- Updated the DOCX builder’s temporary workspace to retain the canonical `chapters/` → `assets/` relationship and to rewrite print-copy asset paths safely.
+- Documented the SVG-master/PNG-derivative policy in `book/README.md`.
+
+**Why:**
+
+SVG is the editable, resolution-independent visual source. The local Pandoc installation lacks an SVG converter, so PNG derivatives provide reliable DOCX embedding without losing the editable original.
+
+**Verification:**
+
+- Docusaurus production build completed with the chapter images.
+- The manuscript DOCX built with no missing-image warnings after the asset-path fix.
+- Rendered and inspected all 16 pages of the current DOCX proof. All three diagrams are legible in the 6×9 layout; no clipping or overlap was observed.
+
+**Decision:**
+
+Milestone 1 is complete. The proof is still a draft artifact—not a release PDF—because later chapters remain incomplete and must add citations, experiments, and visual content before print production.
+
+**Next steps:**
+
+- [ ] Start Milestone 2: create a small versioned vision fixture and reproducible PyTorch CNN with train/validation/test metrics and error analysis.
+- [ ] Only then implement a matched TensorFlow/Keras version with the same split, seed, preprocessing, and metrics.
+- [ ] Expand Chapters 4–5 from recorded comparison evidence.
+
+**Status:** Milestone 1 complete; Milestone 2 ready to begin.

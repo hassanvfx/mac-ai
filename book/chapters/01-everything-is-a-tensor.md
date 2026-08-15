@@ -19,6 +19,8 @@ examples at once, and tensor libraries make that operation executable on CPUs
 and accelerators. The representation is therefore the bridge between a
 mathematical expression and a training program [@goodfellow2016deep].
 
+![A feature bias broadcasts across every example in a batch.](../assets/day1/tensor-broadcasting.png)
+
 ## Problem
 
 Suppose two examples each have three features and we want to add a different
