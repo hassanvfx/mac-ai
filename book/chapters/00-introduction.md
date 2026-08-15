@@ -233,6 +233,14 @@ Build the draft manuscript DOCX from the committed Lulu 6×9 Word template:
 ./scripts/build-book.sh
 ```
 
+The course site can render the editable SVG diagrams directly. Pandoc needs an
+SVG rasterizer such as `rsvg-convert` available on `PATH` to embed those same
+figures in DOCX; otherwise it warns and omits the image. Install that print
+dependency before treating a DOCX proof as visually complete, then rebuild and
+inspect the generated pages. Keep the SVG source under `book/assets/`; any PNG
+fallback should be generated from that source at print resolution, not edited
+independently.
+
 This writes `book/build/from-tensors-to-agents.docx`. It is a review artifact,
 not an upload-ready PDF. At print-production time, export it through Word on
 macOS, run the preflight script, and inspect every rendered page before calling

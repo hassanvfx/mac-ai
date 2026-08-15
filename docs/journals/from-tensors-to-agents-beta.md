@@ -1093,3 +1093,12 @@ and generated-DOCX inspection have all happened.
   Provenance must remain available for reader inspection.
 - Next: expand chunking, learned-index provenance, retrieval failures, and the
   embedding/retrieval visual.
+
+### 2026-08-15 — DOCX SVG conversion finding
+
+- Rebuilt the manuscript DOCX. Pandoc completed, but warned that it cannot
+  convert the new editable SVG diagrams because `rsvg-convert` is unavailable.
+- Added the requirement to the living installation chapter: SVG is canonical;
+  a rasterizer or source-derived print PNG is required before a visually
+  complete DOCX proof can be accepted.
+- No PDF or print-ready visual claim is made from this build.
