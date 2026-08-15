@@ -2463,3 +2463,30 @@ and generated-DOCX inspection have all happened.
 - [ ] Continue canonical manuscript expansion with the remaining teaching
   appendices, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
+
+### 2026-08-15 — Canonical guided-exercises appendix
+
+**What changed:**
+
+- Added Appendix D, *Guided Exercises and Evidence Prompts*. It gives ten
+  evidence-oriented exercises tied to the existing runnable companion material:
+  tensors, gradients, training, device selection, framework fixtures,
+  tokenization, retrieval, RAG, structured plans, and no-write approval.
+- Each exercise requires expected/actual observations and a limitation, rather
+  than treating terminal output as a complete answer.
+
+**Verification:**
+
+- `make audit-book` passed at 40,046 words; Appendix D contributes 1,237
+  words. The manuscript remains below the 45,000-word beta minimum.
+- `./scripts/build-book.sh` produced the ignored interim DOCX including all
+  four appendices.
+- `UV_CACHE_DIR=/private/tmp/ai-on-mac-uv-cache uv run pytest
+  tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Add the remaining canonical teaching material needed to reach the beta
+  word target, then run the full Python/site/reliability batch and render a
+  fresh interim DOCX proof.
