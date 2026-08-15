@@ -33,6 +33,15 @@ a built-in explanation of why a model chose a label: attention weights are part
 of the computation, while a trustworthy explanation requires a separate,
 validated evaluation question.
 
+At one position, attention can be written compactly as
+`softmax(QKᵀ / √dₖ)V`. The formula names an operation, not an interpretation:
+queries and keys create compatibility scores, scaling keeps their magnitude
+manageable, softmax normalizes them across permitted positions, and values are
+mixed using the resulting weights. Residual connections, feed-forward layers,
+normalization, many heads, and many stacked blocks make the full model more
+than this one line. Track tensor contracts and input masks before trying to
+tell a story about what any head “means.”
+
 ![Transformer inference turns text into an explicit sequence of model contracts.](../assets/transformers/tokenization-to-logits.svg)
 
 ## Problem
@@ -106,6 +115,20 @@ path is known to be equivalent on fixed inputs, a pipeline is useful for small
 applications and demonstrations. If it later disagrees, reduce back to the
 direct path first rather than guessing which convenience default changed.
 
+The two paths should match only under a shared contract. Keep model revision,
+tokenizer revision, label mapping, device, truncation setting, maximum length,
+and batch/input order fixed. A pipeline may otherwise choose defaults that are
+reasonable for an application but unsuitable for an investigation. In this
+example, the manual path runs first so decoded tokens and ranked logits become
+the reference for interpreting the pipeline output.
+
+Softmax values sum to one across classifier labels for this input; they do not
+tell us whether the label set is suitable, whether training data resembles the
+input, or whether a sentence has one objective sentiment. Calibration is a
+separate empirical property. When a product decision depends on confidence,
+evaluate calibration and error costs on a relevant held-out dataset instead of
+thresholding a displayed score by intuition.
+
 ## Experiment
 
 The recorded run used Python 3.11.9, PyTorch 2.13.0, Transformers 5.15.0, a
@@ -121,6 +144,14 @@ The direct two-sentence pass took 380.206 ms in the recorded MPS run and
 comparison: it is a single tiny workload without repeated warmups or equal
 overhead boundaries. It is included precisely to demonstrate why a number
 without a benchmark design should not become a hardware claim.
+
+Reproduce the interface check before changing the workload. First inspect the
+JSON record: tokens, IDs, masks, model revision, device, logits-derived ranking,
+and pipeline result. Then change one variable—such as `--max-length` or
+`--device cpu`—and keep the original record. If the label changes, locate the
+first changed contract: tokenization, truncation, model revision, label map, or
+device. A changed label is an observation that needs context, not a reason to
+select the more convenient result.
 
 ## What broke
 
@@ -139,6 +170,19 @@ at 64 tokens. In a real system, silently discarding the tail of a document can
 change the result; record the limit, inspect the tokenized sequence, and choose
 a chunking strategy rather than assuming the model saw everything.
 
+The 64-token limit is especially easy to misuse in document work. Token count
+is not word count, and a boundary can split an important qualifier from the
+claim it limits. For longer material, decide whether to shorten, chunk, pool,
+or use a model with an appropriate context window. Record the policy and test
+examples near the limit. Silent truncation can make a result look stable while
+excluding the evidence a reader cares about.
+
+Labels also drift across checkpoints. Do not hard-code “class 1 means positive”
+without reading the loaded model's `id2label` mapping. A different fine-tuned
+checkpoint can reverse a mapping, add classes, or use labels whose names are
+less self-explanatory. The manual ranking helper reads the mapping to keep this
+experiment tied to the selected model artifact.
+
 ## Alternatives and when to use them
 
 Use a direct model call when you need to inspect preprocessing, logits, labels,
@@ -146,6 +190,13 @@ or device placement. Use a pipeline for a well-understood inference task after
 the low-level path has been verified. Recurrent models remain useful where
 streaming state or very small deployments dominate; task-specific classifiers
 can be simpler and more predictable than a general generative model.
+
+For offline inspection, a small local classifier is useful because its inputs
+and output space are bounded. For open-ended synthesis, an instruction model
+has different context, safety, and evaluation requirements; do not treat this
+sentiment script as a miniature chat assistant. For exact strings, metadata, or
+known keywords, conventional search and rules can be more transparent than any
+Transformer inference call.
 
 ## Takeaway
 

@@ -1367,3 +1367,29 @@ and generated-DOCX inspection have all happened.
 - [ ] Expand Chapter 6's transformer inference material with an explicit
   token-to-logit walkthrough, prompt/context failure cases, and model/pipeline
   interpretation boundaries.
+
+### 2026-08-15 — Chapter 6 transformer-inference second pass
+
+**What changed:**
+
+- Expanded Chapter 6 to 1,605 words. It now explains the attention operation
+  without treating attention as explanation, defines the shared manual/pipeline
+  input contract, and separates softmax label scores from calibration or truth.
+- Added a controlled interface-change procedure, context-window/truncation and
+  label-map failure modes, and clearer classifier/instruction-model/rules-based
+  alternatives.
+- Retained the recorded MPS/CPU values as a deliberately non-comparable tiny
+  workload observation; no new performance or model-quality claim was added.
+
+**Verification:**
+
+- `make audit-book` passed; manuscript count is 20,198 words, still below the
+  45,000–55,000 beta target.
+- `uv run pytest tests/test_transformers_helpers.py` passed (4 tests).
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Begin the Chapter 4 framework-comparison second pass, making data/split/
+  metric equivalence, backend/device limits, and what the measured comparison
+  does not establish more concrete.
