@@ -782,3 +782,12 @@ versioned control that any future model-backed comparison must match.
 **Next:** complete the broader beta audit: site/DOCX gates, chapter/citation
 audit, and document remaining non-code release blockers (remote, Word PDF,
 and Lulu proof).
+
+### Beta audit — external release blockers
+
+- No Git remote is configured; GitHub Pages placeholders cannot be finalized or
+  published until the project owner chooses the destination.
+- The generated DOCX exists, but Word export to the final PDF, PDF preflight,
+  and a page-by-page release inspection remain macOS production tasks.
+- Lulu cover-template download and proof ordering require finalized page count,
+  cover/metadata choices, and explicit publication approval.
