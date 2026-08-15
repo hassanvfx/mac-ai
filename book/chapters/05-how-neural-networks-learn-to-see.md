@@ -189,6 +189,13 @@ backgrounds, labels, and class proportions that this generator never models.
 The correct response is not to claim robustness from a toy score; it is to
 create a new versioned evaluation question with those conditions represented.
 
+## Evidence trail
+
+The fixture and CNN are defined in `src/from_tensors_to_agents/vision.py`; the
+research note is `research/02-vision-and-frameworks/notes.md`. Run
+`experiments/05-vision/train_pytorch_cnn.py` and inspect the evidence record in
+`benchmarks/02-vision/README.md`.
+
 ## Takeaway
 
 Neural networks learn to see by turning repeated local measurements into a

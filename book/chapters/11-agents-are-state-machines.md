@@ -147,6 +147,12 @@ a declared order. Do not use them to conceal broad tool access behind a chat
 interface. A state machine can make unsafe authority easier to automate as well
 as safe authority easier to test.
 
+## Evidence trail
+
+The workflow source note is `research/07-workflow-graphs/notes.md`. Run
+`experiments/11-langgraph/approval_workflow.py` and review the local-persistence
+observation in `benchmarks/07-workflow-graphs/README.md`.
+
 ## Takeaway
 
 An agent is a state machine with a language model somewhere inside or beside

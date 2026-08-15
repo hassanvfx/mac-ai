@@ -150,6 +150,13 @@ subject-matter review, and reproducible experiments remain necessary. When a
 new capability is proposed, define its failure cases and the evidence required
 for release before wiring it into a workflow with more authority.
 
+## Evidence trail
+
+Read `research/07-workflow-graphs/notes.md`, run
+`evals/run_reliability.py`, and inspect the versioned cases in
+`evals/book_intelligence.jsonl`; generated traces remain local under
+`.book-intelligence/`.
+
 ## Takeaway
 
 Trust is a continuing engineering practice. This beta is trustworthy only in

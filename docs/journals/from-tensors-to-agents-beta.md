@@ -1469,3 +1469,28 @@ and generated-DOCX inspection have all happened.
 - [ ] Add explicit per-chapter research/evidence references where a chapter
   currently relies only on a citation, then run a full technical consistency
   audit and build a fresh site/DOCX proof.
+
+### 2026-08-15 — Chapter-level evidence trails
+
+**What changed:**
+
+- Added an `Evidence trail` section to every substantive chapter. Each points
+  to its working research note plus the relevant runnable experiment, benchmark,
+  or deterministic evaluation artifact.
+- Extended the editorial audit with the expected research-note mapping for
+  Chapters 1–14, so a later prose edit cannot silently remove the reader's
+  route from a lesson to its evidence base.
+
+**Verification:**
+
+- `make audit-book` passed all mandatory sections, citations, Markdown links,
+  inline repository paths, and chapter research-evidence references. Manuscript
+  count is 21,333 words, still below the 45,000–55,000 beta target.
+- `uv run pytest tests/test_book_audit.py` passed.
+- `git diff --check` passed.
+
+**Next task:**
+
+- [ ] Run the full Python/site/DOCX gates after this cross-chapter update,
+  render a fresh DOCX proof for visual inspection, then prioritize a larger
+  third editorial pass to close the remaining manuscript-length gap.

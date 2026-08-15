@@ -198,6 +198,12 @@ only to make the addition look explicit: it consumes memory and obscures the
 fact that the values are shared. Prefer the representation that makes the
 mathematical intention easiest for a future reader to verify.
 
+## Evidence trail
+
+Read the working source note at `research/01-tensors/notes.md`, run
+`experiments/01-tensors/broadcasting.py`, and use `tests/test_day1.py` for the
+small numerical expectations that protect this lesson.
+
 ## Takeaway
 
 Tensors are not merely containers. Their shapes are part of the program’s

@@ -195,6 +195,12 @@ precision, and distributed execution after an explicit baseline has established
 the data, loss, metric, and failure behavior. Abstraction should remove
 repetition, not conceal the evidence needed to trust an experiment.
 
+## Evidence trail
+
+Read `research/01-tensors/notes.md`, run
+`experiments/03-pytorch/train_tiny_network.py`, and interpret timing only
+through `benchmarks/01-day1/README.md` and its declared workload.
+
 ## Takeaway
 
 PyTorch training is a controlled feedback loop. A useful result is not merely a

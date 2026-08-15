@@ -198,6 +198,13 @@ sentiment script as a miniature chat assistant. For exact strings, metadata, or
 known keywords, conventional search and rules can be more transparent than any
 Transformer inference call.
 
+## Evidence trail
+
+Read `research/03-transformers/notes.md`, run
+`experiments/06-transformers/inspect_sentiment.py`, and use
+`benchmarks/03-transformers/README.md` for the fixed-input observation and its
+timing limits.
+
 ## Takeaway
 
 Transformers trade recurrent sequence processing for flexible context mixing,

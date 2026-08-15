@@ -193,6 +193,12 @@ metric and an explicit stopping rule. Use the simplest optimizer that makes the
 experiment readable, then compare alternatives under the same data split,
 seed, and measurement method.
 
+## Evidence trail
+
+The gradient source note is `research/01-tensors/notes.md`; the runnable scalar
+example is `experiments/02-gradients/autograd.py`, with deterministic checks in
+`tests/test_day1.py` and the Day 1 record in `benchmarks/01-day1/README.md`.
+
 ## Takeaway
 
 Loss measures error, gradients measure local sensitivity, and an optimizer

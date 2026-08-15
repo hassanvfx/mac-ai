@@ -163,6 +163,12 @@ measurement rules. A remote service can simplify distribution but changes
 privacy, cost, latency, and outage behavior. State which trade-off matters
 before choosing a runtime.
 
+## Evidence trail
+
+The local-inference note is `research/04-mlx/notes.md`. Run
+`experiments/07-mlx/run_local_model.py` only after the documented optional
+install, then interpret its one workload through `benchmarks/04-mlx/README.md`.
+
 ## Takeaway
 
 Local inference is a systems decision, not only a privacy preference. The

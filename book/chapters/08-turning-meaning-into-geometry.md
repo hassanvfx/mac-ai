@@ -160,6 +160,12 @@ substitute for reading the returned source, or a performance claim about a
 model. When an answer needs exact legal, safety, or publication requirements,
 retrieve the primary source and inspect it directly.
 
+## Evidence trail
+
+Read `research/05-embeddings-and-rag/notes.md`, run
+`experiments/08-embeddings/book_search.py`, and inspect the local model
+observation and limits in `benchmarks/05-book-intelligence/README.md`.
+
 ## Takeaway
 
 Embeddings make meaning searchable, not self-verifying. The important product

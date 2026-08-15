@@ -194,6 +194,13 @@ a separate performance protocol select matching devices, warm-ups, precision,
 batch sizes, run counts, and timers. The two reports then answer different
 questions without smuggling one conclusion into the other.
 
+## Evidence trail
+
+The shared framework note is `research/02-vision-and-frameworks/notes.md`.
+Run `experiments/05-vision/train_pytorch_cnn.py` and
+`experiments/04-tensorflow/train_keras_cnn.py`; compare their recorded contract
+in `benchmarks/02-vision/README.md`, not elapsed values alone.
+
 ## Takeaway
 
 Framework choice is an engineering trade-off, not a different theory of

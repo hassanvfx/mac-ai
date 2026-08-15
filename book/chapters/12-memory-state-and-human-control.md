@@ -141,6 +141,13 @@ boring. It gives a reader one place to inspect operational history and another
 place to inspect published source history, without asking either system to
 pretend it can replace the other.
 
+## Evidence trail
+
+Read `research/07-workflow-graphs/notes.md`, run the no-write graph at
+`experiments/11-langgraph/approval_workflow.py`, and inspect
+`tests/test_approval_workflow.py` for persistence, rejection, and fallback
+contracts.
+
 ## Takeaway
 
 Human-in-the-loop is not a decorative confirmation button. It is a persisted

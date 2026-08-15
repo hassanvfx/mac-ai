@@ -166,6 +166,12 @@ security questions, retrieve the primary source, state its scope and date, and
 ask the responsible person to review it. RAG is context management, not an
 authority transfer.
 
+## Evidence trail
+
+The RAG source note is `research/05-embeddings-and-rag/notes.md`; run
+`experiments/09-rag/grounded_answer.py` and the versioned cases in
+`evals/book_intelligence.jsonl` before treating a retrieved excerpt as support.
+
 ## Takeaway
 
 RAG is not a memory implant. It is a disciplined context pipeline. The first

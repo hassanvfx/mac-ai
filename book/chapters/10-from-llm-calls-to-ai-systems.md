@@ -156,6 +156,12 @@ workflow, or present a reviewable plan. Do not confuse a schema with a
 capability grant: a structured plan remains read-only until a separate,
 least-privilege action is explicitly approved.
 
+## Evidence trail
+
+Read `research/06-structured-ai-systems/notes.md`, run
+`experiments/10-systems/compare_structured_planning.py`, and use
+`benchmarks/06-structured-systems/README.md` for the no-network contract run.
+
 ## Takeaway
 
 The relevant comparison is not “SDK versus framework.” It is whether both paths

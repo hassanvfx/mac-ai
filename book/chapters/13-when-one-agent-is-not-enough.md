@@ -140,6 +140,12 @@ review and explanatory drafting, then a role boundary can make review easier.
 In every case, a human remains responsible for deciding whether the proposed
 change should become a repository change.
 
+## Evidence trail
+
+Read `research/07-workflow-graphs/notes.md`, run
+`experiments/13-workflows/compare_workflows.py`, and inspect the frozen
+comparison contract in `benchmarks/08-workflow-comparison/README.md`.
+
 ## Takeaway
 
 More agents are justified only by measured, auditable improvement. Until then,
