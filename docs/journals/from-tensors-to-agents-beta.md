@@ -2844,6 +2844,33 @@ without introducing a parallel Word or cover workflow.
   Lulu-remediation, and supplied cover-template design assets together. Push
   `main` to `hassanvfx/mac-ai`.
 
+### 2026-08-15 — Reusable book + repository publishing playbook
+
+**What changed:**
+
+- Captured the project’s transferable editorial, technical, and operational
+  lessons in `docs/reusable-book-repo-publishing-playbook.md`.
+- The guide covers canonical Markdown, exercise/repository bridges, QR
+  manifests, deterministic TOC and front matter, PDF-font/transparency/image
+  preflight, Lulu proof boundaries, and a reusable delivery checklist.
+- Linked the guide from the README so future projects can adopt the method
+  without reading the full historical journal.
+
+**Next action:**
+
+- [ ] Review the playbook as the reusable starter protocol for the next
+  book-plus-repository project; commit it with its journal entry.
+
+### 2026-08-15 — Reusable-agent handoff
+
+**What changed:**
+
+- Added a copy-ready agent handoff block to the README with absolute paths to
+  the reusable playbook, canonical protocol, journal, manifest, and PDF build
+  scripts.
+- The handoff explicitly separates transferable method from title-specific
+  metadata, prose, ISBN, cover assets, and distribution claims.
+
 ### 2026-08-15 — Lulu ISBN and Global Distribution integration
 
 **What changed:**
@@ -3245,3 +3272,24 @@ without introducing a parallel Word or cover workflow.
 - [ ] Add the remaining canonical teaching material needed to reach the beta
   word target, then run the full Python/site/reliability batch and render a
   fresh interim DOCX proof.
+
+### 2026-08-15 — Printed hardcover purchase links
+
+**Goal:** Give readers of both public entry points a direct path to purchase
+the printed hardcover edition.
+
+**Completed:**
+
+- Added the exact Lulu hardcover product link near the repository introduction
+  in `README.md`.
+- Added the same link to the GitHub Pages landing-page navigation in
+  `site/src/pages/index.mdx`.
+
+**Verification:**
+
+- Verified both reader entry points contain the supplied Lulu URL.
+- Ran `npm run build` in `site/`; page compilation succeeded, but Docusaurus
+  stopped on an unrelated pre-existing broken README link to
+  `docs/reusable-book-repo-publishing-playbook.md`.
+
+**Status:** Complete

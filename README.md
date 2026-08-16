@@ -10,6 +10,8 @@ This is the companion repository for an English-language book and course that
 moves from tensors and gradients to RAG and agentic systems. It targets Python
 3.11 and Apple Silicon, including an M4 with 24 GB unified memory.
 
+[Buy the printed hardcover edition](https://www.lulu.com/shop/hassan-uriostegui/ai-from-tensors-to-agents-on-mac-silicon/hardcover/product-e7qy7gy.html?page=1&pageSize=4)
+
 ## One source, two publications
 
 `book/chapters/` is the canonical prose. Docusaurus renders those exact files
@@ -20,6 +22,50 @@ copy chapter prose into `site/`.
 research/ -> book/chapters/ -> GitHub Pages course
                          -> DOCX -> print PDF
 experiments/ -> chapter links and reproducible observations
+```
+
+For the reusable production method behind this project, see the Spanish
+[book + repository publishing playbook](docs/reusable-book-repo-publishing-playbook.md).
+
+### Agent handoff: reuse this publishing method
+
+Copy this brief into another coding agent when adapting the method to a new
+book-plus-repository project:
+
+```text
+Use the documented book + repository publishing method from this completed
+project as the starting point for the new project. Read the reusable playbook
+first, then inspect the canonical examples and preserve the same principles:
+one Markdown source of published prose; a manifest-generated bridge between
+chapters, exercises, QR codes, and the course site; deterministic TOC and PDF
+production; and separate automated preflight from human print-proof decisions.
+
+Workspace root:
+/Users/hassan/repos/ai-on-mac
+
+Primary reusable guide:
+/Users/hassan/repos/ai-on-mac/docs/reusable-book-repo-publishing-playbook.md
+
+Canonical publishing protocol:
+/Users/hassan/repos/ai-on-mac/book/appendices/i-reproducible-publishing-protocol.md
+
+Reader/repository onboarding reference:
+/Users/hassan/repos/ai-on-mac/README.md
+
+Historical decisions and validation record:
+/Users/hassan/repos/ai-on-mac/docs/journals/from-tensors-to-agents-beta.md
+
+Key implementation references:
+/Users/hassan/repos/ai-on-mac/book/qrcode-manifest.json
+/Users/hassan/repos/ai-on-mac/scripts/build-book.sh
+/Users/hassan/repos/ai-on-mac/scripts/polish_pdf.py
+/Users/hassan/repos/ai-on-mac/scripts/prepare_lulu_pdf.py
+/Users/hassan/repos/ai-on-mac/scripts/preflight_pdf.py
+
+Before changing anything, read the project journal and identify the new
+project's audience, canonical source location, print target, exercise format,
+and public repository/site destination. Do not copy title-specific prose,
+metadata, ISBN, cover assets, or distribution claims from mac-ai.
 ```
 
 ## Quick start
