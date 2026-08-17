@@ -3294,6 +3294,31 @@ the printed hardcover edition.
 
 **Status:** Complete
 
+### 2026-08-17 — Fresh-clone ISBN barcode asset repair
+
+**Problem:**
+
+- The Lulu distribution test passed in the author checkout but failed in a
+  fresh reader clone because it requires SVG, PNG, and PDF barcode assets.
+  The required PDF existed locally but the repository-wide `*.pdf` rule had
+  kept it out of Git.
+
+**Decision and implementation:**
+
+- Added a narrow ignore exception and versioned the 1.9 KB
+  `isbn/978-0-557-95054-6.pdf` source asset. Generated book PDFs remain
+  ignored; the validation contract and reader commands are unchanged.
+
+**Verification:**
+
+- `uv run pytest tests/test_lulu_distribution.py` passed with the tracked PDF
+  present.
+- The complete base reader validation passed: Ruff was clean, pytest reported
+  44 passed with the existing optional TensorFlow test skipped, and all three
+  Day 1 programs ran successfully.
+
+**Status:** Complete
+
 ### 2026-08-17 — Backward-compatible reader installation repair
 
 **Problem:**

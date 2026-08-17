@@ -11,6 +11,7 @@ site/src/generated/
 site/src/pages/labs/
 book/build/
 *.pdf
+!isbn/978-0-557-95054-6.pdf
 *.DS_Store
 
 # ClineFlow - per-developer config
