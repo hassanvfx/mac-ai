@@ -25,7 +25,7 @@ experiments/ -> chapter links and reproducible observations
 ```
 
 For the reusable production method behind this project, see the Spanish
-[book + repository publishing playbook](docs/reusable-book-repo-publishing-playbook.md).
+[book + repository publishing playbook](https://github.com/hassanvfx/mac-ai/blob/main/docs/reusable-book-repo-publishing-playbook.md).
 
 ### Agent handoff: reuse this publishing method
 

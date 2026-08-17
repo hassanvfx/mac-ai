@@ -3294,6 +3294,26 @@ the printed hardcover edition.
 
 **Status:** Complete
 
+### 2026-08-17 — Docusaurus reader-onboarding link repair
+
+**Problem:**
+
+- The site prebuild copies the repository README into the landing page. Its
+  relative playbook link was interpreted as a Docusaurus route and caused the
+  GitHub Actions production build to fail on a nonexistent `/docs/` page.
+
+**Resolution:**
+
+- Replaced that repository-relative link with the canonical GitHub blob URL.
+  The generated landing page now links readers to the source document without
+  asking Docusaurus to publish it as course content.
+
+**Verification:**
+
+- `npm run build --prefix site` completed successfully with no broken links.
+
+**Status:** Complete
+
 ### 2026-08-17 — Fresh-clone ISBN barcode asset repair
 
 **Problem:**
