@@ -11,9 +11,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v5
         with: {python-version: '3.11'}
-      - run: uv sync --group dev
-      - run: uv run ruff check .
-      - run: uv run pytest
+      - name: Reader base installation
+        run: uv sync --group dev
+      - name: Reader base lint validation
+        run: uv run ruff check .
+      - name: Reader base test validation
+        run: uv run pytest
   site:
     runs-on: ubuntu-latest
     steps:

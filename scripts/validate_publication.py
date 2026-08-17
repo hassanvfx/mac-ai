@@ -9,7 +9,6 @@ from pathlib import Path
 
 from pypdf import PdfReader
 
-
 ROOT = Path(__file__).resolve().parents[1]
 BUILD = ROOT / "book/build"
 MANIFEST = BUILD / "publication-manifest.json"

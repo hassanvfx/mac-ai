@@ -6,7 +6,6 @@ does not prepend a second cover or write another edition.
 
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 MASTER = ROOT / "book/build/pdf-online.pdf"
 

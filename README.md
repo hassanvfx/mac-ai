@@ -80,6 +80,16 @@ uv run python experiments/02-gradients/autograd.py
 uv run python experiments/03-pytorch/train_tiny_network.py
 ```
 
+The base environment includes the lightweight Pydantic and LangGraph
+checkpoint packages used by the repository's test suite. It does not install
+model downloads, API credentials, or the later course-framework integrations.
+
+> **Reader repair notice.** If you cloned the repository before this
+> installation fix, run `git pull --ff-only` and then rerun the same
+> `uv sync --group dev` command above. The printed setup commands themselves
+> have not changed. If Git reports local changes, preserve them first or clone
+> a fresh copy rather than overwriting your work.
+
 The TensorFlow/Keras comparison is optional so a base install stays small. It
 uses the supported Python 3.11 dependency group:
 

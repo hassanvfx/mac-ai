@@ -3293,3 +3293,38 @@ the printed hardcover edition.
   `docs/reusable-book-repo-publishing-playbook.md`.
 
 **Status:** Complete
+
+### 2026-08-17 — Backward-compatible reader installation repair
+
+**Problem:**
+
+- The printed base sequence (`uv sync --group dev`, lint, and pytest) failed
+  on fresh clones: two collected tests imported Pydantic and LangGraph, while
+  those packages were available only through the optional `agents` group.
+- The same reader-visible lint command also reported six pre-existing Ruff
+  findings in publishing utilities.
+
+**Decision and implementation:**
+
+- Kept the printed commands unchanged and added lightweight test requirements
+  (`pydantic`, `langgraph`, and `langgraph-checkpoint-sqlite`) to `dev`.
+  Model downloads, API clients, and later course frameworks remain optional.
+- Repaired the Ruff findings, including an explicit Python 3.11
+  `itertools.pairwise` loop for print-art node connections.
+- Added a repair notice to the repository README and the canonical
+  introduction chapter, which is also the web edition source. Existing
+  readers can fast-forward and rerun the printed commands without changing
+  their learning workflow.
+- Labeled CI steps as the reader base installation, lint, and test validation
+  so the public gate directly mirrors the documented contract.
+
+**Verification:**
+
+- A clean temporary Python 3.11 environment completed the exact printed base
+  sequence: `uv sync --group dev`, `uv run ruff check .`, `uv run pytest`, and
+  all three Day 1 programs. Ruff passed; pytest reported 44 passed and the
+  existing optional TensorFlow test skipped.
+- The optional `agents` group still ran both the fixture-only structured
+  planning comparison and the persisted approval workflow successfully.
+
+**Status:** Complete

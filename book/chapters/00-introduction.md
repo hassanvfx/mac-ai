@@ -120,6 +120,17 @@ uv run python experiments/02-gradients/autograd.py
 uv run python experiments/03-pytorch/train_tiny_network.py
 ```
 
+The base environment includes the lightweight Pydantic and LangGraph
+checkpoint packages needed by the repository's complete test suite. It does
+not install model downloads, credentials, or the larger framework integrations
+used in later chapters.
+
+> **Reader repair notice.** If this repository was cloned before the base
+> installation fix, run `git pull --ff-only`, then rerun the same `uv sync
+> --group dev` command above. The printed setup commands have not changed. If
+> Git reports local changes, preserve them first or clone a fresh copy instead
+> of overwriting your work.
+
 The last command chooses MPS when the installed PyTorch build reports it as
 available and otherwise uses CPU. An explicit device can be selected in the
 benchmark command:

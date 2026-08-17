@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import textwrap
+from itertools import pairwise
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
@@ -62,7 +63,7 @@ def make_clineflow_print_variant() -> None:
     draw.text((92, 196), "open knowledge", fill=BLUE, font=title)
     draw.text((94, 290), "ClineFlow — AI coding memory with a portable, agent-readable project record.", fill=INK, font=subtitle)
     nodes = [(280, 455), (560, 400), (840, 475), (1120, 405), (1400, 465)]
-    for left, right in zip(nodes, nodes[1:]):
+    for left, right in pairwise(nodes):
         draw.line((*left, *right), fill="#7EA9D6", width=4)
     for x, y in nodes:
         draw.ellipse((x - 21, y - 21, x + 21, y + 21), fill="#FFFFFF", outline=BLUE, width=5)

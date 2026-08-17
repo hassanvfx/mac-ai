@@ -13,8 +13,8 @@ from PIL import Image
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib.colors import HexColor
 from reportlab.lib.utils import ImageReader
-from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 

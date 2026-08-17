@@ -14,7 +14,6 @@ from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
-
 ROOT = Path(__file__).resolve().parent
 WIDTH, HEIGHT, DPI = 7500, 11100, 1200
 IVORY = "#F8F2E8"

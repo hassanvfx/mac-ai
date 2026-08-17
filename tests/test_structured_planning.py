@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+from types import ModuleType
 
 import pytest
 
@@ -10,6 +12,7 @@ from from_tensors_to_agents.structured_planning import (
     StructuredPlan,
     direct_plan,
     direct_review,
+    langchain_model_from_environment,
     langchain_plan,
     langchain_review,
     openai_responder_from_environment,
@@ -104,8 +107,29 @@ def test_missing_api_configuration_fails_before_a_network_call(monkeypatch: pyte
         openai_responder_from_environment()
 
 
-def test_langchain_openai_adapter_exposes_structured_output_without_network() -> None:
-    from langchain_openai import ChatOpenAI
+def test_langchain_openai_adapter_exposes_structured_output_without_network(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    class FakeChatOpenAI:
+        def __init__(self, **kwargs: object) -> None:
+            self.kwargs = kwargs
 
-    model = ChatOpenAI(model="test", api_key="not-a-real-key", base_url="http://localhost:9/v1")
+        def with_structured_output(self, _: type[StructuredPlan], **__: object) -> FakeRunnable:
+            return FakeRunnable({})
+
+    fake_module = ModuleType("langchain_openai")
+    fake_module.ChatOpenAI = FakeChatOpenAI
+    monkeypatch.setitem(sys.modules, "langchain_openai", fake_module)
+    monkeypatch.setenv("BOOK_INTELLIGENCE_API_KEY", "not-a-real-key")
+    monkeypatch.setenv("BOOK_INTELLIGENCE_API_BASE", "http://localhost:9/v1")
+    monkeypatch.setenv("BOOK_INTELLIGENCE_MODEL", "test")
+
+    model = langchain_model_from_environment()
+    assert isinstance(model, FakeChatOpenAI)
+    assert model.kwargs == {
+        "model": "test",
+        "api_key": "not-a-real-key",
+        "base_url": "http://localhost:9/v1",
+        "temperature": 0,
+    }
     assert model.with_structured_output(StructuredPlan, include_raw=True) is not None
